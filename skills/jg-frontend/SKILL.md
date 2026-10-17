@@ -1,6 +1,6 @@
 ---
 name: jg-frontend
-description: Frontend standards for accessible, responsive, light- and dark-themed UI that feels native on mobile, UI-package reuse, forms, dialogs and feedback, motion, single-page-app delivery, and Tailwind CSS. Use when writing, reviewing, or planning UI components, pages, layout, styling, CSS or Tailwind, forms, dialogs, toasts or error states, accessibility, responsive, mobile, or theme behavior, motion, single-page-app hosting headers or chunk loading, or frontend tests.
+description: Frontend standards for accessible, responsive, light- and dark-themed UI that feels native on mobile, UI-package reuse, forms, dialogs and feedback, motion, single-page-app delivery, and Tailwind CSS. Use when writing, reviewing, or planning UI components, pages, links, layout, styling, CSS or Tailwind, forms, dialogs, toasts or error states, accessibility, responsive, mobile, or theme behavior, motion, single-page-app hosting headers or chunk loading, or frontend tests.
 ---
 
 ## Application
@@ -27,6 +27,7 @@ These files belong to this skill and hold rules that apply only to some work. Re
 - Before writing or reviewing a dialog, drawer, popover, menu, or tooltip, or using a native feature such as `<dialog>`, `popover`, `inert`, or `:has()` where no UI-package component fits, read `references/dialogs-and-overlays.md`. Use only native features that are Baseline for the supported browsers, or ship a fallback.
 - Before writing or reviewing toasts, inline errors, empty or loading states, pending actions, or status messages, read `references/feedback-and-errors.md`. Never show raw exception text.
 - Before creating or changing a form or a form field, read `references/forms.md`. Client validation never replaces server validation.
+- Before adding or changing a link to another site, or any link that opens a new tab, read `references/links.md`. Every link that opens a new tab says "opens in a new tab" in its accessible name, and ends with an external-link icon unless it is an icon-only link whose icon shows where it goes.
 - Before adding or changing images, embeds, or other content that loads late, read `references/loading-performance.md`. Reserve space for late-loading content, so the page never shifts as it loads.
 - Before adding or changing animation or transitions, read `references/motion.md`. Every new or modified animation must have an equivalent reduced-motion path.
 - Before changing a single-page app's hosting headers, fallback rewrites, or chunk loading, read `references/single-page-app-delivery.md`.
@@ -115,7 +116,6 @@ When building UI:
 - Meet WCAG 2.2 AA, including targets of at least 24 by 24 CSS pixels, or spaced as its target-size exceptions allow, and a focused component that sticky headers, footers, or overlays never hide entirely.
 - Prefer one `h1` per page that names its content.
 - Keep element IDs unique, and give every same-page `#fragment` link a target.
-- Prefer opening links in the same tab. A link that opens a new tab shows a visible indicator and says "opens in a new tab" in its accessible name or description. `target="_blank"` already implies `noopener`; leave out `noreferrer` on links to your own and partner sites, and use it on pages whose URLs carry secrets.
 - Remote images that can fail, such as avatars, render a same-size fallback, such as initials. An avatar next to the person's visible name gets `alt=""`.
 - Copy buttons call `navigator.clipboard.writeText` in the click handler, before any `await`, report success only after it resolves, and on failure show manual-copy guidance with the text left selectable.
 - Prefer a button component's size variants over height or size utilities on one instance; add a touch size to the UI package rather than to one button.
