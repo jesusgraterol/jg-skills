@@ -31,6 +31,7 @@ export type ISkillLucideIcon =
   | 'messages-square'
   | 'monitor-smartphone'
   | 'package'
+  | 'puzzle'
   | 'scale'
   | 'search-check'
   | 'shield-question-mark'

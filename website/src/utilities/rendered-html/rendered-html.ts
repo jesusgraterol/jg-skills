@@ -154,6 +154,22 @@ export const findUnsafeAttributes = (html: string): string | undefined => {
   return undefined;
 };
 
+/** Recognises the decorative icon marker emitted by the site's ExternalLink component. */
+const isExternalLinkIcon = (attributes: string): boolean => {
+  const values = new Map(
+    [...attributes.matchAll(ATTRIBUTE_PATTERN)].map(([, name = '', value = '']) => [
+      name.toLowerCase(),
+      decodeHtmlEntities(unquote(value)),
+    ]),
+  );
+
+  return (
+    values.get('aria-hidden') === 'true' &&
+    values.get('data-external-icon') === 'true' &&
+    (values.get('class') ?? '').split(/\s+/u).includes('lucide-external-link')
+  );
+};
+
 /**
  * Finds the first markup in rendered Markdown that Markdown itself never produces: elements other
  * than its own, comments, malformed tags, event handlers, and unsafe URLs. The rendered output is
@@ -161,10 +177,16 @@ export const findUnsafeAttributes = (html: string): string | undefined => {
  * or encoding.
  * @param html The rendered HTML of one Markdown file, where text is escaped and every remaining <
  * opens a tag or sits inside an attribute value.
+ * @param allowExternalLinkIcons Whether the final page may contain the site's decorative link
+ * icons. Source Markdown uses the default false, so authors still cannot supply raw SVG.
  * @returns A short description of the problem, or undefined when the markup is safe.
  */
-export const findUnsafeMarkup = (html: string): string | undefined => {
+export const findUnsafeMarkup = (
+  html: string,
+  allowExternalLinkIcons = false,
+): string | undefined => {
   MARKUP_OPENER_PATTERN.lastIndex = 0;
+  let insideExternalIcon = false;
 
   for (
     let opener = MARKUP_OPENER_PATTERN.exec(html);
@@ -180,7 +202,21 @@ export const findUnsafeMarkup = (html: string): string | undefined => {
       return `malformed markup ${html.slice(opener.index, opener.index + 16)}`;
     }
 
-    if (!MARKDOWN_ELEMENTS.has(name.toLowerCase())) return `<${name.toLowerCase()}> element`;
+    const element = name.toLowerCase();
+
+    if (allowExternalLinkIcons && element === 'svg') {
+      if (tag[0].startsWith('</')) {
+        if (!insideExternalIcon) return '<svg> element';
+
+        insideExternalIcon = false;
+      } else {
+        if (insideExternalIcon || !isExternalLinkIcon(attributes)) return '<svg> element';
+
+        insideExternalIcon = true;
+      }
+    } else if (insideExternalIcon ? element !== 'path' : !MARKDOWN_ELEMENTS.has(element)) {
+      return `<${element}> element`;
+    }
 
     const problem = findUnsafeAttribute(attributes);
 
@@ -190,5 +226,5 @@ export const findUnsafeMarkup = (html: string): string | undefined => {
     MARKUP_OPENER_PATTERN.lastIndex = TAG_PATTERN.lastIndex;
   }
 
-  return undefined;
+  return insideExternalIcon ? 'unclosed external-link icon' : undefined;
 };

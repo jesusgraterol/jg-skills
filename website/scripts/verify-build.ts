@@ -316,7 +316,8 @@ export const verifyBuild = async (
     }
 
     const unsafeContent = markdownContents
-      .map((content) => findUnsafeMarkup(content))
+      // Raw source Markdown is checked separately; only the renderer may add these icons.
+      .map((content) => findUnsafeMarkup(content, true))
       .find((problem) => problem !== undefined);
 
     if (unsafeContent !== undefined) {

@@ -1,6 +1,5 @@
 ---
 import { ArrowLeft, ArrowRight } from '@lucide/astro';
-import { render } from 'astro:content';
 
 import {
   SKILL_ACCESS_LABELS,
@@ -11,6 +10,7 @@ import { SITE_CONFIG } from '../../site.config.ts';
 import ExternalLink from '../external-link/external-link.astro';
 import SkillIcon from '../skill-icon/skill-icon.astro';
 import TerminalWindow from '../terminal-window/terminal-window.astro';
+import SkillMarkdown from './skill-markdown.astro';
 
 interface Props {
   // neighboring skills in catalog order, absent at either end
@@ -20,14 +20,8 @@ interface Props {
 }
 
 const { next, previous, skill } = Astro.props;
-const { Content } = await render(skill.entry);
-// each reference file, rendered below SKILL.md under the path SKILL.md names it by
-const references = await Promise.all(
-  skill.references.map(async ({ entry, path }) => ({
-    Content: (await render(entry)).Content,
-    path,
-  })),
-);
+// The catalog checks every entry has safe rendered HTML before it reaches this component.
+const instructionsHtml = skill.entry.rendered?.html ?? '';
 const isImplicit = skill.kind === 'implicit';
 const hasCases = !isImplicit && skill.examples.length > 1;
 // implicit skills open with their summary, because their description is a trigger list for agents
@@ -240,10 +234,10 @@ const examples =
       data-skill-instructions
       data-skill-markdown
     >
-      <Content />
+      <SkillMarkdown html={instructionsHtml} />
     </div>
     {
-      references.length > 0 && (
+      skill.references.length > 0 && (
         <div
           class="mt-10"
           data-skill-references
@@ -252,7 +246,7 @@ const examples =
           <p class="mt-2 text-sm leading-6 text-muted">
             The agent reads each file only when its task needs it, as SKILL.md says.
           </p>
-          {references.map(({ Content: ReferenceContent, path }) => (
+          {skill.references.map(({ entry, path }) => (
             <div
               class="mt-6"
               data-skill-reference={path}
@@ -262,7 +256,7 @@ const examples =
                 class="article-content mt-3 rounded-xl border border-border bg-surface px-5 py-6 text-base shadow-surface sm:px-8 sm:py-8 [&_h2]:mt-10 [&_h2]:pt-6 [&_h2]:text-xl [&_h2:first-child]:mt-0 [&_h2:first-child]:border-t-0 [&_h2:first-child]:pt-0"
                 data-skill-markdown
               >
-                <ReferenceContent />
+                <SkillMarkdown html={entry.rendered?.html ?? ''} />
               </div>
             </div>
           ))}

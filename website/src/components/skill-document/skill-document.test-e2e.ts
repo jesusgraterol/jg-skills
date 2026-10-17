@@ -212,4 +212,38 @@ test.describe('skill pages', () => {
       '/jg-execute [auto] [plan-path] [milestone N]',
     );
   });
+
+  for (const theme of ['light', 'dark'] as const) {
+    test(`the Markdown policy link uses the shared external-link behavior in the ${theme} theme`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme: theme });
+      await page.goto('/skills/jg-packages/');
+
+      const link = page.getByRole('link', {
+        name: 'reusable jg-packages policy (opens in a new tab)',
+        exact: true,
+      });
+
+      await expect(link).toHaveAttribute(
+        'href',
+        'https://github.com/jesusgraterol/jg-skills/blob/main/skills/jg-packages/assets/agents-section.md',
+      );
+      await expect(link).toHaveAttribute('target', '_blank');
+      await expect(link).toHaveAttribute('rel', 'noreferrer');
+      await expect(link.locator('svg.lucide-external-link')).toHaveAttribute('aria-hidden', 'true');
+      await expect(link.locator('[data-external-icon] + .sr-only')).toHaveText(
+        '(opens in a new tab)',
+      );
+      await expect(link.locator('..')).toContainText(
+        'When asked to adopt or review coding instructions',
+      );
+
+      // The example's copy button is the preceding control in the document's tab order.
+      await page.getByRole('button', { name: 'Copy request', exact: true }).focus();
+      await page.keyboard.press('Tab');
+      await expect(link).toBeFocused();
+      await expect(link).not.toHaveCSS('outline-style', 'none');
+    });
+  }
 });

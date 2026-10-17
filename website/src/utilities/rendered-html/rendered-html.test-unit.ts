@@ -71,6 +71,46 @@ describe('findUnsafeMarkup', () => {
     expect(findUnsafeMarkup(SAFE_RENDERED_MARKDOWN)).toBeUndefined();
   });
 
+  test('accepts the shared link icon only in decorated page output, never source Markdown', () => {
+    const icon =
+      '<svg class="lucide lucide-external-link" aria-hidden="true" data-external-icon="true"><path d="M1 1"></path></svg>';
+
+    expect(findUnsafeMarkup(icon)).toBe('<svg> element');
+    expect(findUnsafeMarkup(icon, true)).toBeUndefined();
+  });
+
+  test.each([
+    ['an unmarked SVG', '<svg><path d="M1 1"></path></svg>', '<svg> element'],
+    ['a standalone path', '<path d="M1 1"></path>', '<path> element'],
+    [
+      'a non-decorative icon',
+      '<svg class="lucide-external-link" aria-hidden="false" data-external-icon="true"></svg>',
+      '<svg> element',
+    ],
+    [
+      'an active child inside an icon',
+      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true"><foreignObject></foreignObject></svg>',
+      '<foreignobject> element',
+    ],
+    [
+      'a handler on an icon path',
+      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true"><path onload="alert(1)"></path></svg>',
+      'onload attribute',
+    ],
+    [
+      'an unsafe URL on an icon',
+      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true" href="javascript:alert(1)"></svg>',
+      'href="javascript:alert(1)"',
+    ],
+    [
+      'an unclosed icon',
+      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true"><path></path>',
+      'unclosed external-link icon',
+    ],
+  ])('rejects %s even in decorated page output', (_name, html, problem) => {
+    expect(findUnsafeMarkup(html, true)).toBe(problem);
+  });
+
   test.each([
     [
       // backticks around blank lines: the old source check read the script as inline code

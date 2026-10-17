@@ -40,6 +40,7 @@
 | `jg-postgres`       | `Database`           | PostgreSQL's elephant blurs at 20 pixels.                                                                                      |
 | `jg-redis`          | Redis mark           | Written for Redis.                                                                                                             |
 | `jg-node`           | Node.js mark         | Written for Node.js.                                                                                                           |
+| `jg-packages` | `Puzzle` | Reusable capabilities that fit into a project; distinct from package authoring. |
 | `jg-npm-package`    | `Package`            | Published packages. The npm mark is lettering that blurs at 20 pixels.                                                         |
 | `jg-monorepo`       | `FolderTree`         | Workspace packages under one repository, across Turborepo and pnpm.                                                            |
 | `jg-bash`           | `FileTerminal`       | Shell scripts. The GNU Bash mark blurs at 20 pixels, and `Terminal` is `jg-command`'s.                                         |

@@ -1,10 +1,10 @@
 ---
 import { ArrowUpRight, ExternalLink as ExternalLinkIcon } from '@lucide/astro';
+import type { HTMLAttributes } from 'astro/types';
 
 import { SITE_CONFIG } from '../../site.config.ts';
 
-interface Props {
-  class?: string | undefined;
+interface Props extends HTMLAttributes<'a'> {
   // pins an up-right arrow to the top-right corner of the nearest positioned card instead of
   // showing the inline new-tab icon; for links that cover a whole card
   cornerArrow?: boolean | undefined;
@@ -14,7 +14,7 @@ interface Props {
 // spoken after the link text so screen reader users know the link opens a new tab
 const NEW_TAB_NOTICE = ' (opens in a new tab)';
 
-const { class: className, cornerArrow = false, href } = Astro.props;
+const { class: className, cornerArrow = false, href, ...attributes } = Astro.props;
 // links to the author's own sites keep their referrer; third-party sites get none
 const { hostname } = new URL(href);
 const isOwnedSite =
@@ -22,10 +22,12 @@ const isOwnedSite =
 ---
 
 <a
+  {...attributes}
   class={className}
   href={href}
   target="_blank"
   rel={isOwnedSite ? undefined : 'noreferrer'}
+  aria-label={attributes['aria-label'] ? `${attributes['aria-label']}${NEW_TAB_NOTICE}` : undefined}
   ><slot />{
     cornerArrow ? (
       <ArrowUpRight

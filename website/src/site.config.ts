@@ -445,6 +445,26 @@ export const SKILL_CATALOG = {
     whenToUse:
       'It loads on its own when a task touches Node.js scripts, CLIs, build tooling, or filesystem code. Call it by name to load it before such a task.',
   },
+  'jg-packages': {
+    examples: [
+      {
+        outcome:
+          'Checks the installed package and its local API documentation, reuses a suitable helper, and justifies any new dependency individually.',
+        request: 'Add exact decimal calculations for order totals and fees.',
+      },
+    ],
+    icon: 'puzzle',
+    kind: 'implicit',
+    order: 21,
+    searchDescription:
+      'An implicit skill for Claude Code and Codex that selects suitable JG Packages, verifies installed API documentation, and preserves project contracts.',
+    searchTitle: 'jg-packages: Reuse JG Packages with coding agents',
+    stage: 'implicit',
+    summary:
+      'Package selection, local API documentation, and consumer integration for JG Packages.',
+    whenToUse:
+      'It loads on its own for reusable helpers, coded errors, API envelopes, HTTP wrappers, decimal math, browser storage or clipboard work, filesystem or process helpers, service workers, or consumer use of JG Packages. Call it by name to load it before such a task.',
+  },
   'jg-npm-package': {
     examples: [
       {
@@ -455,7 +475,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'package',
     kind: 'implicit',
-    order: 21,
+    order: 22,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps package exports, dependency ranges, tarball tests, and npm releases correct and safe.',
     searchTitle: 'jg-npm-package: npm package standards for coding agents',
@@ -475,7 +495,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'folder-tree',
     kind: 'implicit',
-    order: 22,
+    order: 23,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Turborepo task graphs, cache keys, and pnpm workspace dependencies correct.',
     searchTitle: 'jg-monorepo: Turborepo and pnpm workspace standards',
@@ -496,7 +516,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'file-terminal',
     kind: 'implicit',
-    order: 23,
+    order: 24,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps bash and sh scripts on Linux safe, consistent, and checked whenever a task touches shell.',
     searchTitle: 'jg-bash: Bash script standards for coding agents',
@@ -516,7 +536,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'ship',
     kind: 'implicit',
-    order: 24,
+    order: 25,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Compose services private, healthy, and reproducible, and Dockerfiles small and safe.',
     searchTitle: 'jg-docker: Docker Compose and Dockerfile standards',
@@ -536,7 +556,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'workflow',
     kind: 'implicit',
-    order: 25,
+    order: 26,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps GitHub Actions CI minimal and secure, adding more only when you ask for it.',
     searchTitle: 'jg-ci: GitHub Actions standards for coding agents',
@@ -556,7 +576,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'zod',
     kind: 'implicit',
-    order: 26,
+    order: 27,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies Zod 4 schema, strictness, and error standards whenever a task validates data.',
     searchTitle: 'jg-zod: Zod 4 validation standards for coding agents',
@@ -575,7 +595,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'flask-conical',
     kind: 'implicit',
-    order: 27,
+    order: 28,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Vitest and Playwright tests deterministic and fast whenever a task touches tests.',
     searchTitle: 'jg-testing: Vitest and Playwright standards for agents',

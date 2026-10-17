@@ -35,11 +35,11 @@ Implicit skills load on their own when a task touches their stack, such as a mig
 Run these from your repository's root:
 
 ```bash
-npx skills update -p jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-nestjs jg-postgres jg-redis jg-node jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
+npx skills update -p jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
 ```
 
 ```bash
-npx skills remove jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-nestjs jg-postgres jg-redis jg-node jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
+npx skills remove jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
 ```
 
 Both commands name the skills, so other skills in the project are left alone. Update refreshes only the skills you already have, so rerun the install command to add skills released since you installed.
@@ -75,6 +75,7 @@ Both commands name the skills, so other skills in the project are left alone. Up
 | `jg-postgres`    | SQL, migrations, schema names, queries, transactions, or connection pools and timeouts.                              | PostgreSQL 18, node-postgres 8                                                                       |
 | `jg-redis`       | Code that uses Redis, such as keys, caching, locks, rate limits, streams, or pub/sub.                                | Redis 8, node-redis 5                                                                                |
 | `jg-node`        | Node.js developer scripts, CLIs, build tooling, or filesystem code.                                                  | Node.js 24                                                                                           |
+| `jg-packages` | Reusable helpers, coded errors, API envelopes, HTTP, decimals, storage, clipboard, filesystem, processes, or service workers. | Eight general packages 1.1.0, jg-fetch 0.2.0, jg-clipboard 0.1.0 |
 | `jg-npm-package` | A published package's manifest, build output, tests, release, or a UI component library shipped to npm.              | npm CLI 11 and 12, Node.js 22, 24, and 26, TypeScript 6.0, pnpm 11 workspaces, Tailwind CSS 4.3      |
 | `jg-monorepo`    | `turbo.json`, `pnpm-workspace.yaml`, workspace dependency ranges, or adding, moving, or removing workspace packages. | Turborepo 2.11, pnpm 12 (pnpm items also hold for pnpm 11)                                           |
 | `jg-bash`        | Shell scripts, container entrypoints, Dockerfile `RUN` steps, CI `run:` steps, or Makefile recipes.                  | Bash 5.3, POSIX `sh`                                                                                 |
