@@ -16,7 +16,7 @@ describe('buildLlmsText', () => {
       },
     ]);
 
-    expect(text).toMatch(/^# JG Skills\n\n> .+\n/u);
+    expect(text).toMatch(/^# jg-skills\n\n> .+\n/u);
     expect(text).toContain(
       '## Install\n\n```bash\nnpx skills add jesusgraterol/jg-skills --skill "*" -y\n```\n',
     );

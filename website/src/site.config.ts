@@ -618,7 +618,7 @@ export const SITE_CONFIG = {
     'Battle-tested agent skills for Claude Code, Codex, and other coding agents. Brainstorm, plan, build, review, and ship changes like professional developers.',
   language: 'en',
   license: 'MIT',
-  name: 'JG Skills',
+  name: 'jg-skills',
   navigation: [
     { href: '/#skills', label: 'Skills' },
     { href: '/#workflow', label: 'How it works' },
@@ -627,7 +627,7 @@ export const SITE_CONFIG = {
   openGraph: {
     height: 630,
     image: '/og/jg-skills.png',
-    imageAlt: 'JG Skills: battle-tested skills for coding agents',
+    imageAlt: 'jg-skills: battle-tested skills for coding agents',
     imageType: 'image/png',
     locale: 'en_US',
     width: 1200,

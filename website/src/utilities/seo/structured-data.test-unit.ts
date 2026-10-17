@@ -7,7 +7,7 @@ import { buildStructuredData } from './structured-data.ts';
 const WEBSITE_REFERENCE = {
   '@id': 'https://jg-skills.jesusgraterol.dev/#website',
   '@type': 'WebSite',
-  name: 'JG Skills',
+  name: 'jg-skills',
   url: 'https://jg-skills.jesusgraterol.dev/',
 };
 
@@ -30,7 +30,7 @@ describe('buildStructuredData', () => {
       buildStructuredData({
         canonicalUrl: 'https://jg-skills.jesusgraterol.dev/',
         description: 'Explicit-only skills for Claude Code and Codex.',
-        title: 'JG Skills',
+        title: 'jg-skills',
         type: 'website',
       }),
     ).toStrictEqual({
@@ -40,7 +40,7 @@ describe('buildStructuredData', () => {
       author: AUTHOR,
       description: 'Explicit-only skills for Claude Code and Codex.',
       inLanguage: 'en',
-      name: 'JG Skills',
+      name: 'jg-skills',
       url: 'https://jg-skills.jesusgraterol.dev/',
     });
   });
@@ -124,7 +124,7 @@ describe('buildStructuredData', () => {
           { name: 'jg-brainstorm', path: '/skills/jg-brainstorm/' },
           { name: 'jg-plan', path: '/skills/jg-plan/' },
         ],
-        title: 'JG Skills',
+        title: 'jg-skills',
         type: 'website',
       }),
     ).toStrictEqual({
@@ -136,7 +136,7 @@ describe('buildStructuredData', () => {
           author: AUTHOR,
           description: 'Agent skills for Claude Code and Codex.',
           inLanguage: 'en',
-          name: 'JG Skills',
+          name: 'jg-skills',
           url: 'https://jg-skills.jesusgraterol.dev/',
         },
         {
@@ -165,7 +165,7 @@ describe('buildStructuredData', () => {
     expect(
       buildStructuredData({
         breadcrumbs: [
-          { name: 'JG Skills', path: '/' },
+          { name: 'jg-skills', path: '/' },
           { name: 'jg-pause', path: '/skills/jg-pause/' },
         ],
         canonicalUrl: 'https://jg-skills.jesusgraterol.dev/skills/jg-pause/',

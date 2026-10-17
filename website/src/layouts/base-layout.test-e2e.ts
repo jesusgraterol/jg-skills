@@ -199,7 +199,7 @@ test.describe('production website', () => {
     await page.setViewportSize({ width: 320, height: 720 });
     await page.goto('/skills/jg-review/');
 
-    await expect(page.getByRole('link', { name: 'JG Skills home' })).toContainText('JG Skills');
+    await expect(page.getByRole('link', { name: 'jg-skills home' })).toContainText('jg-skills');
 
     const menu = page.getByLabel('Navigation menu', { exact: true });
     const mobileNavigation = page.getByRole('navigation', { name: 'Mobile navigation' });
