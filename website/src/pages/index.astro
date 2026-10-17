@@ -3,6 +3,7 @@ import { ArrowDown } from '@lucide/astro';
 
 import Credits from '../components/credits/credits.astro';
 import InstallCommand from '../components/install-command/install-command.astro';
+import PackagesBridge from '../components/packages-bridge/packages-bridge.astro';
 import SessionDemo from '../components/session-demo/session-demo.astro';
 import SkillCard from '../components/skill-card/skill-card.astro';
 import StandardsSection from '../components/standards-section/standards-section.astro';
@@ -177,6 +178,8 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
   </section>
 
   <StandardsSection />
+
+  <PackagesBridge />
 
   <Credits />
 </BaseLayout>

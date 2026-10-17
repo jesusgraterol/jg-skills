@@ -654,6 +654,8 @@ export const SITE_CONFIG = {
   },
   // the author's own domain; links to it and its subdomains keep their referrer
   ownedDomain: 'jesusgraterol.dev',
+  packagesSkillPath: '/skills/jg-packages/',
+  packagesUrl: 'https://jg-packages.jesusgraterol.dev/',
   repositoryUrl: 'https://github.com/jesusgraterol/jg-skills',
   themeColors: {
     dark: '#1e2939',

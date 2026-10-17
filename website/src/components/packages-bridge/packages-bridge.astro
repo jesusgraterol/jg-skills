@@ -1,0 +1,79 @@
+---
+import { ArrowRight, FileText, Puzzle, Workflow } from '@lucide/astro';
+
+import { SITE_CONFIG } from '../../site.config.ts';
+import ExternalLink from '../external-link/external-link.astro';
+
+// each layer has a distinct role, while the project keeps its own contracts
+const ROLES = [
+  { Icon: FileText, name: 'Coding instructions', text: "Set your project's standards." },
+  { Icon: Workflow, name: 'jg-skills', text: 'Guide the work.' },
+  { Icon: Puzzle, name: 'jg-packages', text: 'Provide reusable code.' },
+] as const;
+---
+
+<section
+  id="packages"
+  class="section-space scroll-mt-16 border-b border-border"
+  aria-labelledby="packages-title"
+>
+  <div
+    class="page-shell grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-14"
+  >
+    <div>
+      <p class="eyebrow">jg-packages</p>
+      <h2
+        id="packages-title"
+        class="section-title mt-4"
+      >
+        Give your agent reusable building blocks.
+      </h2>
+      <p class="lede mt-5">
+        Use reusable helpers alongside your project's own code. The jg-packages skill helps your
+        agent choose a suitable package and verify its installed API.
+      </p>
+      <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
+        <ExternalLink
+          class="action-primary"
+          href={SITE_CONFIG.packagesUrl}
+        >
+          Browse jg-packages
+        </ExternalLink>
+        <a
+          class="action-secondary"
+          href={SITE_CONFIG.packagesSkillPath}
+        >
+          Use the jg-packages skill
+          <ArrowRight
+            class="size-4"
+            aria-hidden="true"
+          />
+        </a>
+      </div>
+    </div>
+    <ol
+      class="grid gap-3"
+      aria-label="How coding instructions, skills, and packages fit together"
+    >
+      {
+        ROLES.map(({ Icon, name, text }) => (
+          <li class="flex items-center gap-4 rounded-xl border border-border bg-surface p-5 shadow-surface">
+            <span
+              class="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground"
+              aria-hidden="true"
+            >
+              <Icon
+                class="size-5"
+                size={20}
+              />
+            </span>
+            <div class="min-w-0">
+              <h3 class="font-mono text-base font-bold wrap-anywhere">{name}</h3>
+              <p class="mt-1 text-sm leading-6 text-muted">{text}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
