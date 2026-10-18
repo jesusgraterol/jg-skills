@@ -10,7 +10,7 @@ The agent loads this skill on its own when a task touches its area. This skill's
 - It adds domain rules to the task. It never authorizes actions, widens scope, or replaces the workflow or approvals of a skill the developer invoked.
 - It ranks with the repository's coding instructions. When they conflict, the coding instructions win, except for the exceptions this skill states for its own area.
 - The repository's established conventions win over this skill's naming, layout, and style rules. Its correctness and safety rules, and the exceptions it states for its own area, still apply.
-- Check the installed versions first. This skill was written for the web platform as of October 2026, meaning current Chromium browsers, Firefox, and Safari 27 on macOS, iOS, and iPadOS, plus Playwright 1.64, and `sw-builder` 1.2 and `sw-service` 1.2 where installed. An item marked with a minimum version, written like (18+), applies only when that version or a later one is installed. For an older installed version, follow that version's official documentation.
+- Check the installed versions first. This skill was written for the web platform as of October 2026, meaning current Chromium browsers, Firefox, and Safari 27 on macOS, iOS, and iPadOS, plus Playwright 1.64, and `jg-sw` 1.2 where installed. An item marked with a minimum version, written like (18+), applies only when that version or a later one is installed. For an older installed version, follow that version's official documentation.
 - Before relying on one of this skill's version-specific items, check it against the current official guidance when the installed version of the technology is newer than the one this skill was written for, or when the version bullet gives a review month for something without an installed version, such as a hosted service or browser behavior, and that month is more than six months before the current date. Where an item differs from that guidance, follow the guidance. Version-specific items are API, syntax, and feature recommendations, and anything marked with a minimum version. This skill's conventions and requirements, such as its naming, layout, style, reuse, and safety rules, keep their usual precedence even where official guidance suggests otherwise. Report each item that looks outdated in the summary, with the installed version and what the current guidance says, and offer there to open an issue on the jg-skills repository, `https://github.com/jesusgraterol/jg-skills`:
   - Never pause or stop a run for the offer, including an autonomous run. When no one can answer, include the pre-filled link described below instead of asking.
   - First search the repository's open issues, and skip the offer when one already covers the item. When the search can't run, say so next to the link, so the developer checks the existing issues before submitting.
@@ -69,7 +69,7 @@ These files belong to this skill and hold rules that apply only to some work. Re
 - Precache only content-hashed build output, plus the shell and the offline page when offline use is in scope, never files the app doesn't load, such as manifest screenshots.
 - Handle only same-origin `GET` requests, and cache only `ok` responses, never opaque, `206`, `Vary: *`, or error responses.
 - Never cache authenticated or personal responses unless the feature is designed for it, and then clear them on sign-out and on account switch. Never cache responses marked `no-store` or `private`.
-- Never serve navigation HTML cache-first.
+- For hand-written workers, never serve navigation HTML cache-first. With jg-sw, an explicitly precached shell may be cache-first: each build has a fresh cache, installation never skips waiting, and users accept the waiting worker before activation and reload. Keep all other HTML excluded from runtime caching.
 - Keep a recovery path: to remove a worker, deploy a replacement at the same URL that deletes the app's caches and unregisters itself, because deleting `sw.js` leaves the installed worker running.
 
 ## Updates and deploys
@@ -84,18 +84,28 @@ These files belong to this skill and hold rules that apply only to some work. Re
 - Add offline behavior only when the task or an approved plan calls for it.
 - Treat `navigator.onLine` as a hint: `false` means offline, but `true` doesn't prove a connection. While offline, show one offline notice instead of an error toast per failed request, and never disable features or hide errors only because of it.
 
-## Using sw-builder and sw-service
+## Using jg-sw
 
-When the repository uses `sw-builder` or `sw-service`:
+When the repository uses `jg-sw`, resolve its installed version and read its bundled `API.md`, then `RECIPES.md` and README for the relevant task. An older installed contract takes precedence over a newer recipe; never assume a version-gated option exists.
 
-- Run the bundler first and `sw-builder` after it, such as `vite build && sw-builder`, and keep an empty `public/sw.js` for development.
+- Use `serviceWorkerPlugin` from `jg-sw/build` with Vite: it generates the worker after `vite build` and serves one without caching during `vite`, so no empty `public/sw.js` is needed. Without the plugin, run the CLI after the bundler, such as `vite build && jg-sw`.
 - Give each app on a shared origin its own `cacheNamePrefix`.
-- Never add `/` or `index.html` to `includeToPrecache`, and keep `text/html`, `audio/`, and `video/` in `excludeMIMETypesFromCache`.
-- `sw-builder` serves runtime requests cache-first and ignores `Cache-Control`, so keep private same-origin responses other than JSON on another origin or excluded by MIME type.
-- `sw-builder` has no offline fallback page or navigation preload. When offline use is in scope, propose an addition for approval instead of editing the generated worker.
-- `sw-service` reports no waiting worker, so detect new versions in the app, such as by comparing a deployed version file, and apply them with `SWService.updateApp()`.
-- `SWService.installer` exists only after a successful registration, so don't rely on it for the install control when registration fails.
-- When the worker's response carries a Content Security Policy, allow the `gstatic.com` scripts that the `firebase-fcm` template imports.
+- When offline use is in scope, precache `/`, `/index.html`, and the content-hashed assets directory through `includeToPrecache`, as the offline recipe does. Each build uses a new `<cacheNamePrefix>--<10 random characters>` cache. Keep `text/html`, API-data MIME types such as `application/json`, `audio/`, and `video/` in `excludeMIMETypesFromCache`; the explicitly precached shell is the HTML exception.
+- (1.2+) Set `navigationFallback` to a precached page: `/index.html` lets offline client routes such as `/settings` open, or use a dedicated offline page for a multi-page site. It answers only navigations absent from the cache whose network request fails, never a server's 4xx or 5xx response. The build fails with `NAVIGATION_FALLBACK_NOT_PRECACHED` when the fallback isn't precached.
+- Runtime caching rejects responses marked `Cache-Control: no-store` or `private`, as well as opaque, `206`, `Vary: *`, and error responses. Keep private same-origin responses out with those headers or an appropriate MIME exclusion; they don't need another origin solely to avoid this cache.
+- jg-sw has no navigation preload or static routing. Propose package additions when needed instead of editing the generated worker.
+- Read `hasWaitingWorker` from `getServiceWorkerSnapshot()` and follow changes with `subscribeToServiceWorker(listener)`, which also works with React's `useSyncExternalStore`. Call `updateApp()` from a user action: it messages the waiting worker to activate and reloads once. Without one, it checks for an update, waits up to 30 seconds for installation, then reloads once even if no update installs. Never reload on its own over unsaved input.
+- `registerServiceWorker()` starts installation tracking even when registration fails or workers are unsupported. Show installation controls only when `installation.canInstall` or `canInstallApp()` allows it, and call `installApp()` from a click; an available prompt resolves to `'accepted'` or `'dismissed'`.
+- `registerServiceWorker()` never rejects; failures appear in `registrationError` as an `Exception` with an `ERRORS` code. Treat `SW_NO_BROWSER_SUPPORT` as online-only operation, not an error to report. Register after `load` when precaching, as the recipe does.
+- When the worker's response carries a Content Security Policy, allow the Firebase compat SDK scripts that the `firebase-fcm` template loads from `https://www.gstatic.com` through `importScripts()`.
+
+### Repositories still using sw-builder and sw-service
+
+jg-sw replaced `sw-builder` and `sw-service`; the older packages are not deprecated. Keep existing apps on their established tooling unless migration is part of the task. For their 1.2 contracts:
+
+- Run the bundler before `sw-builder` and keep the empty development `public/sw.js`. Keep `/` and `index.html` out of `includeToPrecache`, and exclude `text/html`, `audio/`, and `video/` from runtime caching.
+- `sw-builder` ignores `Cache-Control`, so keep private same-origin responses on another origin or excluded by MIME type. It has no offline fallback or navigation preload; propose additions rather than editing generated workers. Its Firebase template needs the same Content Security Policy allowance.
+- `sw-service` has no waiting-worker snapshot: detect new versions in the app and apply them with `SWService.updateApp()`. Its `SWService.installer` exists only after successful registration, so don't rely on it for install controls when registration fails.
 
 ## iOS and Safari
 
