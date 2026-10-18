@@ -104,6 +104,31 @@ test.describe('production website', () => {
     await expect(browseLink.locator('svg.lucide-arrow-down')).toHaveCount(1);
   });
 
+  test('the footer links to the package site alongside its existing project destinations', async ({
+    page,
+  }) => {
+    await page.goto('/');
+
+    const links = page.getByRole('navigation', { name: 'Project links' });
+    const packages = links.getByRole('link', {
+      name: 'jg-packages (opens in a new tab)',
+      exact: true,
+    });
+
+    await expect(packages).toHaveAttribute('href', 'https://jg-packages.jesusgraterol.dev/');
+    await expect(packages).toHaveAttribute('target', '_blank');
+    await expect(packages.locator('[data-external-icon]')).toHaveCount(1);
+    await expect(links.getByRole('link', { name: 'Source repository' })).toHaveAttribute(
+      'href',
+      SITE_CONFIG.repositoryUrl,
+    );
+    await expect(links.getByRole('link', { name: 'llms.txt' })).toHaveAttribute(
+      'href',
+      '/llms.txt',
+    );
+    await expect(links.getByRole('link', { name: 'Credits' })).toHaveAttribute('href', '/#credits');
+  });
+
   for (const route of ACCESSIBILITY_ROUTES) {
     test(`${route} has no automatically detectable accessibility violations`, async ({ page }) => {
       await page.goto(route);
