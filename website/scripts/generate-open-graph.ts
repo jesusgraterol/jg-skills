@@ -19,6 +19,8 @@ const faviconSvg = await readFile(
   fileURLToPath(import.meta.resolve('jg-personal-astro-ui/jg-favicon.svg')),
   'utf8',
 );
+// the font families the template declares with @font-face from bundled files
+const TEMPLATE_FONTS = ['Ubuntu Sans Variable', 'Ubuntu Sans Mono Variable'];
 // the explicit skills in catalog order, which the image lists as the workflow's commands
 const EXPLICIT_SKILL_NAMES = Object.entries(SKILL_CATALOG)
   .filter(([, entry]) => entry.kind === 'explicit')
@@ -60,7 +62,20 @@ const generateOpenGraphImage = async (): Promise<void> => {
         }),
       );
     }, EXPLICIT_SKILL_NAMES);
-    await page.evaluate(async () => document.fonts.ready);
+    // fail instead of rendering with a fallback when a bundled font doesn't load
+    const missingFonts = await page.evaluate(async (families) => {
+      const loaded = await Promise.all(
+        families.map(async (family) => (await document.fonts.load(`16px "${family}"`)).length > 0),
+      );
+      await document.fonts.ready;
+
+      return families.filter((_, index) => !loaded[index]);
+    }, TEMPLATE_FONTS);
+
+    if (missingFonts.length > 0) {
+      throw new Error(`The open-graph template's fonts did not load: ${missingFonts.join(', ')}`);
+    }
+
     await page.locator('.canvas').screenshot({ path: outputPath });
   } finally {
     await browser.close();
