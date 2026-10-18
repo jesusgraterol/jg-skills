@@ -37,6 +37,7 @@
 | `jg-pwa`            | `MonitorSmartphone`  | Web apps installed on desktops and phones, across several browsers.                                                            |
 | `jg-seo`            | `Globe`              | Public websites as search engines and social networks see them.                                                                |
 | `jg-svg`            | `VectorSquare`       | Vector graphics, drawn as a shape with its anchor points. The SVG mark is CC-BY-SA-4.0.                                        |
+| `jg-graphics`       | `Image`              | Generated images, made with HTML, SVG, and Playwright, so no single mark fits.                                                 |
 | `jg-nestjs`         | NestJS mark          | Written for NestJS.                                                                                                            |
 | `jg-postgres`       | `Database`           | PostgreSQL's elephant blurs at 20 pixels.                                                                                      |
 | `jg-redis`          | Redis mark           | Written for Redis.                                                                                                             |

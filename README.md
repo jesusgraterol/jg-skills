@@ -35,11 +35,11 @@ Implicit skills load on their own when a task touches their stack, such as a mig
 Run these from your repository's root:
 
 ```bash
-npx skills update -p jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
+npx skills update -p jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-graphics jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
 ```
 
 ```bash
-npx skills remove jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
+npx skills remove jg-brainstorm jg-plan jg-challenge-plan jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-graphics jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
 ```
 
 Both commands name the skills, so other skills in the project are left alone. Update refreshes only the skills you already have, so rerun the install command to add skills released since you installed.
@@ -72,6 +72,7 @@ Both commands name the skills, so other skills in the project are left alone. Up
 | `jg-pwa`         | Web app manifests, install prompts, service workers, offline caching, or web push.                                   | The web platform as of October 2026, Playwright 1.64, `jg-sw` 1.2 where installed                   |
 | `jg-seo`         | A public site's metadata, canonical URLs, sitemap, robots rules, structured data, social previews, or llms.txt.      | Google Search Central guidance as of October 2026, Astro 7.4 with `@astrojs/sitemap` 3.7, Next.js 16 |
 | `jg-svg`         | SVG files, inline SVG, icons, logos, favicons, or sprites drawn as SVG, design-tool exports, or SVGO.                | SVGO 4, browser behavior as of October 2026                                                          |
+| `jg-graphics`    | Generated images such as social posts, blog covers, preview image files, or video graphics.                          | Playwright 1.64, browser behavior as of October 2026                                                 |
 | `jg-nestjs`      | NestJS modules, controllers, providers, configuration, logging, or NestJS tests.                                     | NestJS 12                                                                                            |
 | `jg-postgres`    | SQL, migrations, schema names, queries, transactions, or connection pools and timeouts.                              | PostgreSQL 18, node-postgres 8                                                                       |
 | `jg-redis`       | Code that uses Redis, such as keys, caching, locks, rate limits, streams, or pub/sub.                                | Redis 8, node-redis 5                                                                                |

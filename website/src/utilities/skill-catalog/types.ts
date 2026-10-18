@@ -25,6 +25,7 @@ export type ISkillLucideIcon =
   | 'folder-tree'
   | 'globe'
   | 'hammer'
+  | 'image'
   | 'lightbulb'
   | 'list-ordered'
   | 'map'

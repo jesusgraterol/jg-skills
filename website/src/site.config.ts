@@ -386,6 +386,26 @@ export const SKILL_CATALOG = {
     whenToUse:
       'It loads on its own when a task touches SVG files, inline SVG, or SVG exported from a design tool. Call it by name to load it before such a task.',
   },
+  'jg-graphics': {
+    examples: [
+      {
+        outcome:
+          'Builds an HTML template with the logo inline and the font loaded from a file, renders it at the exact size with Playwright, and keeps the template and script next to the PNG.',
+        request: 'Make a cover image for the launch post with its title and our logo.',
+      },
+    ],
+    icon: 'image',
+    kind: 'implicit',
+    order: 18,
+    searchDescription:
+      'An implicit agent skill for Claude Code and Codex that renders social posts, blog covers, and video graphics with consistent fonts and exact sizes.',
+    searchTitle: 'jg-graphics: Image generation standards for coding agents',
+    stage: 'implicit',
+    summary:
+      'Templates, fonts, exact sizes, formats, and repeatable renders for images made with Playwright.',
+    whenToUse:
+      'It loads on its own when a task generates images such as social posts, blog covers, or video graphics. Call it by name to load it before such a task.',
+  },
   'jg-nestjs': {
     examples: [
       {
@@ -396,7 +416,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'nestjs',
     kind: 'implicit',
-    order: 18,
+    order: 19,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies NestJS module, validation, logging, lifecycle, and test standards whenever a task touches Nest.',
     searchTitle: 'jg-nestjs: NestJS standards for coding agents',
@@ -415,7 +435,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'database',
     kind: 'implicit',
-    order: 19,
+    order: 20,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies PostgreSQL naming, constraint, query, and migration standards whenever a task touches SQL.',
     searchTitle: 'jg-postgres: PostgreSQL standards for coding agents',
@@ -435,7 +455,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'redis',
     kind: 'implicit',
-    order: 20,
+    order: 21,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies Redis key, expiry, scanning, and locking standards whenever a task touches Redis.',
     searchTitle: 'jg-redis: Redis standards for coding agents',
@@ -455,7 +475,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'nodedotjs',
     kind: 'implicit',
-    order: 21,
+    order: 22,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Node.js scripts, CLIs, and filesystem code portable and safe on Windows, macOS, and Linux.',
     searchTitle: 'jg-node: Portable Node.js scripts for coding agents',
@@ -475,7 +495,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'puzzle',
     kind: 'implicit',
-    order: 22,
+    order: 23,
     searchDescription:
       'An implicit skill for Claude Code and Codex that selects suitable JG Packages, verifies installed API documentation, and preserves project contracts.',
     searchTitle: 'jg-packages: Reuse JG Packages with coding agents',
@@ -495,7 +515,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'package',
     kind: 'implicit',
-    order: 23,
+    order: 24,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps package exports, dependency ranges, tarball tests, and npm releases correct and safe.',
     searchTitle: 'jg-npm-package: npm package standards for coding agents',
@@ -515,7 +535,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'folder-tree',
     kind: 'implicit',
-    order: 24,
+    order: 25,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Turborepo task graphs, cache keys, and pnpm workspace dependencies correct.',
     searchTitle: 'jg-monorepo: Turborepo and pnpm workspace standards',
@@ -536,7 +556,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'file-terminal',
     kind: 'implicit',
-    order: 25,
+    order: 26,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps bash and sh scripts on Linux safe, consistent, and checked whenever a task touches shell.',
     searchTitle: 'jg-bash: Bash script standards for coding agents',
@@ -556,7 +576,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'ship',
     kind: 'implicit',
-    order: 26,
+    order: 27,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Compose services private, healthy, and reproducible, and Dockerfiles small and safe.',
     searchTitle: 'jg-docker: Docker Compose and Dockerfile standards',
@@ -576,7 +596,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'workflow',
     kind: 'implicit',
-    order: 27,
+    order: 28,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps GitHub Actions CI minimal and secure, adding more only when you ask for it.',
     searchTitle: 'jg-ci: GitHub Actions standards for coding agents',
@@ -596,7 +616,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'zod',
     kind: 'implicit',
-    order: 28,
+    order: 29,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies Zod 4 schema, strictness, and error standards whenever a task validates data.',
     searchTitle: 'jg-zod: Zod 4 validation standards for coding agents',
@@ -615,7 +635,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'flask-conical',
     kind: 'implicit',
-    order: 29,
+    order: 30,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Vitest and Playwright tests deterministic and fast whenever a task touches tests.',
     searchTitle: 'jg-testing: Vitest and Playwright standards for agents',
