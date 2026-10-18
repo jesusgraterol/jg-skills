@@ -38,6 +38,7 @@ export type ISkillLucideIcon =
   | 'ship'
   | 'terminal'
   | 'upload'
+  | 'vector-square'
   | 'workflow';
 
 // the Simple Icons slug of a technology mark an implicit skill shows for the stack it covers
