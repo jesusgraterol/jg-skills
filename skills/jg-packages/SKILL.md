@@ -1,16 +1,16 @@
 ---
 name: jg-packages
-description: Consumer guidance for selecting and integrating JG Packages. Use when writing, reviewing, or planning reusable validation, formatting, string, date, JSON, collection, randomization, or async helpers; coded exceptions or API response envelopes; HTTP request wrappers; exact decimal arithmetic; browser key-value storage or clipboard operations; Node.js filesystem or process helpers; service-worker integration; or consumer code using JG Packages. Not for marketing copy about the collection.
+description: Consumer guidance for selecting and integrating JG Packages. Use when writing, reviewing, or planning reusable validation, formatting, string, date, JSON, collection, randomization, or async helpers; coded exceptions or API response envelopes; HTTP request wrappers; exact decimal arithmetic or money stored as scaled integers; environment variables or secret files; PostgreSQL pools, transactions, or advisory locks; Redis caching or one-time claims; TanStack Query clients or their persistence; React hooks for browser state; browser key-value storage or clipboard operations; Node.js filesystem or process helpers; service-worker integration; or consumer code using JG Packages. Not for marketing copy about the collection.
 ---
 
 ## Application
 
-The agent loads this skill on its own when a task touches its area. This skill's area is reusable support helpers, coded exceptions, API envelopes, HTTP wrappers, decimal arithmetic, browser storage and clipboard operations, Node.js filesystem and process helpers, service-worker integration, and consumer use of JG Packages.
+The agent loads this skill on its own when a task touches its area. This skill's area is reusable support helpers, coded exceptions, API envelopes, HTTP wrappers, decimal arithmetic, environment and secret reading, PostgreSQL and Redis helpers, React query persistence and browser-state hooks, browser storage and clipboard operations, Node.js filesystem and process helpers, service-worker integration, and consumer use of JG Packages.
 
 - It adds domain rules to the task. It never authorizes actions, widens scope, or replaces the workflow or approvals of a skill the developer invoked.
 - It ranks with the repository's coding instructions. When they conflict, the coding instructions win, except for the exceptions this skill states for its own area.
 - The repository's established conventions win over this skill's naming, layout, and style rules. Its correctness and safety rules, and the exceptions it states for its own area, still apply.
-- Check the installed versions first. This skill was written for jg-exception, jg-bignumber, jg-fs, and jg-sw 1.2.0; jg-api-response, jg-utilities, jg-process, and jg-storage 1.1.1; jg-fetch 0.2.1; and jg-clipboard 0.2.0. An item marked with a minimum version, written like (18+), applies only when that version or a later one is installed. For an older installed version, follow that version's official documentation.
+- Check the installed versions first. This skill was written for jg-exception, jg-bignumber, and jg-sw 1.3.0; jg-utilities and jg-fs 1.2.0; jg-api-response, jg-process, and jg-storage 1.1.1; jg-fetch 0.2.2; jg-clipboard 0.2.0; and jg-env, jg-postgres, jg-redis, jg-tanstack-query, and jg-react 0.1.1. An item marked with a minimum version, written like (18+), applies only when that version or a later one is installed. For an older installed version, follow that version's official documentation.
 - Before relying on one of this skill's version-specific items, check it against the current official guidance when the installed version of the technology is newer than the one this skill was written for, or when the version bullet gives a review month for something without an installed version, such as a hosted service or browser behavior, and that month is more than six months before the current date. Where an item differs from that guidance, follow the guidance. Version-specific items are API, syntax, and feature recommendations, and anything marked with a minimum version. This skill's conventions and requirements, such as its naming, layout, style, reuse, and safety rules, keep their usual precedence even where official guidance suggests otherwise. Report each item that looks outdated in the summary, with the installed version and what the current guidance says, and offer there to open an issue on the jg-skills repository, `https://github.com/jesusgraterol/jg-skills`:
   - Never pause or stop a run for the offer, including an autonomous run. When no one can answer, include the pre-filled link described below instead of asking.
   - First search the repository's open issues, and skip the offer when one already covers the item. When the search can't run, say so next to the link, so the developer checks the existing issues before submitting.
@@ -26,16 +26,21 @@ Consider the relevant package when its capability fits, even when the request na
 
 | Package | Capability |
 | --- | --- |
-| `jg-exception` | Coded exceptions, error extraction, redaction of secret values, and error-code assertions through `jg-exception/testing` |
+| `jg-exception` | Coded exceptions, error extraction, redaction of secret values and named fields, and error-code assertions through `jg-exception/testing` |
 | `jg-api-response` | Structured response envelopes exchanged between services |
 | `jg-utilities` | Reusable validation, formatting, string, date, JSON, collection, generation, and async helpers |
-| `jg-bignumber` | Exact decimal arithmetic and related numeric operations |
+| `jg-bignumber` | Exact decimal arithmetic, related numeric operations, and exact conversion of amounts to and from scaled integers |
 | `jg-fs` | Node.js filesystem helpers, with public async and sync entry points |
 | `jg-process` | Child-process execution and lifecycle helpers |
 | `jg-storage` | Browser key-value persistence |
 | `jg-sw` | Service-worker build and browser integration |
 | `jg-fetch` | HTTP requests with documented result and failure contracts |
 | `jg-clipboard` | Supported browser clipboard operations |
+| `jg-env` | Strict environment-variable reading, and secret files through `jg-env/node`, with errors that never print a value |
+| `jg-postgres` | node-postgres pools, transactions, advisory locks, cursor pagination, and ordered lists, with JSON records through `jg-postgres/record-store` |
+| `jg-redis` | node-redis connections and read-through caching, with one-time claims and single-use values through `jg-redis/coordination` |
+| `jg-tanstack-query` | TanStack Query clients for React, with IndexedDB persistence |
+| `jg-react` | React hooks for browser state: online status, document visibility, breakpoints, and scroll position |
 
 - Inspect manifests, lockfiles, existing imports, project-owned abstractions, supported runtimes, and resolved versions before choosing an export. Prefer a suitable installed export over equivalent new support logic or a platform call when it preserves the required behavior.
 - These are approved dependency candidates, not an installation or migration instruction. Justify each new dependency individually. Add an uninstalled candidate only when the requested change already involves dependency changes or its meaningful production benefit outweighs dependency, bundle, runtime, and maintenance costs; otherwise present it as an option. Follow the project's package manager, version, and dependency-type rules.

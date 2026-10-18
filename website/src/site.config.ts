@@ -463,7 +463,7 @@ export const SKILL_CATALOG = {
     summary:
       'Package selection, local API documentation, and consumer integration for JG Packages.',
     whenToUse:
-      'It loads on its own for reusable helpers, coded errors, API envelopes, HTTP wrappers, decimal math, browser storage or clipboard work, filesystem or process helpers, service workers, or consumer use of JG Packages. Call it by name to load it before such a task.',
+      'It loads on its own for reusable helpers, coded errors, API envelopes, HTTP wrappers, decimal math, environment variables and secrets, PostgreSQL and Redis helpers, React query persistence and browser-state hooks, browser storage or clipboard work, filesystem or process helpers, service workers, or consumer use of JG Packages. Call it by name to load it before such a task.',
   },
   'jg-npm-package': {
     examples: [
