@@ -30,7 +30,9 @@ test.describe('credits section', () => {
       await expect(card.locator('[data-credit-author]')).toHaveText(`by ${author}`);
       await expect(card.locator('[data-credit-license]')).toHaveText('MIT');
       await expect(card.locator('svg[data-github-mark]')).toHaveCount(1);
-      await expect(card.locator('[data-external-icon].lucide-arrow-up-right')).toHaveCount(1);
+      // the link card's up-right arrow in the corner, and the new-tab notice on its link
+      await expect(card.locator('.lucide-arrow-up-right')).toHaveCount(1);
+      await expect(card.getByRole('link')).toHaveAccessibleName(`${name} (opens in a new tab)`);
     }
   });
 
@@ -38,9 +40,7 @@ test.describe('credits section', () => {
     await page.goto('/');
 
     await expect(
-      page
-        .getByRole('navigation', { name: 'Project links' })
-        .getByRole('link', { name: 'Credits' }),
+      page.getByRole('navigation', { name: 'Project' }).getByRole('link', { name: 'Credits' }),
     ).toHaveAttribute('href', '/#credits');
   });
 

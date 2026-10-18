@@ -1,8 +1,9 @@
 ---
 import { ArrowRight, FileText, Puzzle, Workflow } from '@lucide/astro';
+import Button from 'jg-personal-astro-ui/button';
+import IconTile from 'jg-personal-astro-ui/icon-tile';
 
 import { SITE_CONFIG } from '../../site.config.ts';
-import ExternalLink from '../external-link/external-link.astro';
 
 // each layer has a distinct role, while the project keeps its own contracts
 const ROLES = [
@@ -14,11 +15,11 @@ const ROLES = [
 
 <section
   id="packages"
-  class="section-space scroll-mt-16 border-b border-border"
+  class="jg-section-space scroll-mt-16 border-b border-border"
   aria-labelledby="packages-title"
 >
   <div
-    class="page-shell grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-14"
+    class="jg-container grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-14"
   >
     <div>
       <p class="eyebrow">jg-packages</p>
@@ -33,22 +34,22 @@ const ROLES = [
         agent choose a suitable package and verify its installed API.
       </p>
       <div class="mt-7 flex flex-col items-start gap-3 sm:flex-row sm:flex-wrap">
-        <ExternalLink
-          class="action-primary"
+        <Button
+          external
           href={SITE_CONFIG.packagesUrl}
         >
           Browse jg-packages
-        </ExternalLink>
-        <a
-          class="action-secondary"
+        </Button>
+        <Button
           href={SITE_CONFIG.packagesSkillPath}
+          variant="outline"
         >
           Use the jg-packages skill
           <ArrowRight
             class="size-4"
             aria-hidden="true"
           />
-        </a>
+        </Button>
       </div>
     </div>
     <ol
@@ -58,15 +59,9 @@ const ROLES = [
       {
         ROLES.map(({ Icon, name, text }) => (
           <li class="flex items-center gap-4 rounded-xl border border-border bg-surface p-5 shadow-surface">
-            <span
-              class="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground"
-              aria-hidden="true"
-            >
-              <Icon
-                class="size-5"
-                size={20}
-              />
-            </span>
+            <IconTile>
+              <Icon size={20} />
+            </IconTile>
             <div class="min-w-0">
               <h3 class="font-mono text-base font-bold wrap-anywhere">{name}</h3>
               <p class="mt-1 text-sm leading-6 text-muted">{text}</p>

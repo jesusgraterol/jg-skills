@@ -53,14 +53,16 @@ test.describe('packages section', () => {
 
         await expect(browse).toHaveAttribute('href', 'https://jg-packages.jesusgraterol.dev/');
         await expect(browse).toHaveAttribute('target', '_blank');
-        await expect(browse).not.toHaveAttribute('rel', /noreferrer/u);
-        await expect(browse.locator('svg.lucide-external-link')).toHaveAttribute(
+        await expect(browse).toHaveAttribute('rel', 'noreferrer');
+        await expect(browse.locator('svg[data-new-tab-marker]')).toHaveAttribute(
           'aria-hidden',
           'true',
         );
         await expect(guidance).toHaveAttribute('href', '/skills/jg-packages/');
         await expect(guidance).not.toHaveAttribute('target', '_blank');
-        await expect(guidance.locator('[data-external-icon]')).toHaveCount(0);
+        await expect(guidance.locator('[data-new-tab-marker], .lucide-arrow-up-right')).toHaveCount(
+          0,
+        );
         await expect(page.locator('html')).toHaveAttribute('data-resolved-theme', theme);
         expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
           width,

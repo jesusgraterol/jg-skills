@@ -1,10 +1,12 @@
 ---
 import { FilePlus, Link2, PencilRuler } from '@lucide/astro';
+import AgenticCodingMark from 'jg-personal-astro-ui/agentic-coding-mark';
+import Badge from 'jg-personal-astro-ui/badge';
+import IconTile from 'jg-personal-astro-ui/icon-tile';
 import JgMark from 'jg-personal-astro-ui/jg-mark';
+import LinkCard from 'jg-personal-astro-ui/link-card';
 
 import { SITE_CONFIG } from '../../site.config.ts';
-import AgenticCodingMark from '../agentic-coding-mark/agentic-coding-mark.astro';
-import ExternalLink from '../external-link/external-link.astro';
 
 // one starting point on Agentic Coding, chosen by whether the repository already has an AGENTS.md
 interface IStandardsCard {
@@ -48,10 +50,10 @@ const toDestination = (href: string): { host: string; path: string } => {
 
 <section
   id="standards"
-  class="section-space scroll-mt-16 border-b border-border"
+  class="jg-section-space scroll-mt-16 border-b border-border"
   aria-labelledby="standards-title"
 >
-  <div class="page-shell">
+  <div class="jg-container">
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end lg:gap-14">
       <div>
         <p class="eyebrow">Agentic Coding</p>
@@ -75,12 +77,12 @@ const toDestination = (href: string): { host: string; path: string } => {
       >
         {/* each item carries the mark of the project that provides it */}
         <li
-          class="flex items-center gap-4 rounded-xl bg-primary p-5 text-primary-foreground shadow-raised"
+          class="flex items-center gap-4 rounded-xl bg-inverse p-5 text-inverse-foreground shadow-raised"
         >
           <AgenticCodingMark class="size-10 shrink-0" />
           <div class="min-w-0">
             <code class="font-mono text-base font-bold">AGENTS.md</code>
-            <span class="mt-1 block text-sm text-accent-on-primary">Sets the standards</span>
+            <span class="mt-1 block text-sm text-inverse-accent">Sets the standards</span>
           </div>
         </li>
         <li
@@ -113,48 +115,33 @@ const toDestination = (href: string): { host: string; path: string } => {
       {
         STANDARDS_CARDS.map(({ href, Icon, label, text, title }) => (
           <li>
-            {/* the whole card is the link target, so the card draws the keyboard focus ring for it */}
-            <article
-              class="relative flex h-full flex-col rounded-xl border border-border bg-surface p-5 shadow-surface transition-colors hover:border-border-strong has-focus-visible:outline-2 has-focus-visible:outline-offset-3 has-focus-visible:outline-focus motion-reduce:transition-none"
+            <LinkCard
+              external
+              href={href}
+              title={title}
               data-standards-card
             >
-              {/* the case badge shares the top row with the corner arrow, raised to center on it */}
-              <p
-                class="-mt-[3px] w-fit rounded-full border border-border px-2.5 py-0.5 font-mono text-xs font-semibold text-muted"
+              <IconTile slot="icon">
+                <Icon size={20} />
+              </IconTile>
+              <Badge
+                slot="kicker"
+                class="mb-2"
+                variant="outline"
                 data-standards-case
               >
                 {label}
-              </p>
-              <div class="mt-4 flex items-center gap-4">
-                <span
-                  class="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground"
-                  aria-hidden="true"
-                >
-                  <Icon
-                    class="size-5"
-                    size={20}
-                  />
-                </span>
-                <h3 class="min-w-0 text-lg font-semibold tracking-tight">
-                  <ExternalLink
-                    class="no-underline outline-none after:absolute after:inset-0 after:rounded-xl"
-                    cornerArrow
-                    href={href}
-                  >
-                    {title}
-                  </ExternalLink>
-                </h3>
-              </div>
-              <p class="mt-4 flex-1 text-sm leading-6 text-pretty text-muted">{text}</p>
+              </Badge>
+              <p class="text-pretty">{text}</p>
               <p
-                class="mt-5 font-mono text-xs wrap-anywhere text-muted"
+                class="mt-5 font-mono text-xs wrap-anywhere"
                 data-standards-destination
               >
                 {toDestination(href).host}
                 <wbr />
                 {toDestination(href).path}
               </p>
-            </article>
+            </LinkCard>
           </li>
         ))
       }

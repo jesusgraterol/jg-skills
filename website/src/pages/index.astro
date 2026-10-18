@@ -1,8 +1,9 @@
 ---
 import { ArrowDown } from '@lucide/astro';
+import Button from 'jg-personal-astro-ui/button';
+import InstallCommand from 'jg-personal-astro-ui/install-command';
 
 import Credits from '../components/credits/credits.astro';
-import InstallCommand from '../components/install-command/install-command.astro';
 import PackagesBridge from '../components/packages-bridge/packages-bridge.astro';
 import SessionDemo from '../components/session-demo/session-demo.astro';
 import SkillCard from '../components/skill-card/skill-card.astro';
@@ -29,7 +30,7 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
 >
   <section class="border-b border-border pt-14 pb-16 sm:pt-20 sm:pb-20">
     <div
-      class="page-shell grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14"
+      class="jg-container grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14"
     >
       <div>
         <p class="eyebrow">Agent Skills for professional development</p>
@@ -44,22 +45,23 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
         </p>
         <div class="mt-8">
           <InstallCommand
-            action="install"
             command={SITE_CONFIG.commands.install}
+            context="install command"
             id="hero-install-command"
-            label="Install in your project"
+            title="Install in your project"
           />
         </div>
-        <a
-          class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline"
+        <Button
+          class="mt-6"
           href="#skills"
+          variant="link"
         >
           Browse the skills
           <ArrowDown
             class="size-4"
             aria-hidden="true"
           />
-        </a>
+        </Button>
       </div>
       <SessionDemo />
     </div>
@@ -67,10 +69,10 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
 
   <section
     id="skills"
-    class="section-space scroll-mt-16 border-b border-border"
+    class="jg-section-space scroll-mt-16 border-b border-border"
     aria-labelledby="skills-title"
   >
-    <div class="page-shell">
+    <div class="jg-container">
       <p class="eyebrow">The skills</p>
       <h2
         id="skills-title"
@@ -111,10 +113,10 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
 
   <section
     id="workflow"
-    class="section-space scroll-mt-16 border-b border-border"
+    class="jg-section-space scroll-mt-16 border-b border-border"
     aria-labelledby="workflow-title"
   >
-    <div class="page-shell">
+    <div class="jg-container">
       <p class="eyebrow">How it works</p>
       <h2
         id="workflow-title"
@@ -130,10 +132,10 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
 
   <section
     id="install"
-    class="section-space scroll-mt-16 border-b border-border"
+    class="jg-section-space scroll-mt-16 border-b border-border"
     aria-labelledby="install-title"
   >
-    <div class="page-shell grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
+    <div class="jg-container grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-14">
       <div>
         <p class="eyebrow">Install</p>
         <h2
@@ -156,22 +158,22 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
       </div>
       <div class="grid gap-5">
         <InstallCommand
-          action="install"
           command={SITE_CONFIG.commands.install}
+          context="install command"
           id="install-command"
-          label="Install"
+          title="Install"
         />
         <InstallCommand
-          action="update"
           command={SITE_CONFIG.commands.update}
+          context="update command"
           id="update-command"
-          label="Update"
+          title="Update"
         />
         <InstallCommand
-          action="remove"
           command={SITE_CONFIG.commands.remove}
+          context="remove command"
           id="remove-command"
-          label="Remove"
+          title="Remove"
         />
       </div>
     </div>

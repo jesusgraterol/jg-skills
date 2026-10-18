@@ -315,9 +315,9 @@ export const verifyBuild = async (
       throw new Error(`${VERIFY_BUILD_ERROR_MESSAGES.UnmarkedSkillContent}: ${pagePath}`);
     }
 
+    // the same check as the catalog's on the source's rendered HTML, now on the page as built
     const unsafeContent = markdownContents
-      // Raw source Markdown is checked separately; only the renderer may add these icons.
-      .map((content) => findUnsafeMarkup(content, true))
+      .map((content) => findUnsafeMarkup(content))
       .find((problem) => problem !== undefined);
 
     if (unsafeContent !== undefined) {

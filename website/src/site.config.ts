@@ -692,11 +692,13 @@ export const SITE_CONFIG = {
     locale: 'en_US',
     width: 1200,
   },
-  // the author's own domain; links to it and its subdomains keep their referrer
-  ownedDomain: 'jesusgraterol.dev',
   packagesSkillPath: '/skills/jg-packages/',
   packagesUrl: 'https://jg-packages.jesusgraterol.dev/',
   repositoryUrl: 'https://github.com/jesusgraterol/jg-skills',
+  // the key the visitor's theme preference is stored under, unchanged so saved themes carry over
+  storageKeys: {
+    theme: 'jg-skills-theme',
+  },
   themeColors: {
     dark: '#1e2939',
     light: '#fefdfb',

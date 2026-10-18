@@ -41,7 +41,7 @@ test.describe('install command', () => {
     await page.goto('/');
 
     const terminal = page
-      .locator('[data-terminal]')
+      .locator('[data-code-window]')
       .filter({ has: page.locator('#install-command') });
 
     await expect(terminal).toContainText(`$${SITE_CONFIG.commands.install}`);
@@ -60,8 +60,8 @@ test.describe('install command', () => {
 
     await expect(copyControl).toHaveAttribute('data-copy-state', 'success');
     await expect(copyControl).toContainText('Copied');
-    await expect(page.locator('#hero-install-command-copy-status')).toHaveText(
-      'Copied to clipboard.',
+    await expect(copyControl.locator('xpath=..').locator('[data-copy-status]')).toHaveText(
+      'Copied to the clipboard.',
     );
     expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(
       SITE_CONFIG.commands.install,
@@ -78,14 +78,17 @@ test.describe('install command', () => {
     await page.goto('/');
 
     const copyControl = page.locator('button[data-copy-source="remove-command"]');
-    const guidance = 'Copy failed. Select the remove command and copy it manually.';
-    const hint = page.locator('[data-copy-hint="remove-command"]');
+    // the package's guidance for a browser without a clipboard
+    const guidance =
+      "This browser can't copy from this page. Select the remove command and copy it manually.";
+    const wrapper = copyControl.locator('xpath=..');
+    const hint = wrapper.locator('[data-copy-hint]');
 
     await copyControl.click();
 
     await expect(copyControl).toHaveAttribute('data-copy-state', 'error');
     await expect(copyControl).toContainText('Copy failed');
-    await expect(page.locator('#remove-command-copy-status')).toHaveText(guidance);
+    await expect(wrapper.locator('[data-copy-status]')).toHaveText(guidance);
     await expect(hint).toBeVisible();
     await expect(hint).toHaveText(guidance);
 

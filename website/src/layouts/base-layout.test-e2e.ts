@@ -62,35 +62,22 @@ test.describe('production website', () => {
 
       for (const link of await page.locator('a[href]').all()) {
         const href = (await link.getAttribute('href')) ?? '';
-        const externalIcon = link.locator('[data-external-icon]');
+        const marker = link.locator('[data-new-tab-marker]');
 
         if (new URL(href, page.url()).origin === pageOrigin) {
-          await expect(externalIcon).toHaveCount(0);
+          await expect(marker).toHaveCount(0);
           continue;
         }
 
+        // every link to another site opens a new tab without a referrer, and says so
         await expect(link).toHaveAttribute('target', '_blank');
-
-        // links to the author's own sites keep their referrer; third-party links drop it
-        const { hostname } = new URL(href, page.url());
-        const isOwnedSite =
-          hostname === SITE_CONFIG.ownedDomain || hostname.endsWith(`.${SITE_CONFIG.ownedDomain}`);
-
-        if (isOwnedSite) {
-          await expect(link).not.toHaveAttribute('rel', /\bnoreferrer\b/u);
-        } else {
-          await expect(link).toHaveAttribute('rel', /\bnoreferrer\b/u);
-        }
+        await expect(link).toHaveAttribute('rel', /\bnoreferrer\b/u);
 
         const spokenName = await link.evaluate(
           (element) => element.getAttribute('aria-label') ?? element.textContent ?? '',
         );
 
         expect(spokenName).toMatch(/\(opens in a new tab\)$/u);
-
-        if ((await externalIcon.count()) === 0) {
-          await expect(link).toHaveAttribute('title', spokenName);
-        }
       }
     });
   }
@@ -109,7 +96,7 @@ test.describe('production website', () => {
   }) => {
     await page.goto('/');
 
-    const links = page.getByRole('navigation', { name: 'Project links' });
+    const links = page.getByRole('navigation', { name: 'Project' });
     const packages = links.getByRole('link', {
       name: 'jg-packages (opens in a new tab)',
       exact: true,
@@ -117,8 +104,9 @@ test.describe('production website', () => {
 
     await expect(packages).toHaveAttribute('href', 'https://jg-packages.jesusgraterol.dev/');
     await expect(packages).toHaveAttribute('target', '_blank');
-    await expect(packages.locator('[data-external-icon]')).toHaveCount(1);
-    await expect(links.getByRole('link', { name: 'Source repository' })).toHaveAttribute(
+    await expect(packages).toHaveAttribute('rel', 'noreferrer');
+    await expect(packages.locator('[data-new-tab-marker]')).toHaveCount(1);
+    await expect(links.getByRole('link', { name: /^Source repository/u })).toHaveAttribute(
       'href',
       SITE_CONFIG.repositoryUrl,
     );
@@ -229,15 +217,15 @@ test.describe('production website', () => {
     const menu = page.getByLabel('Navigation menu', { exact: true });
     const mobileNavigation = page.getByRole('navigation', { name: 'Mobile navigation' });
 
-    await expect(menu.locator('[data-menu-icon="open"]')).toBeVisible();
-    await expect(menu.locator('[data-menu-icon="close"]')).toBeHidden();
+    await expect(menu.locator('.lucide-menu')).toBeVisible();
+    await expect(menu.locator('.lucide-x')).toBeHidden();
 
     await menu.focus();
     await page.keyboard.press('Enter');
 
     await expect(mobileNavigation).toBeVisible();
-    await expect(menu.locator('[data-menu-icon="close"]')).toBeVisible();
-    await expect(menu.locator('[data-menu-icon="open"]')).toBeHidden();
+    await expect(menu.locator('.lucide-x')).toBeVisible();
+    await expect(menu.locator('.lucide-menu')).toBeHidden();
     await expect(
       mobileNavigation.getByRole('link', { name: 'Install', exact: true }),
     ).toHaveAttribute('href', '/#install');
@@ -245,7 +233,7 @@ test.describe('production website', () => {
     await page.keyboard.press('Enter');
 
     await expect(mobileNavigation).toBeHidden();
-    await expect(menu.locator('[data-menu-icon="open"]')).toBeVisible();
+    await expect(menu.locator('.lucide-menu')).toBeVisible();
   });
 
   test('mobile navigation closes after a same-page link and on Escape', async ({ page }) => {

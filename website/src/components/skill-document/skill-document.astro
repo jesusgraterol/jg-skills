@@ -1,5 +1,9 @@
 ---
 import { ArrowLeft, ArrowRight } from '@lucide/astro';
+import Breadcrumb from 'jg-personal-astro-ui/breadcrumb';
+import Button from 'jg-personal-astro-ui/button';
+import Prose from 'jg-personal-astro-ui/prose';
+import TerminalWindow from 'jg-personal-astro-ui/terminal-window';
 
 import {
   SKILL_ACCESS_LABELS,
@@ -7,10 +11,7 @@ import {
   type ISkill,
 } from '../../utilities/skill-catalog/index.ts';
 import { SITE_CONFIG } from '../../site.config.ts';
-import ExternalLink from '../external-link/external-link.astro';
 import SkillIcon from '../skill-icon/skill-icon.astro';
-import TerminalWindow from '../terminal-window/terminal-window.astro';
-import SkillMarkdown from './skill-markdown.astro';
 
 interface Props {
   // neighboring skills in catalog order, absent at either end
@@ -53,29 +54,13 @@ const examples =
       }));
 ---
 
-<article class="prose-shell py-12 sm:py-16">
-  <nav
-    aria-label="Breadcrumb"
-    class="text-sm text-muted"
-  >
-    <ol class="flex flex-wrap items-center gap-2">
-      <li class="flex items-center gap-2">
-        <a
-          class="underline-offset-4 hover:text-foreground hover:underline"
-          href="/"
-          >{SITE_CONFIG.name}</a
-        >
-        <span aria-hidden="true">/</span>
-      </li>
-      <li>
-        <span
-          class="font-mono text-foreground"
-          aria-current="page"
-          >{skill.name}</span
-        >
-      </li>
-    </ol>
-  </nav>
+<article class="jg-container-prose py-12 sm:py-16">
+  <Breadcrumb
+    items={[
+      { href: '/', name: SITE_CONFIG.name },
+      { href: `/skills/${skill.name}/`, name: skill.name },
+    ]}
+  />
 
   <header class="mt-10">
     <SkillIcon
@@ -169,7 +154,7 @@ const examples =
           >
             <p class="flex gap-3">
               <span
-                class="flex h-6 w-3 shrink-0 justify-center text-primary-foreground/50 select-none"
+                class="flex h-6 w-3 shrink-0 justify-center text-terminal-foreground/50 select-none"
                 aria-hidden="true"
               >
                 {'>'}
@@ -188,17 +173,17 @@ const examples =
                   id={example.id}
                   data-skill-invocation
                 >
-                  <span class="font-bold text-accent-on-primary">{`/${example.name}`}</span>
+                  <span class="font-bold text-terminal-accent">{`/${example.name}`}</span>
                   {example.text}
                 </code>
               )}
             </p>
-            <p class="mt-3 flex gap-3 text-primary-foreground/70">
+            <p class="mt-3 flex gap-3 text-terminal-foreground/70">
               <span
                 class="flex h-6 w-3 shrink-0 items-center justify-center"
                 aria-hidden="true"
               >
-                <span class="size-1.5 rounded-full bg-accent-on-primary" />
+                <span class="size-1.5 rounded-full bg-terminal-accent" />
               </span>
               <span data-skill-outcome>{example.outcome}</span>
             </p>
@@ -229,13 +214,16 @@ const examples =
           : `The complete instructions your agent loads when you invoke ${skill.name}.`
       }
     </p>
-    <div
-      class="article-content mt-6 rounded-xl border border-border bg-surface px-5 py-6 text-base shadow-surface sm:px-8 sm:py-8 [&_h2]:mt-10 [&_h2]:pt-6 [&_h2]:text-xl [&_h2:first-child]:mt-0 [&_h2:first-child]:border-t-0 [&_h2:first-child]:pt-0"
+    {
+      /* the Markdown, which the catalog and verify-build check, sits alone in its data-skill-markdown wrapper */
+    }
+    <Prose
+      class="mt-6 rounded-xl border border-border bg-surface px-5 py-6 shadow-surface sm:px-8 sm:py-8"
       data-skill-instructions
       data-skill-markdown
     >
-      <SkillMarkdown html={instructionsHtml} />
-    </div>
+      <Fragment set:html={instructionsHtml} />
+    </Prose>
     {
       skill.references.length > 0 && (
         <div
@@ -252,12 +240,12 @@ const examples =
               data-skill-reference={path}
             >
               <p class="font-mono text-sm font-semibold wrap-anywhere text-foreground">{path}</p>
-              <div
-                class="article-content mt-3 rounded-xl border border-border bg-surface px-5 py-6 text-base shadow-surface sm:px-8 sm:py-8 [&_h2]:mt-10 [&_h2]:pt-6 [&_h2]:text-xl [&_h2:first-child]:mt-0 [&_h2:first-child]:border-t-0 [&_h2:first-child]:pt-0"
+              <Prose
+                class="mt-3 rounded-xl border border-border bg-surface px-5 py-6 shadow-surface sm:px-8 sm:py-8"
                 data-skill-markdown
               >
-                <SkillMarkdown html={entry.rendered?.html ?? ''} />
-              </div>
+                <Fragment set:html={entry.rendered?.html ?? ''} />
+              </Prose>
             </div>
           ))}
         </div>
@@ -308,21 +296,23 @@ const examples =
       }
     </nav>
     <div class="mt-6 flex flex-wrap gap-3">
-      <a
-        class="action-secondary"
+      <Button
         href="/#skills"
+        variant="outline"
       >
         <ArrowLeft
           class="size-4"
           aria-hidden="true"
         />
         All skills
-      </a>
-      <ExternalLink
-        class="action-secondary"
+      </Button>
+      <Button
+        external
         href={skill.sourceUrl}
-        >View SKILL.md on GitHub</ExternalLink
+        variant="outline"
       >
+        View SKILL.md on GitHub
+      </Button>
     </div>
   </footer>
 </article>

@@ -25,6 +25,7 @@ import {
   VectorSquare,
   Workflow,
 } from '@lucide/astro';
+import IconTile from 'jg-personal-astro-ui/icon-tile';
 
 import type {
   ISkillBrandMark,
@@ -68,45 +69,34 @@ const LUCIDE_ICONS = {
   workflow: Workflow,
 } as const satisfies Record<ISkillLucideIcon, typeof Bug>;
 
-// tile classes and the glyph size inside it, shared by Lucide icons and technology marks
-const SIZES = {
-  card: { glyph: 'size-5', pixels: 20, tile: 'size-10 rounded-lg' },
-  header: { glyph: 'size-7', pixels: 28, tile: 'size-14 rounded-xl' },
-} as const;
+// the glyph's drawn size in each tile size, which the tile also sets with CSS
+const GLYPH_PIXELS = { card: 20, header: 28 } as const;
 
 /** Narrows an icon key to a technology mark. */
 const isBrandMark = (icon: ISkillIcon): icon is ISkillBrandMark =>
   Object.hasOwn(SKILL_BRAND_MARK_PATHS, icon);
 
 const { icon, size } = Astro.props;
-const sizing = SIZES[size];
+const pixels = GLYPH_PIXELS[size];
 // what draws the icon: a technology mark's path data, or a Lucide component
 const glyph = isBrandMark(icon)
   ? ({ kind: 'brand', path: SKILL_BRAND_MARK_PATHS[icon] } as const)
   : ({ kind: 'lucide', Component: LUCIDE_ICONS[icon] } as const);
 ---
 
-{/* decorative: the skill's name is always shown with the tile */}
-<span
-  class:list={[
-    'inline-flex shrink-0 items-center justify-center bg-primary text-primary-foreground',
-    sizing.tile,
-  ]}
-  aria-hidden="true"
+{/* decorative: the skill's name is always shown with the tile, which inverts in dark mode */}
+<IconTile
+  size={size}
   data-skill-icon={icon}
 >
   {
     glyph.kind === 'lucide' ? (
-      <glyph.Component
-        class={sizing.glyph}
-        size={sizing.pixels}
-      />
+      <glyph.Component size={pixels} />
     ) : (
       <svg
-        class={sizing.glyph}
         viewBox="0 0 24 24"
-        width={sizing.pixels}
-        height={sizing.pixels}
+        width={pixels}
+        height={pixels}
         fill="currentColor"
         data-skill-brand-mark={icon}
       >
@@ -114,4 +104,4 @@ const glyph = isBrandMark(icon)
       </svg>
     )
   }
-</span>
+</IconTile>

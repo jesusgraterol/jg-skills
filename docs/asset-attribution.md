@@ -4,11 +4,13 @@
 
 ## jg/ mark
 
-The lowercase `jg/` mark comes from [`jg-personal-astro-ui`](https://jg-packages.jesusgraterol.dev/packages/jg-personal-astro-ui/), which documents its source and license. The header logo and the standards section draw it with the package's `JgMark` component. `npm run assets:generate` writes `website/public/favicon.svg` from the package's `jg-favicon.svg`, the mark's slash alone, because the three letters can't be read at 16 pixels, and draws the package's `jg-mark.svg` into the open-graph image. Never keep a copy of the mark here: change it in the package, then regenerate.
+[`jg-personal-astro-ui`](https://jg-packages.jesusgraterol.dev/packages/jg-personal-astro-ui/) owns both marks below, and documents their source and license.
+
+The lowercase `jg/` mark is the package's. The header and footer logos and the standards section draw it with the package's `JgMark` component. `npm run assets:generate` writes `website/public/favicon.svg` from the package's `jg-favicon.svg`, the mark's slash alone, because the three letters can't be read at 16 pixels, and draws the package's `jg-mark.svg` into the open-graph image. Never keep a copy of the mark here: change it in the package, then regenerate.
 
 ## Agentic Coding mark
 
-`website/src/components/agentic-coding-mark/agentic-coding-mark.astro` is an unchanged copy of the code mark that the sibling Agentic Coding website draws in its `src/components/brand-mark/brand-mark.astro`, using the same theme tokens. The Agentic Coding section shows it only beside the `AGENTS.md` label. Keep its geometry unchanged.
+The Agentic Coding mark is the package's too, in fixed colors, and the Agentic Coding website draws the same one. The standards section draws it with the package's `AgenticCodingMark` component, only beside the `AGENTS.md` label. Never keep a copy of it here: change it in the package.
 
 ## Claude Code mark
 
@@ -20,7 +22,7 @@ The credits section draws GitHub's mark inline, as `mark-github-16` from [Primer
 
 ## Technology marks
 
-The skill cards and skill pages show the mark of the technology some implicit skills are written for. The path data in `website/src/components/skill-icon/constants.ts` is copied unchanged from [Simple Icons](https://simpleicons.org/) 16.35.0, released under CC0-1.0, and drawn in one theme color on the site's icon tile. The marks remain trademarks of their owners and identify only the technology a skill covers. Their presence does not imply endorsement, partnership, or sponsorship. Keep their geometry unchanged. [`skill-icons.md`](skill-icons.md) explains which skills use a mark.
+The skill cards and skill pages show the mark of the technology some implicit skills are written for. The path data in `website/src/components/skill-icon/constants.ts` is copied unchanged from [Simple Icons](https://simpleicons.org/) 16.35.0, released under CC0-1.0, and drawn in one theme color on the package's icon tile. The marks remain trademarks of their owners and identify only the technology a skill covers. Their presence does not imply endorsement, partnership, or sponsorship. Keep their geometry unchanged. [`skill-icons.md`](skill-icons.md) explains which skills use a mark.
 
 | Skill         | Mark         | Simple Icons slug | Owner terms                                                                          |
 | ------------- | ------------ | ----------------- | ------------------------------------------------------------------------------------ |

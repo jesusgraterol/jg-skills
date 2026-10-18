@@ -154,39 +154,177 @@ export const findUnsafeAttributes = (html: string): string | undefined => {
   return undefined;
 };
 
-/** Recognises the decorative icon marker emitted by the site's ExternalLink component. */
-const isExternalLinkIcon = (attributes: string): boolean => {
-  const values = new Map(
+// where jg-personal-astro-ui's markup sits in rendered Markdown: Markdown's own markup, a code
+// window from codeWindowPlugin, or a new-tab marker from externalLinkPlugin
+type IMarkupContext = 'code window' | 'markdown' | 'new-tab marker';
+
+// one element the package may put in a code window or a new-tab marker: the elements it may sit
+// in, the exact sets of attributes it may carry, and what its style may say, when it has one
+type IPackageElement = {
+  attributes: readonly (readonly string[])[];
+  parents: readonly string[];
+  style?: RegExp;
+};
+
+// the attributes of a code window's figure, and of a new-tab marker's svg, exactly as the package
+// renders them; finding one opens that markup's context
+const CODE_WINDOW_ROOT: Readonly<Record<string, string>> = {
+  class: 'jg-code-window',
+  'data-code-window': '',
+};
+const NEW_TAB_MARKER_ROOT: Readonly<Record<string, string>> = {
+  'aria-hidden': 'true',
+  class: 'ml-[0.15em] inline-block size-[0.6em] shrink-0',
+  'data-new-tab-marker': '',
+  fill: 'none',
+  stroke: 'currentColor',
+  'stroke-linecap': 'round',
+  'stroke-linejoin': 'round',
+  'stroke-width': '1.75',
+  viewbox: '6 6 12 12',
+  xmlns: 'http://www.w3.org/2000/svg',
+};
+
+// a code window's header, from renderCodeWindowHeader, and its highlighted code, from Shiki with
+// the package's syntax theme; a style may only colour the code
+const CODE_WINDOW_ELEMENTS: Readonly<Record<string, IPackageElement>> = {
+  figcaption: { attributes: [['class', 'data-pagefind-ignore']], parents: ['figure'] },
+  span: {
+    attributes: [
+      [],
+      ['class'],
+      ['aria-hidden', 'class'],
+      ['class', 'data-pagefind-ignore'],
+      ['class', 'data-copy-label'],
+      ['aria-live', 'class', 'data-copy-status'],
+      ['class', 'data-copy-hint', 'hidden'],
+      ['style'],
+    ],
+    parents: ['button', 'code', 'figcaption', 'span'],
+    style:
+      /^color:var\(--jg-syntax-[a-z\d-]+\)(?:;(?:font-style:italic|font-weight:bold|text-decoration:(?:underline|line-through)))*$/u,
+  },
+  button: {
+    attributes: [['class', 'data-copy-button', 'data-copy-context', 'type']],
+    parents: ['span'],
+  },
+  svg: {
+    attributes: [
+      [
+        'aria-hidden',
+        'class',
+        'fill',
+        'stroke',
+        'stroke-linecap',
+        'stroke-linejoin',
+        'stroke-width',
+        'viewbox',
+        'xmlns',
+      ],
+    ],
+    parents: ['button'],
+  },
+  path: { attributes: [['d']], parents: ['svg'] },
+  rect: { attributes: [['height', 'rx', 'ry', 'width', 'x', 'y']], parents: ['svg'] },
+  pre: {
+    attributes: [
+      ['class', 'data-language', 'style', 'tabindex'],
+      ['class', 'style', 'tabindex'],
+    ],
+    parents: ['figure'],
+    style:
+      /^background-color:var\(--jg-syntax-background\);color:var\(--jg-syntax-foreground\);(?: overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;)?$/u,
+  },
+  code: { attributes: [[]], parents: ['pre'] },
+};
+
+// a new-tab marker's arrow; its screen-reader notice is an ordinary span after it
+const NEW_TAB_MARKER_ELEMENTS: Readonly<Record<string, IPackageElement>> = {
+  path: { attributes: [['d']], parents: ['svg'] },
+};
+
+/**
+ * Reads one tag's attributes, as browsers do, with lowercase names and decoded values.
+ * @param attributes The text between a tag's name and its closing bracket.
+ * @returns Each attribute's value by its name; an attribute without one has an empty value.
+ */
+const readAttributes = (attributes: string): Map<string, string> =>
+  new Map(
     [...attributes.matchAll(ATTRIBUTE_PATTERN)].map(([, name = '', value = '']) => [
       name.toLowerCase(),
       decodeHtmlEntities(unquote(value)),
     ]),
   );
 
-  return (
-    values.get('aria-hidden') === 'true' &&
-    values.get('data-external-icon') === 'true' &&
-    (values.get('class') ?? '').split(/\s+/u).includes('lucide-external-link')
-  );
+/**
+ * Checks whether a tag carries exactly the given attributes, with exactly their values.
+ * @param attributes The tag's attributes.
+ * @param expected The attributes and values it must carry, and no others.
+ * @returns Whether they match.
+ */
+const hasExactly = (
+  attributes: ReadonlyMap<string, string>,
+  expected: Readonly<Record<string, string>>,
+): boolean =>
+  attributes.size === Object.keys(expected).length &&
+  Object.entries(expected).every(([name, value]) => attributes.get(name) === value);
+
+/**
+ * Finds what is wrong with one opening tag inside a code window or a new-tab marker: an element
+ * the package never puts there, in a place it never puts it, with attributes it never gives it,
+ * or with a style that does more than colour code.
+ * @param element The tag's element.
+ * @param attributes The tag's attributes.
+ * @param parent The element it sits in.
+ * @param context The package markup it is part of.
+ * @returns A short description of the problem, or undefined when the package renders exactly this.
+ */
+const findUnexpectedPackageMarkup = (
+  element: string,
+  attributes: ReadonlyMap<string, string>,
+  parent: string | undefined,
+  context: Exclude<IMarkupContext, 'markdown'>,
+): string | undefined => {
+  const allowed = (context === 'code window' ? CODE_WINDOW_ELEMENTS : NEW_TAB_MARKER_ELEMENTS)[
+    element
+  ];
+
+  if (allowed === undefined || parent === undefined || !allowed.parents.includes(parent)) {
+    return `<${element}> element in a ${context}`;
+  }
+
+  const names = [...attributes.keys()].toSorted();
+
+  if (!allowed.attributes.some((set) => set.join(' ') === names.join(' '))) {
+    return `<${element}> attributes in a ${context}: ${names.join(', ')}`;
+  }
+
+  const style = attributes.get('style');
+
+  return style !== undefined && !(allowed.style?.test(style) ?? false)
+    ? `style attribute in a ${context}`
+    : undefined;
 };
 
 /**
- * Finds the first markup in rendered Markdown that Markdown itself never produces: elements other
- * than its own, comments, malformed tags, event handlers, and unsafe URLs. The rendered output is
- * checked, rather than the source, because it is what browsers run, whatever the source's syntax
- * or encoding.
+ * Finds the first markup in rendered Markdown that neither Markdown nor jg-personal-astro-ui's
+ * Markdown plugins produce: elements other than Markdown's own, comments, malformed tags, event
+ * handlers, unsafe URLs, and styles. The rendered output is checked, rather than the source,
+ * because it is what browsers run, whatever the source's syntax or encoding. The plugins' markup
+ * is accepted by its structure: a code window, opened by its exact figure, holds only the header
+ * and highlighted code the package renders, each element in its place with its exact attributes
+ * and only Shiki's colours as styles; a new-tab marker, opened by its exact svg inside a link,
+ * holds only its arrow's paths.
  * @param html The rendered HTML of one Markdown file, where text is escaped and every remaining <
  * opens a tag or sits inside an attribute value.
- * @param allowExternalLinkIcons Whether the final page may contain the site's decorative link
- * icons. Source Markdown uses the default false, so authors still cannot supply raw SVG.
  * @returns A short description of the problem, or undefined when the markup is safe.
  */
-export const findUnsafeMarkup = (
-  html: string,
-  allowExternalLinkIcons = false,
-): string | undefined => {
+export const findUnsafeMarkup = (html: string): string | undefined => {
   MARKUP_OPENER_PATTERN.lastIndex = 0;
-  let insideExternalIcon = false;
+  let context: IMarkupContext = 'markdown';
+  // the open elements of the code window or marker being read, outermost first
+  const openElements: string[] = [];
+  let linkDepth = 0;
 
   for (
     let opener = MARKUP_OPENER_PATTERN.exec(html);
@@ -196,35 +334,61 @@ export const findUnsafeMarkup = (
     TAG_PATTERN.lastIndex = opener.index;
 
     const tag = TAG_PATTERN.exec(html);
-    const [, name = '', attributes = ''] = tag ?? [];
+    const [source = '', name = '', attributeText = ''] = tag ?? [];
 
-    if (!tag || !WELL_FORMED_ATTRIBUTES_PATTERN.test(attributes)) {
+    if (!tag || !WELL_FORMED_ATTRIBUTES_PATTERN.test(attributeText)) {
       return `malformed markup ${html.slice(opener.index, opener.index + 16)}`;
     }
 
+    // continue after the tag, so a < inside one of its attribute values is not read as a tag
+    MARKUP_OPENER_PATTERN.lastIndex = TAG_PATTERN.lastIndex;
+
     const element = name.toLowerCase();
-
-    if (allowExternalLinkIcons && element === 'svg') {
-      if (tag[0].startsWith('</')) {
-        if (!insideExternalIcon) return '<svg> element';
-
-        insideExternalIcon = false;
-      } else {
-        if (insideExternalIcon || !isExternalLinkIcon(attributes)) return '<svg> element';
-
-        insideExternalIcon = true;
-      }
-    } else if (insideExternalIcon ? element !== 'path' : !MARKDOWN_ELEMENTS.has(element)) {
-      return `<${element}> element`;
-    }
-
-    const problem = findUnsafeAttribute(attributes);
+    const isClosing = source.startsWith('</');
+    const problem = findUnsafeAttribute(attributeText);
 
     if (problem !== undefined) return problem;
 
-    // continue after the tag, so a < inside one of its attribute values is not read as a tag
-    MARKUP_OPENER_PATTERN.lastIndex = TAG_PATTERN.lastIndex;
+    if (context !== 'markdown') {
+      if (isClosing) {
+        if (openElements.pop() !== element) return `misplaced </${element}> in a ${context}`;
+        if (openElements.length === 0) context = 'markdown';
+        continue;
+      }
+
+      const unexpected = findUnexpectedPackageMarkup(
+        element,
+        readAttributes(attributeText),
+        openElements.at(-1),
+        context,
+      );
+
+      if (unexpected !== undefined) return unexpected;
+      if (!/\/\s*$/u.test(attributeText)) openElements.push(element);
+      continue;
+    }
+
+    const attributes = readAttributes(attributeText);
+
+    if (!isClosing && element === 'figure' && hasExactly(attributes, CODE_WINDOW_ROOT)) {
+      context = 'code window';
+      openElements.push(element);
+    } else if (
+      !isClosing &&
+      element === 'svg' &&
+      linkDepth > 0 &&
+      hasExactly(attributes, NEW_TAB_MARKER_ROOT)
+    ) {
+      context = 'new-tab marker';
+      openElements.push(element);
+    } else if (!MARKDOWN_ELEMENTS.has(element)) {
+      return `<${element}> element`;
+    } else if (attributes.has('style')) {
+      return 'style attribute';
+    } else if (element === 'a') {
+      linkDepth = Math.max(0, linkDepth + (isClosing ? -1 : 1));
+    }
   }
 
-  return insideExternalIcon ? 'unclosed external-link icon' : undefined;
+  return context === 'markdown' ? undefined : `unclosed ${context}`;
 };

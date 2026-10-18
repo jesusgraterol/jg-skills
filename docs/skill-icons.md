@@ -7,7 +7,7 @@
 - Every skill has exactly one icon, set as `icon` in its entry in `website/src/site.config.ts`. It leads the skill's card and opens its page.
 - An explicit skill uses a [Lucide](https://lucide.dev/icons/) icon. The type check rejects a technology mark on an explicit skill.
 - An implicit skill uses the [Simple Icons](https://simpleicons.org/) mark of the technology it is written for. It uses a Lucide icon for its domain instead when it covers several technologies, like `jg-testing`, or when the mark blurs at 20 pixels, like `jg-postgres`, `jg-bash`, and `jg-ci`, or when its license adds terms the site doesn't carry, like the SVG mark's CC-BY-SA-4.0 for `jg-svg`.
-- Icons are drawn in one theme color on the dark tile, never in brand colors.
+- Icons are drawn in one theme color on the package's icon tile, never in brand colors. The tile is `jg-personal-astro-ui`'s `icon-tile`, in the primary color, so it is dark in the light theme and inverts to light in the dark theme.
 
 ## Choosing an icon
 
@@ -53,7 +53,7 @@
 
 ## Finding icons
 
-- **Lucide.** Search [lucide.dev](https://lucide.dev/icons/) by idea, then confirm the icon exists in the installed version as `website/node_modules/@lucide/astro/src/icons/<name>.ts`. The icon's key is that file name, which also names its `lucide-<name>` class.
+- **Lucide.** Search [lucide.dev](https://lucide.dev/icons/) by idea, then confirm the icon exists in the installed version, `@lucide/astro` 1.58.0, the one `jg-personal-astro-ui` also uses, as `website/node_modules/@lucide/astro/src/icons/<name>.ts`. The icon's key is that file name, which also names its `lucide-<name>` class.
 - **Simple Icons.** Find the mark's slug on [simpleicons.org](https://simpleicons.org/). Take its path data from `https://cdn.jsdelivr.net/npm/simple-icons@<version>/icons/<slug>.svg`, and its source, guidelines, and license from that version's `data/simple-icons.json`. The key is the slug.
 
 ## Adding or changing an icon
