@@ -384,7 +384,7 @@ export const SKILL_CATALOG = {
     summary:
       'Icon drawing, outlined logo text, file shape, brand colors, exports, and optimization for SVG.',
     whenToUse:
-      'It loads on its own when a task touches SVG files, inline SVG, or SVG exported from a design tool. Call it by name to load it before such a task.',
+      'It loads on its own when a task writes or changes SVG files, inline SVG, or SVG exported from a design tool. Call it by name to load it before such a task.',
   },
   'jg-graphics': {
     examples: [
