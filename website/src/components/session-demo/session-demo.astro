@@ -1,5 +1,6 @@
 ---
 import { UserRound } from '@lucide/astro';
+import InlineCode from 'jg-personal-astro-ui/inline-code';
 
 // who sends one message of the example conversation
 type ISessionSpeaker = 'agent' | 'you';
@@ -94,9 +95,10 @@ const SPEAKER_LABELS = {
             </span>
             <span class="mt-1 block text-sm leading-6 wrap-anywhere">
               {command && (
-                <code class="rounded-md bg-code px-1.5 py-0.5 font-mono font-semibold text-accent">
-                  {`/${command}`}
-                </code>
+                <InlineCode
+                  class="font-semibold"
+                  code={`/${command}`}
+                />
               )}
               {command && text && ' '}
               {text}

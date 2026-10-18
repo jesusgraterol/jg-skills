@@ -54,7 +54,7 @@
   - a skill or reference file links to a section of a document, or names another skill with a `/` or `$` prefix
   - a skill names a reference file that doesn't exist, or has a reference file it never names
   - a skill names a reference path that isn't a kebab-case Markdown file directly in `references/`, or its `references/` folder holds a nested or non-Markdown file
-  - a skill or reference file renders an element Markdown doesn't produce, a comment, an event handler, or a URL whose scheme isn't `http`, `https`, or `mailto`
+  - a skill or reference file renders an element Markdown doesn't produce, a comment, a style, an event handler, or a URL whose scheme isn't `http`, `https`, or `mailto`. The one exception is the markup `jg-personal-astro-ui`'s Markdown plugins add, checked by its structure: a code window holds only the package's header and Shiki's highlighted code, whose styles only colour it, and a link to another site may end with the package's new-tab marker
   - an explicit skill has reference files, or a reference names another reference
   - a `SKILL.md` or reference file is larger than 20,480 bytes
   - a skill page is missing one of its reference files

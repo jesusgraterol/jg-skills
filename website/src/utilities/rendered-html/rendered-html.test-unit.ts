@@ -1,5 +1,11 @@
 // @vitest-environment node
-import { describe, expect, test } from 'vitest';
+import { createSatteriMarkdownProcessor } from '@astrojs/markdown-satteri';
+import { renderCodeWindowHeader } from 'jg-personal-astro-ui/code-window';
+import { codeWindowPlugin } from 'jg-personal-astro-ui/code-window-plugin';
+import { externalLinkPlugin } from 'jg-personal-astro-ui/external-link-plugin';
+import { renderNewTabMarker } from 'jg-personal-astro-ui/new-tab-marker-markup';
+import { SYNTAX_THEME } from 'jg-personal-astro-ui/syntax-theme';
+import { beforeAll, describe, expect, test } from 'vitest';
 
 import {
   decodeHtmlEntities,
@@ -8,15 +14,14 @@ import {
   isUnsafeUrl,
 } from './rendered-html.ts';
 
-// what the site's Markdown renderer emitted for safe content: an autolink, escaped text, inline
-// code, a link title and image alt text holding a raw <, a heading, a table, and a code block
+// what the site's Markdown renderer emits for safe content without code: an autolink, escaped text,
+// inline code, a link title and image alt text holding a raw <, a heading, and a table
 const SAFE_RENDERED_MARKDOWN = [
   '<h2 id="rules">Rules</h2>',
   '<p><a href="https://example.com">https://example.com</a> and a &lt; b and <code>&lt;dialog&gt;</code> and <a href="https://x.dev" title="a<b>c">t</a> and <img src="https://x.dev/i.png" alt="alt <b>"></p>',
   '<p>Mail <a href="mailto:dev@example.com">dev</a>, read <a href="references/forms.md">forms</a>, or see <a href="https://x.dev/?a=1&#x26;b=2">x</a>.<br></p>',
   '<table>\n<thead>\n<tr>\n<th>Object</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><strong>Table</strong></td>\n</tr>\n</tbody>\n</table>',
   '<ul>\n<li><input type="checkbox" checked disabled> done</li>\n</ul>',
-  '<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6E7781;--shiki-dark:#8B949E"># Usage: archive-uploads.sh [-h] &lt;archive-path&gt;</span></span></code></pre>',
 ].join('\n');
 
 describe('decodeHtmlEntities', () => {
@@ -71,44 +76,141 @@ describe('findUnsafeMarkup', () => {
     expect(findUnsafeMarkup(SAFE_RENDERED_MARKDOWN)).toBeUndefined();
   });
 
-  test('accepts the shared link icon only in decorated page output, never source Markdown', () => {
-    const icon =
-      '<svg class="lucide lucide-external-link" aria-hidden="true" data-external-icon="true"><path d="M1 1"></path></svg>';
+  describe("jg-personal-astro-ui's Markdown markup", () => {
+    // a skill page's Markdown, rendered as the site renders it: Sätteri with Astro's Shiki and the
+    // package's syntax theme, code windows, and new-tab markers
+    let rendered = '';
+    // one code window, built from the package's header and Shiki's highlighted code
+    let codeWindow = '';
+    // an external link ending with the package's new-tab marker
+    const externalLink = `<a href="https://example.com/" target="_blank" rel="noreferrer">Example${renderNewTabMarker()}</a>`;
 
-    expect(findUnsafeMarkup(icon)).toBe('<svg> element');
-    expect(findUnsafeMarkup(icon, true)).toBeUndefined();
-  });
+    beforeAll(async () => {
+      const processor = await createSatteriMarkdownProcessor({
+        hastPlugins: [codeWindowPlugin, externalLinkPlugin({ siteUrl: 'https://jg-skills.dev' })],
+        shikiConfig: { theme: SYNTAX_THEME, wrap: true },
+      });
+      const { code } = await processor.render(
+        [
+          'See [the docs](https://example.com/docs), [a skill](/skills/jg-plan/), and [mail](mailto:a@b.dev).',
+          '',
+          '```ts',
+          "// a comment\nconst greeting: string = '<b>hi</b>';",
+          '```',
+          '',
+          '```',
+          'plain text',
+          '```',
+        ].join('\n'),
+      );
+      rendered = code;
+      const pre = /<pre[\s\S]*?<\/pre>/u.exec(code)?.[0] ?? '';
+      codeWindow = `<figure class="jg-code-window" data-code-window="">${renderCodeWindowHeader({ caption: 'ts' })}${pre}</figure>`;
+    });
 
-  test.each([
-    ['an unmarked SVG', '<svg><path d="M1 1"></path></svg>', '<svg> element'],
-    ['a standalone path', '<path d="M1 1"></path>', '<path> element'],
-    [
-      'a non-decorative icon',
-      '<svg class="lucide-external-link" aria-hidden="false" data-external-icon="true"></svg>',
-      '<svg> element',
-    ],
-    [
-      'an active child inside an icon',
-      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true"><foreignObject></foreignObject></svg>',
-      '<foreignobject> element',
-    ],
-    [
-      'a handler on an icon path',
-      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true"><path onload="alert(1)"></path></svg>',
-      'onload attribute',
-    ],
-    [
-      'an unsafe URL on an icon',
-      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true" href="javascript:alert(1)"></svg>',
-      'href="javascript:alert(1)"',
-    ],
-    [
-      'an unclosed icon',
-      '<svg class="lucide-external-link" aria-hidden="true" data-external-icon="true"><path></path>',
-      'unclosed external-link icon',
-    ],
-  ])('rejects %s even in decorated page output', (_name, html, problem) => {
-    expect(findUnsafeMarkup(html, true)).toBe(problem);
+    test('accepts code windows and new-tab markers as the site renders them', () => {
+      expect(rendered.match(/data-code-window/gu)).toHaveLength(2);
+      expect(rendered).toContain('data-new-tab-marker');
+      expect(findUnsafeMarkup(rendered)).toBeUndefined();
+    });
+
+    test("accepts the package's own header, marker, and Shiki's code", () => {
+      expect(findUnsafeMarkup(`${codeWindow}<p>${externalLink}</p>`)).toBeUndefined();
+    });
+
+    test.each([
+      [
+        'an image in the header',
+        (html: string) => html.replace('</figcaption>', '<img src="x.png"></figcaption>'),
+        '<img> element in a code window',
+      ],
+      [
+        'a script in the code',
+        (html: string) => html.replace('</code>', '<script>alert(1)</script></code>'),
+        '<script> element in a code window',
+      ],
+      [
+        'a handler on the copy button',
+        (html: string) =>
+          html.replace('<button type="button"', '<button onclick="alert(1)" type="button"'),
+        'onclick attribute',
+      ],
+      [
+        'another attribute on the copy button',
+        (html: string) =>
+          html.replace(
+            '<button type="button"',
+            '<button data-copy-url="https://evil.dev/" type="button"',
+          ),
+        '<button> attributes in a code window',
+      ],
+      [
+        'a link in the header',
+        (html: string) =>
+          html.replace('</figcaption>', '<a href="https://x.dev">x</a></figcaption>'),
+        '<a> element in a code window',
+      ],
+      [
+        'a style that does more than colour a token',
+        (html: string) =>
+          html.replace(
+            /<span style="color:var\(--jg-syntax-[a-z\d-]+\)[^"]*"/u,
+            '<span style="background:url(https://x.dev/)"',
+          ),
+        'style attribute in a code window',
+      ],
+      [
+        'a copy button outside its wrapper',
+        (html: string) =>
+          html.replace(
+            'data-code-window="">',
+            'data-code-window=""><button type="button" class="x" data-copy-button data-copy-context="code"></button>',
+          ),
+        '<button> element in a code window',
+      ],
+      [
+        'an unclosed window',
+        (html: string) => html.replace('</figure>', ''),
+        'unclosed code window',
+      ],
+      [
+        "a window that is not exactly the package's",
+        (html: string) => html.replace('class="jg-code-window"', 'class="jg-code-window x"'),
+        '<figure> element',
+      ],
+    ])('rejects a code window with %s', (_name, tamper, problem) => {
+      expect(findUnsafeMarkup(tamper(codeWindow))).toContain(problem);
+    });
+
+    test.each([
+      ['outside a link', renderNewTabMarker(), '<svg> element'],
+      [
+        'with another attribute',
+        externalLink.replace('data-new-tab-marker', 'data-new-tab-marker onload="x"'),
+        'onload attribute',
+      ],
+      [
+        "that is not exactly the package's",
+        externalLink.replace('viewBox="6 6 12 12"', 'viewBox="0 0 24 24"'),
+        '<svg> element',
+      ],
+      [
+        'holding more than its arrow',
+        externalLink.replace('</svg>', '<foreignObject></foreignObject></svg>'),
+        '<foreignobject> element in a new-tab marker',
+      ],
+      [
+        'holding a path with a handler',
+        externalLink.replace('<path d="M7 7h10v10"/>', '<path d="M7 7h10v10" onclick="x"/>'),
+        'onclick attribute',
+      ],
+    ])('rejects a new-tab marker %s', (_name, html, problem) => {
+      expect(findUnsafeMarkup(`<p>${html}</p>`)).toContain(problem);
+    });
+
+    test('rejects a style anywhere outside a code window', () => {
+      expect(findUnsafeMarkup('<p><span style="color:red">red</span></p>')).toBe('style attribute');
+    });
   });
 
   test.each([

@@ -150,30 +150,38 @@ test.describe('skill pages', () => {
     }
   });
 
-  test('shows code blocks in their dark colors once the dark theme is on', async ({ page }) => {
+  test('shows code blocks in code windows that stay dark in both themes', async ({ page }) => {
     await page.goto('/skills/jg-ci/');
-    const codeBlock = page.locator('[data-skill-instructions] pre').first();
+    const codeWindow = page.locator('[data-skill-instructions] [data-code-window]').first();
+    const codeBlock = codeWindow.locator('pre');
+
+    await expect(codeWindow.getByRole('button', { name: 'Copy code' })).toBeVisible();
+
+    /**
+     * Reads the code block's background and the relative luminance of its red channel, enough to
+     * tell a dark surface from a light one.
+     * @returns The computed background, and whether it is dark.
+     */
+    const readSurface = async (): Promise<{ background: string; isDark: boolean }> =>
+      codeBlock.evaluate((element) => {
+        const background = getComputedStyle(element).backgroundColor;
+        const probe = document.createElement('canvas').getContext('2d');
+
+        if (probe === null) throw new Error('A canvas is unavailable to read the color.');
+        probe.fillStyle = background;
+        probe.fillRect(0, 0, 1, 1);
+        const [red = 0, green = 0, blue = 0] = probe.getImageData(0, 0, 1, 1).data;
+
+        return { background, isDark: (red + green + blue) / 3 < 96 };
+      });
+
+    const light = await readSurface();
 
     await page.getByRole('button', { name: 'Use dark theme' }).first().click();
     await expect(page.locator('html')).toHaveClass(/dark/u);
 
-    // resolves the dark colors Shiki stores in custom properties into the rgb form computed styles report
-    const darkColors = await codeBlock.evaluate((element) => {
-      const styles = getComputedStyle(element);
-      const probe = document.createElement('span');
-
-      probe.style.backgroundColor = styles.getPropertyValue('--shiki-dark-bg');
-      probe.style.color = styles.getPropertyValue('--shiki-dark');
-      document.body.append(probe);
-      const resolved = getComputedStyle(probe);
-      const colors = { background: resolved.backgroundColor, text: resolved.color };
-      probe.remove();
-
-      return colors;
-    });
-
-    await expect(codeBlock).toHaveCSS('background-color', darkColors.background);
-    await expect(codeBlock).toHaveCSS('color', darkColors.text);
+    expect(light.isDark).toBe(true);
+    expect(await readSurface()).toStrictEqual(light);
   });
 
   test('labels one example per supported case, each with its own copy button', async ({ page }) => {
@@ -186,7 +194,7 @@ test.describe('skill pages', () => {
     for (const [index, { label }] of SKILL_CATALOG['jg-execute'].examples.entries()) {
       const sourceId = `jg-execute-invocation-${index + 1}`;
       const terminal = page
-        .locator('[data-terminal]')
+        .locator('[data-code-window]')
         .filter({ has: page.locator(`#${sourceId}`) });
 
       await expect(terminal.locator('figcaption')).toContainText(label);
@@ -199,7 +207,7 @@ test.describe('skill pages', () => {
     await expect(
       page.getByRole('heading', { exact: true, level: 2, name: 'Example' }),
     ).toBeVisible();
-    await expect(page.locator('[data-terminal] figcaption')).toContainText('Example');
+    await expect(page.locator('[data-code-window] figcaption')).toContainText('Example');
     await expect(page.getByText('Each example shows one supported case.')).toHaveCount(0);
   });
 
@@ -231,8 +239,8 @@ test.describe('skill pages', () => {
       );
       await expect(link).toHaveAttribute('target', '_blank');
       await expect(link).toHaveAttribute('rel', 'noreferrer');
-      await expect(link.locator('svg.lucide-external-link')).toHaveAttribute('aria-hidden', 'true');
-      await expect(link.locator('[data-external-icon] + .sr-only')).toHaveText(
+      await expect(link.locator('svg[data-new-tab-marker]')).toHaveAttribute('aria-hidden', 'true');
+      await expect(link.locator('[data-new-tab-marker] + .sr-only')).toHaveText(
         '(opens in a new tab)',
       );
       await expect(link.locator('..')).toContainText(

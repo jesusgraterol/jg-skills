@@ -66,7 +66,8 @@ test.describe('standards section', () => {
       );
       await expect(card.getByRole('link')).toHaveAttribute('href', href);
       await expect(card.locator('[data-standards-destination]')).toHaveText(destination);
-      await expect(card.locator('[data-external-icon].lucide-arrow-up-right')).toHaveCount(1);
+      // the link card's up-right arrow in the corner
+      await expect(card.locator('.lucide-arrow-up-right')).toHaveCount(1);
     }
   });
 

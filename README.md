@@ -102,7 +102,7 @@ Use `jg-pause` at any point to stop the agent at a safe point and pick up later.
 
 ## Website
 
-The site in `website/` is a static Astro and Tailwind CSS project. It reads every `skills/*/SKILL.md` and `skills/*/references/*.md` at build time, so the published names, descriptions, instructions, and reference files always match what gets installed.
+The site in `website/` is a static Astro and Tailwind CSS project built on [`jg-personal-astro-ui`](https://www.npmjs.com/package/jg-personal-astro-ui), the UI package Jesus Graterol's sites share: its theme, page head, header, footer, cards, buttons, badges, icon tiles, and segmented control, and the code windows and new-tab markers its Markdown plugins add to every skill. It reads every `skills/*/SKILL.md` and `skills/*/references/*.md` at build time, so the published names, descriptions, instructions, and reference files always match what gets installed.
 
 Requirements: Node.js `24.15` or newer within Node 24, and npm `11.12` or newer within npm 11. Run these from `website/`:
 
@@ -152,10 +152,10 @@ Until then, the deploy job fails, or the site is served under a path where its r
 │   ├── src/
 │   │   ├── components/      # focused Astro presentation modules
 │   │   ├── content/         # SKILL.md and reference file frontmatter schemas
-│   │   ├── layouts/         # shared metadata, navigation, theme, and footer shell
+│   │   ├── layouts/         # the package's page head, header, and footer, with the site's structured data
 │   │   ├── pages/           # home, one page per skill, 404, llms.txt, and robots.txt
-│   │   ├── styles/          # Tailwind entry point and branded semantic tokens
-│   │   ├── utilities/       # skill catalog loading, SEO, theme, and llms.txt behavior
+│   │   ├── styles/          # Tailwind entry point, importing the package's contract, theme, and prose styles
+│   │   ├── utilities/       # skill catalog loading, the rendered-Markdown allowlist, SEO, and llms.txt
 │   │   └── site.config.ts   # site metadata, commands, and the skill catalog
 │   └── vitest/              # test-category discovery configuration
 ├── LICENSE
@@ -167,8 +167,8 @@ Until then, the deploy job fails, or the site is served under a path where its r
 - Explicit skills are explicit-only in both agents: their frontmatter sets `disable-model-invocation: true`, and their `agents/openai.yaml` sets `policy.allow_implicit_invocation: false`. Implicit skills omit the flag and set `policy.allow_implicit_invocation: true`. The site catalog's `kind` must match, or the build fails.
 - Every skill is self-contained and never links to sections of a specific `AGENTS.md`. Explicit skills share the rules in their `## Invocation` section. Implicit skills share their `## Application` section, which sets how their rules rank against the repository's coding instructions and conventions. Skills refer to each other by bare name, such as `jg-breakdown`, never with a `/` or `$` prefix. Every skill works on its own: a mention of another skill is only a pointer, and the one runtime dependency is `jg-execute auto`, which reads the `jg-review` and `jg-push` `SKILL.md` files from the neighboring folders.
 - Creating, writing, checking, maintaining, renaming, and removing a skill follow [`docs/skill-guidelines.md`](docs/skill-guidelines.md), which lists every place to update.
-- Website links show where they lead: `ArrowDown` for a section on the same page, `ArrowRight` (or `ArrowLeft` going back) for another page on the site, and the `external-link` component, which adds a screen-reader note plus an inline new-tab icon, or an up-right arrow in the corner when the link covers a whole card, for other sites.
-- The website shares its design tokens, Ubuntu Sans typography, and tooling with Agentic Coding and jesusgraterol.dev. [`docs/asset-attribution.md`](docs/asset-attribution.md) records where its brand marks come from.
+- Website links show where they lead: `ArrowDown` for a section on the same page, `ArrowRight` (or `ArrowLeft` going back) for another page on the site, and the package's new-tab marker, a screen-reader note plus an up-right arrow, for other sites, which open in a new tab without a referrer. A link card that covers a whole card shows the arrow in its corner. The package's external-link plugin gives skill Markdown's links to other sites the same marker.
+- The website shares its design tokens, Ubuntu Sans typography, and components with Agentic Coding, jesusgraterol.dev, and jg-packages, through `jg-personal-astro-ui`. [`docs/asset-attribution.md`](docs/asset-attribution.md) records where its brand marks come from.
 - Local coding instructions (`AGENTS.md`, `CLAUDE.md`, `CANDIDATE.md`) and `coding-agent-planning/` are git-ignored and never published.
 - `/docs` is reserved for concise, quickly scannable documentation of essential, durable project concepts and processes. API and HTTP endpoint documentation, if the project ever needs it, belongs outside `/docs`.
 

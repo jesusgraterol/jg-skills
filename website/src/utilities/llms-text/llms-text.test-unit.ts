@@ -37,6 +37,7 @@ describe('buildLlmsText', () => {
   test('keeps the required sections when no skills are published', () => {
     const text = buildLlmsText([]);
 
-    expect(text).toContain('\n## Skills\n\n\n## Optional\n');
+    // the Skills heading stays, with no links under it before the Optional section
+    expect(text).toMatch(/\n## Skills\n\s*\n## Optional\n/u);
   });
 });

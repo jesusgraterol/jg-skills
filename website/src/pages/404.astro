@@ -1,5 +1,6 @@
 ---
 import { ArrowLeft } from '@lucide/astro';
+import Button from 'jg-personal-astro-ui/button';
 
 import BaseLayout from '../layouts/base-layout.astro';
 import { SITE_CONFIG } from '../site.config.ts';
@@ -10,16 +11,16 @@ import { SITE_CONFIG } from '../site.config.ts';
   title={`Page not found | ${SITE_CONFIG.name}`}
   noIndex
 >
-  <section class="section-space">
-    <div class="prose-shell">
+  <section class="jg-section-space">
+    <div class="jg-container-prose">
       <p class="eyebrow">404, page not found</p>
       <h1 class="display-title mt-6">No skill lives at this path.</h1>
       <p class="lede mt-8">
         The page may have moved, or the link may be incomplete. Every skill is listed on the home
         page.
       </p>
-      <a
-        class="action-primary mt-9"
+      <Button
+        class="mt-9"
         href="/#skills"
       >
         <ArrowLeft
@@ -27,7 +28,7 @@ import { SITE_CONFIG } from '../site.config.ts';
           aria-hidden="true"
         />
         Browse the skills
-      </a>
+      </Button>
     </div>
   </section>
 </BaseLayout>
