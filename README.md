@@ -147,7 +147,7 @@ Until then, the deploy job fails, or the site is served under a path where its r
 │       │   └── openai.yaml  # Codex invocation policy
 │       └── references/      # implicit skills only: topic detail that SKILL.md says when to read
 ├── website/
-│   ├── public/              # favicon, Claude Code mark, and the generated open-graph image
+│   ├── public/              # favicons, Claude Code mark, and the generated open-graph image
 │   ├── scripts/             # open-graph generation and build-artifact verification
 │   ├── src/
 │   │   ├── components/      # focused Astro presentation modules

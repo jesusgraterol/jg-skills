@@ -6,7 +6,7 @@
 
 [`jg-personal-astro-ui`](https://jg-packages.jesusgraterol.dev/packages/jg-personal-astro-ui/) owns both marks below, and documents their source and license.
 
-The lowercase `jg/` mark is the package's. The header and footer logos and the standards section draw it with the package's `JgMark` component. `npm run assets:generate` writes `website/public/favicon.svg` from the package's `jg-favicon.svg`, the mark's slash alone, because the three letters can't be read at 16 pixels, and draws the package's `jg-mark.svg` into the open-graph image. Never keep a copy of the mark here: change it in the package, then regenerate.
+The lowercase `jg/` mark is the package's. The header and footer logos and the standards section draw it with the package's `JgMark` component. `npm run assets:generate` renders the favicons from the package's `jg-favicon.svg`, the mark's slash alone, because the three letters can't be read at 16 pixels, as jesusgraterol.dev does: `website/public/favicon.ico` at 16, 32, and 48 pixels, `website/public/favicons/32x32.png`, and `website/public/favicons/192x192.png`, the home screen icon. It draws the package's `jg-mark.svg` into the open-graph image. Never keep a copy of the mark here: change it in the package, then regenerate.
 
 ## Agentic Coding mark
 
