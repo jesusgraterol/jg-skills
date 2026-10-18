@@ -1,9 +1,9 @@
 ---
 import { FilePlus, Link2, PencilRuler } from '@lucide/astro';
+import JgMark from 'jg-personal-astro-ui/jg-mark';
 
 import { SITE_CONFIG } from '../../site.config.ts';
 import AgenticCodingMark from '../agentic-coding-mark/agentic-coding-mark.astro';
-import BrandMark from '../brand-mark/brand-mark.astro';
 import ExternalLink from '../external-link/external-link.astro';
 
 // one starting point on Agentic Coding, chosen by whether the repository already has an AGENTS.md
@@ -101,7 +101,7 @@ const toDestination = (href: string): { host: string; path: string } => {
         <li
           class="flex items-center gap-4 rounded-xl border border-border bg-surface p-5 shadow-surface"
         >
-          <BrandMark class="size-10 shrink-0" />
+          <JgMark class="size-10 shrink-0" />
           <div class="min-w-0">
             <code class="font-mono text-base font-bold">jg-skills</code>
             <span class="mt-1 block text-sm text-muted">Runs the workflow</span>

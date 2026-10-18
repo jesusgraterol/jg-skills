@@ -52,6 +52,7 @@
     "eslint": "10.8.1",
     "eslint-config-prettier": "10.1.8",
     "globals": "17.9.0",
+    "jg-personal-astro-ui": "0.2.0",
     "prettier": "3.9.6",
     "prettier-plugin-astro": "0.14.1",
     "prettier-plugin-tailwindcss": "0.7.2",
