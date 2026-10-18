@@ -6,7 +6,7 @@
 
 - Every skill has exactly one icon, set as `icon` in its entry in `website/src/site.config.ts`. It leads the skill's card and opens its page.
 - An explicit skill uses a [Lucide](https://lucide.dev/icons/) icon. The type check rejects a technology mark on an explicit skill.
-- An implicit skill uses the [Simple Icons](https://simpleicons.org/) mark of the technology it is written for. It uses a Lucide icon for its domain instead when it covers several technologies, like `jg-testing`, or when the mark blurs at 20 pixels, like `jg-postgres`, `jg-bash`, and `jg-ci`.
+- An implicit skill uses the [Simple Icons](https://simpleicons.org/) mark of the technology it is written for. It uses a Lucide icon for its domain instead when it covers several technologies, like `jg-testing`, or when the mark blurs at 20 pixels, like `jg-postgres`, `jg-bash`, and `jg-ci`, or when its license adds terms the site doesn't carry, like the SVG mark's CC-BY-SA-4.0 for `jg-svg`.
 - Icons are drawn in one theme color on the dark tile, never in brand colors.
 
 ## Choosing an icon
@@ -36,6 +36,8 @@
 | `jg-react`          | React mark           | Written for React.                                                                                                             |
 | `jg-pwa`            | `MonitorSmartphone`  | Web apps installed on desktops and phones, across several browsers.                                                            |
 | `jg-seo`            | `Globe`              | Public websites as search engines and social networks see them.                                                                |
+| `jg-svg`            | `VectorSquare`       | Vector graphics, drawn as a shape with its anchor points. The SVG mark is CC-BY-SA-4.0.                                        |
+| `jg-graphics`       | `Image`              | Generated images, made with HTML, SVG, and Playwright, so no single mark fits.                                                 |
 | `jg-nestjs`         | NestJS mark          | Written for NestJS.                                                                                                            |
 | `jg-postgres`       | `Database`           | PostgreSQL's elephant blurs at 20 pixels.                                                                                      |
 | `jg-redis`          | Redis mark           | Written for Redis.                                                                                                             |
