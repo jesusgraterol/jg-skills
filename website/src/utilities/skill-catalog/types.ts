@@ -19,6 +19,7 @@ export type ISkillAccess =
 export type ISkillLucideIcon =
   | 'bug'
   | 'circle-pause'
+  | 'clipboard-check'
   | 'database'
   | 'file-terminal'
   | 'flask-conical'

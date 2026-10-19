@@ -267,6 +267,25 @@ export const SKILL_CATALOG = {
     whenToUse:
       "Use it when a reviewed change is ready to publish. In a checkout shared with other agents, run it in the session that made the change, so it commits only that task's files.",
   },
+  'jg-review-session': {
+    access: 'read-only',
+    examples: [
+      {
+        invocation: 'jg-review-session org-api-keys',
+        outcome:
+          "Checks the commits, pull requests, and claims of the session that built organization API keys against its plan and milestones, and answers Everything checks out, Issues found, or Couldn't confirm everything.",
+      },
+    ],
+    icon: 'clipboard-check',
+    kind: 'explicit',
+    order: 12,
+    searchDescription:
+      'An explicit-only agent skill for Claude Code and Codex that checks what another session built against its plan, milestones, and your decisions.',
+    searchTitle: "jg-review-session: Review another agent's delivered work",
+    stage: 'ship',
+    whenToUse:
+      "Use it from a fresh session or a different agent once a plan's milestones are built, to confirm the work matches what you agreed.",
+  },
   'jg-feedback': {
     access: 'read-only',
     examples: [
@@ -278,7 +297,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'scale',
     kind: 'explicit',
-    order: 12,
+    order: 13,
     searchDescription:
       'An explicit-only agent skill for Claude Code and Codex that checks feedback against the evidence and recommends what to adopt, reject, or adjust.',
     searchTitle: 'jg-feedback: Assess review feedback with evidence',
@@ -297,7 +316,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'messages-square',
     kind: 'explicit',
-    order: 13,
+    order: 14,
     searchDescription:
       'An explicit-only agent skill that finds a named Claude Code or Codex session and answers questions from its latest decisions and state.',
     searchTitle: 'jg-session: Read past Claude Code and Codex sessions',
@@ -314,7 +333,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'tailwindcss',
     kind: 'implicit',
-    order: 14,
+    order: 15,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps UI work accessible, responsive, themed, and on your design system whenever a task touches it.',
     searchTitle: 'jg-frontend: Frontend standards for coding agents',
@@ -334,7 +353,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'react',
     kind: 'implicit',
-    order: 15,
+    order: 16,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies React 19 APIs, render-performance rules, and testing standards whenever a task touches React.',
     searchTitle: 'jg-react: React standards for coding agents',
@@ -354,7 +373,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'monitor-smartphone',
     kind: 'implicit',
-    order: 16,
+    order: 17,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex for web apps you choose to make installable, keeping their service workers, caching, and push safe.',
     searchTitle: 'jg-pwa: Progressive web app standards for coding agents',
@@ -375,7 +394,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'globe',
     kind: 'implicit',
-    order: 17,
+    order: 18,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps metadata, canonical URLs, sitemaps, robots rules, and structured data right on public sites.',
     searchTitle: 'jg-seo: SEO standards for public websites',
@@ -395,7 +414,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'vector-square',
     kind: 'implicit',
-    order: 18,
+    order: 19,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps SVG icons, logos, and exported files consistent, correctly sized, and true to the brand.',
     searchTitle: 'jg-svg: SVG standards for coding agents',
@@ -415,7 +434,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'image',
     kind: 'implicit',
-    order: 19,
+    order: 20,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that renders social posts, blog covers, and video graphics with consistent fonts and exact sizes.',
     searchTitle: 'jg-graphics: Image generation standards for coding agents',
@@ -435,7 +454,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'nestjs',
     kind: 'implicit',
-    order: 20,
+    order: 21,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies NestJS module, validation, logging, lifecycle, and test standards whenever a task touches Nest.',
     searchTitle: 'jg-nestjs: NestJS standards for coding agents',
@@ -454,7 +473,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'database',
     kind: 'implicit',
-    order: 21,
+    order: 22,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies PostgreSQL naming, constraint, query, and migration standards whenever a task touches SQL.',
     searchTitle: 'jg-postgres: PostgreSQL standards for coding agents',
@@ -474,7 +493,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'redis',
     kind: 'implicit',
-    order: 22,
+    order: 23,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies Redis key, expiry, scanning, and locking standards whenever a task touches Redis.',
     searchTitle: 'jg-redis: Redis standards for coding agents',
@@ -494,7 +513,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'nodedotjs',
     kind: 'implicit',
-    order: 23,
+    order: 24,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Node.js scripts, CLIs, and filesystem code portable and safe on Windows, macOS, and Linux.',
     searchTitle: 'jg-node: Portable Node.js scripts for coding agents',
@@ -514,7 +533,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'puzzle',
     kind: 'implicit',
-    order: 24,
+    order: 25,
     searchDescription:
       'An implicit skill for Claude Code and Codex that selects suitable JG Packages, verifies installed API documentation, and preserves project contracts.',
     searchTitle: 'jg-packages: Reuse JG Packages with coding agents',
@@ -534,7 +553,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'package',
     kind: 'implicit',
-    order: 25,
+    order: 26,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps package exports, dependency ranges, tarball tests, and npm releases correct and safe.',
     searchTitle: 'jg-npm-package: npm package standards for coding agents',
@@ -554,7 +573,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'folder-tree',
     kind: 'implicit',
-    order: 26,
+    order: 27,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Turborepo task graphs, cache keys, and pnpm workspace dependencies correct.',
     searchTitle: 'jg-monorepo: Turborepo and pnpm workspace standards',
@@ -575,7 +594,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'file-terminal',
     kind: 'implicit',
-    order: 27,
+    order: 28,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps bash and sh scripts on Linux safe, consistent, and checked whenever a task touches shell.',
     searchTitle: 'jg-bash: Bash script standards for coding agents',
@@ -595,7 +614,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'ship',
     kind: 'implicit',
-    order: 28,
+    order: 29,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Compose services private, healthy, and reproducible, and Dockerfiles small and safe.',
     searchTitle: 'jg-docker: Docker Compose and Dockerfile standards',
@@ -615,7 +634,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'workflow',
     kind: 'implicit',
-    order: 29,
+    order: 30,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps GitHub Actions CI minimal and secure, adding more only when you ask for it.',
     searchTitle: 'jg-ci: GitHub Actions standards for coding agents',
@@ -635,7 +654,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'zod',
     kind: 'implicit',
-    order: 30,
+    order: 31,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that applies Zod 4 schema, strictness, and error standards whenever a task validates data.',
     searchTitle: 'jg-zod: Zod 4 validation standards for coding agents',
@@ -654,7 +673,7 @@ export const SKILL_CATALOG = {
     ],
     icon: 'flask-conical',
     kind: 'implicit',
-    order: 31,
+    order: 32,
     searchDescription:
       'An implicit agent skill for Claude Code and Codex that keeps Vitest and Playwright tests deterministic and fast whenever a task touches tests.',
     searchTitle: 'jg-testing: Vitest and Playwright standards for agents',

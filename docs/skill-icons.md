@@ -31,6 +31,7 @@
 | `jg-command`           | `Terminal`                  | Shell commands.                                                                                                                |
 | `jg-review`            | `SearchCheck`               | Inspects a change and gives a verdict.                                                                                         |
 | `jg-push`              | `Upload`                    | Publishes commits, and differs from its `GitCommitHorizontal` badge.                                                           |
+| `jg-review-session`    | `ClipboardCheck`            | Checks delivered work against the plan, and differs from `jg-review`'s `SearchCheck`.                                          |
 | `jg-feedback`          | `Scale`                     | Weighs feedback.                                                                                                               |
 | `jg-session`           | `MessagesSquare`            | Reads past sessions.                                                                                                           |
 | `jg-frontend`          | Tailwind CSS mark           | Written for Tailwind CSS.                                                                                                      |

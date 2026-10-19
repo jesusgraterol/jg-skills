@@ -45,6 +45,11 @@ const OPTIONAL_BUILD_STEPS = [
 const SHIP_STEPS = [
   { command: 'jg-review', isOptional: false, text: 'Check the change before it ships.' },
   { command: 'jg-push', isOptional: false, text: "Commit and push the task's files." },
+  {
+    command: 'jg-review-session',
+    isOptional: true,
+    text: 'Check the delivered work from a fresh session.',
+  },
 ] as const satisfies readonly IWorkflowStep[];
 
 // how jg-execute runs in each mode, and who runs the ship steps

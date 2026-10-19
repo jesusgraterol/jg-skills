@@ -35,11 +35,11 @@ Implicit skills load on their own when a task touches their stack, such as a mig
 Run these from your repository's root:
 
 ```bash
-npx skills update -p jg-brainstorm jg-plan jg-challenge-plan jg-challenge-session jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-graphics jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
+npx skills update -p jg-brainstorm jg-plan jg-challenge-plan jg-challenge-session jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-review-session jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-graphics jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
 ```
 
 ```bash
-npx skills remove jg-brainstorm jg-plan jg-challenge-plan jg-challenge-session jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-graphics jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
+npx skills remove jg-brainstorm jg-plan jg-challenge-plan jg-challenge-session jg-breakdown jg-execute jg-debug jg-pause jg-command jg-review jg-push jg-review-session jg-feedback jg-session jg-frontend jg-react jg-pwa jg-seo jg-svg jg-graphics jg-nestjs jg-postgres jg-redis jg-node jg-packages jg-npm-package jg-monorepo jg-bash jg-docker jg-ci jg-zod jg-testing
 ```
 
 Both commands name the skills, so other skills in the project are left alone. Update refreshes only the skills you already have, so rerun the install command to add skills released since you installed.
@@ -61,6 +61,7 @@ Both commands name the skills, so other skills in the project are left alone. Up
 | `jg-command`           | Turns a task into a few checked shell commands for your machine and explains each one.         | Nothing until you pick; then runs that command. Irreversible ones ask again; `sudo` ones are printed.                       |
 | `jg-review`            | Reviews the task's changes and how they follow its plan, or the branch against a target.       | No files. With a target branch, it may refresh that branch's remote-tracking ref.                                           |
 | `jg-push`              | Commits the current task's files, signed when signing is set up, and pushes the branch.        | Stages and commits the task's files (or every change without a task) and pushes the current branch.                         |
+| `jg-review-session`    | Reviews what another session built against its plan, milestones, and your decisions.           | Nothing.                                                                                                                    |
 | `jg-feedback`          | Assesses feedback independently and recommends what to adopt, reject, or adjust.               | Nothing.                                                                                                                    |
 | `jg-session`           | Finds a named Codex or Claude Code session and answers questions about it.                     | Nothing.                                                                                                                    |
 
@@ -95,7 +96,7 @@ Each implicit skill states the versions it was written for and, for anything wit
 2. `jg-plan` asks about any decision that is yours to make, then turns the discussion into a plan under `coding-agent-planning/` and asks for approval. When the idea isn't clear enough to plan, it points you back to `jg-brainstorm`.
 3. Optionally, `jg-challenge-plan` returns a verdict, any required corrections, and numbered decisions, and `jg-plan` with your answers revises the same plan. For an independent challenge, run `jg-challenge-session` with the planning session's name from a separate session or another coding agent, then paste its answer into the planning session with `jg-feedback`.
 4. Optionally, `jg-breakdown` writes `milestones.md` when the plan has real milestone boundaries, with an overview table of every milestone's status at the top and a status line under each milestone: pending, in progress, or done. `jg-plan` and `jg-challenge-plan` recommend it when the plan has parts that can each be finished and reviewed on their own, such as separate packages or repositories.
-5. `jg-execute` builds the next milestone, runs its checks, and stops so you can run `jg-review` and `jg-push` yourself. `jg-review` checks the change against the plan and the milestone it belongs to, as well as the code. `jg-execute auto` builds every remaining milestone instead, reviewing and pushing each one before starting the next.
+5. `jg-execute` builds the next milestone, runs its checks, and stops so you can run `jg-review` and `jg-push` yourself. `jg-review` checks the change against the plan and the milestone it belongs to, as well as the code. `jg-execute auto` builds every remaining milestone instead, reviewing and pushing each one before starting the next. To check what a session delivered from the outside, run `jg-review-session` with that session's name from a separate session or another coding agent, then paste its answer into that session with `jg-feedback`.
 
 A small, settled change, such as a few edits with nothing left to decide, skips steps 2 to 4: invoke `jg-execute` right after the discussion, and it builds the agreed task as one unit.
 
