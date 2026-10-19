@@ -38,7 +38,9 @@ test.describe('workflow section', () => {
       'Push',
       'Next milestone',
     ]);
-    await expect(workflow.getByText('jg-execute runs these after each milestone.')).toBeVisible();
+    await expect(
+      workflow.getByText('jg-execute runs jg-review and jg-push after each milestone.'),
+    ).toBeVisible();
     await expect(workflow.getByText('/jg-debug', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-pause', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-command', { exact: true })).toBeVisible();
