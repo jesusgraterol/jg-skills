@@ -4,6 +4,7 @@ import { describe, expect, test } from 'vitest';
 import {
   assertBareSkillReferences,
   assertCatalogCoverage,
+  assertCopiedSections,
   assertFileBudget,
   assertInvocationSettings,
   assertNoOrphanedReferences,
@@ -16,7 +17,6 @@ import {
   assertSearchMetadata,
   assertSharedSections,
   assertSkillName,
-  assertTaskScopeSections,
   assertVersionLine,
   buildSourceUrl,
   extractReferencePaths,
@@ -295,13 +295,15 @@ describe('assertSharedSections', () => {
   });
 });
 
-describe('assertTaskScopeSections', () => {
+describe('assertCopiedSections', () => {
   const buildScopedBody = (scope: string, workflow: string): string =>
     `## Invocation\n\nShared rules.\n\n## Task scope\n\n${scope}\n\n## Workflow\n\n${workflow}\n`;
+  const buildReadingBody = (reading: string, workflow: string): string =>
+    `## Invocation\n\nShared rules.\n\n## Reading a session\n\n${reading}\n\n## Workflow\n\n${workflow}\n`;
 
   test('accepts skills whose Task scope sections match, and skills without one', () => {
     expect(() =>
-      assertTaskScopeSections([
+      assertCopiedSections([
         {
           body: buildScopedBody('- The same scope.', 'Review.'),
           kind: 'explicit',
@@ -313,9 +315,9 @@ describe('assertTaskScopeSections', () => {
     ).not.toThrow();
   });
 
-  test('names every skill that carries one when the copies drift apart', () => {
+  test('names the section and every skill that carries it when Task scope copies drift apart', () => {
     expect(() =>
-      assertTaskScopeSections([
+      assertCopiedSections([
         {
           body: buildScopedBody('- The same scope.', 'Review.'),
           kind: 'explicit',
@@ -325,7 +327,45 @@ describe('assertTaskScopeSections', () => {
         { body: buildExplicitBody('Shared rules.', 'Plan.'), kind: 'explicit', name: 'jg-plan' },
       ]),
     ).toThrow(
-      'Skill Task scope section differs from the other skills that carry one: jg-push, jg-review',
+      'Skill section differs from the other skills that carry it: Task scope (jg-push, jg-review)',
+    );
+  });
+
+  test('accepts skills whose Reading a session sections match, and skills without one', () => {
+    expect(() =>
+      assertCopiedSections([
+        {
+          body: buildReadingBody('Find the session.', 'Answer.'),
+          kind: 'explicit',
+          name: 'jg-session',
+        },
+        {
+          body: buildReadingBody('Find the session.', 'Challenge.'),
+          kind: 'explicit',
+          name: 'jg-challenge-session',
+        },
+        { body: buildExplicitBody('Shared rules.', 'Plan.'), kind: 'explicit', name: 'jg-plan' },
+      ]),
+    ).not.toThrow();
+  });
+
+  test('names the section and every skill that carries it when Reading a session copies drift apart', () => {
+    expect(() =>
+      assertCopiedSections([
+        {
+          body: buildReadingBody('Find the session.', 'Answer.'),
+          kind: 'explicit',
+          name: 'jg-session',
+        },
+        {
+          body: buildReadingBody('Find another session.', 'Challenge.'),
+          kind: 'explicit',
+          name: 'jg-challenge-session',
+        },
+        { body: buildExplicitBody('Shared rules.', 'Plan.'), kind: 'explicit', name: 'jg-plan' },
+      ]),
+    ).toThrow(
+      'Skill section differs from the other skills that carry it: Reading a session (jg-challenge-session, jg-session)',
     );
   });
 });

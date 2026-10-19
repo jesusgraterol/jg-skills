@@ -17,6 +17,8 @@ test.describe('workflow section', () => {
     await expect(workflow.getByText('/jg-debug', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-pause', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-command', { exact: true })).toBeVisible();
+    await expect(workflow.getByText('/jg-challenge-session', { exact: true })).toBeVisible();
+    await expect(workflow.getByText('Challenge it again from a fresh session.')).toBeVisible();
 
     await supervised.focus();
     await page.keyboard.press('ArrowRight');

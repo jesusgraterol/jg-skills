@@ -9,6 +9,7 @@ export const IMPLICIT_OPENAI_POLICY = 'policy:\n  allow_implicit_invocation: tru
 // stable messages for skill contract violations that must fail the build
 export const SKILL_CATALOG_ERROR_MESSAGES = {
   CatalogMismatch: 'Skill catalog does not match the skill folders',
+  CopiedSectionMismatch: 'Skill section differs from the other skills that carry it',
   ExplicitSkillReferences: 'Explicit skill has reference files',
   FileOverBudget: 'Skill file is larger than its size budget',
   InvalidSearchMetadata: 'Skill search metadata is outside its limits',
@@ -24,7 +25,6 @@ export const SKILL_CATALOG_ERROR_MESSAGES = {
   ReferenceUnmentioned: 'Skill reference file is not mentioned in its SKILL.md',
   SectionLink: 'Skill links to a section of another document',
   SharedSectionMismatch: 'Skill shared section differs from the other skills of its kind',
-  TaskScopeMismatch: 'Skill Task scope section differs from the other skills that carry one',
   UnsafeMarkup:
     'Skill file renders markup that Markdown does not produce, an event handler, or a URL with a disallowed scheme',
 } as const;
@@ -42,8 +42,12 @@ export const SHARED_SECTION_HEADINGS = {
   implicit: 'Application',
 } as const satisfies Record<ISkillKind, string>;
 
-// the section jg-review and jg-push copy word for word, so a review verdict and a push agree on scope
-export const TASK_SCOPE_HEADING = 'Task scope';
+/*
+ * sections every skill that carries them copies word for word: Task scope, so a jg-review verdict
+ * and a jg-push agree on scope, and Reading a session, so the skills that read another session
+ * find it and weigh its messages alike
+ */
+export const COPIED_SECTION_HEADINGS = ['Task scope', 'Reading a session'] as const;
 
 /*
  * the two lines an implicit skill may change in its shared Application section: the area sentence,

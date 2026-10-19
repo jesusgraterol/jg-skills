@@ -18,38 +18,39 @@
 
 ## Current icons
 
-| Skill               | Icon                 | Why                                                                                                                            |
-| ------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `jg-brainstorm`     | `Lightbulb`          | Ideas before a plan.                                                                                                           |
-| `jg-plan`           | `Map`                | The route from an idea to a change.                                                                                            |
-| `jg-challenge-plan` | `ShieldQuestionMark` | Questions a plan before approval.                                                                                              |
-| `jg-breakdown`      | `ListOrdered`        | A plan split into numbered milestones.                                                                                         |
-| `jg-execute`        | `Hammer`             | Builds the work.                                                                                                               |
-| `jg-debug`          | `Bug`                | Finds and fixes a bug.                                                                                                         |
-| `jg-pause`          | `CirclePause`        | Stops at a safe point.                                                                                                         |
-| `jg-command`        | `Terminal`           | Shell commands.                                                                                                                |
-| `jg-review`         | `SearchCheck`        | Inspects a change and gives a verdict.                                                                                         |
-| `jg-push`           | `Upload`             | Publishes commits, and differs from its `GitCommitHorizontal` badge.                                                           |
-| `jg-feedback`       | `Scale`              | Weighs feedback.                                                                                                               |
-| `jg-session`        | `MessagesSquare`     | Reads past sessions.                                                                                                           |
-| `jg-frontend`       | Tailwind CSS mark    | Written for Tailwind CSS.                                                                                                      |
-| `jg-react`          | React mark           | Written for React.                                                                                                             |
-| `jg-pwa`            | `MonitorSmartphone`  | Web apps installed on desktops and phones, across several browsers.                                                            |
-| `jg-seo`            | `Globe`              | Public websites as search engines and social networks see them.                                                                |
-| `jg-svg`            | `VectorSquare`       | Vector graphics, drawn as a shape with its anchor points. The SVG mark is CC-BY-SA-4.0.                                        |
-| `jg-graphics`       | `Image`              | Generated images, made with HTML, SVG, and Playwright, so no single mark fits.                                                 |
-| `jg-nestjs`         | NestJS mark          | Written for NestJS.                                                                                                            |
-| `jg-postgres`       | `Database`           | PostgreSQL's elephant blurs at 20 pixels.                                                                                      |
-| `jg-redis`          | Redis mark           | Written for Redis.                                                                                                             |
-| `jg-node`           | Node.js mark         | Written for Node.js.                                                                                                           |
-| `jg-packages` | `Puzzle` | Reusable capabilities that fit into a project; distinct from package authoring. |
-| `jg-npm-package`    | `Package`            | Published packages. The npm mark is lettering that blurs at 20 pixels.                                                         |
-| `jg-monorepo`       | `FolderTree`         | Workspace packages under one repository, across Turborepo and pnpm.                                                            |
-| `jg-bash`           | `FileTerminal`       | Shell scripts. The GNU Bash mark blurs at 20 pixels, and `Terminal` is `jg-command`'s.                                         |
-| `jg-docker`         | `Ship`               | Ships containers. The Docker mark is too detailed for 20 pixels, and `Container` is too close to `jg-npm-package`'s `Package`. |
-| `jg-ci`             | `Workflow`           | Pipelines. The GitHub Actions mark blurs at 20 pixels.                                                                         |
-| `jg-zod`            | Zod mark             | Written for Zod.                                                                                                               |
-| `jg-testing`        | `FlaskConical`       | Covers Vitest and Playwright, so no single mark fits.                                                                          |
+| Skill                  | Icon                        | Why                                                                                                                            |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `jg-brainstorm`        | `Lightbulb`                 | Ideas before a plan.                                                                                                           |
+| `jg-plan`              | `Map`                       | The route from an idea to a change.                                                                                            |
+| `jg-challenge-plan`    | `ShieldQuestionMark`        | Questions a plan before approval.                                                                                              |
+| `jg-challenge-session` | `MessageCircleQuestionMark` | Questions what another session planned, and differs from `jg-session`'s `MessagesSquare`.                                      |
+| `jg-breakdown`         | `ListOrdered`               | A plan split into numbered milestones.                                                                                         |
+| `jg-execute`           | `Hammer`                    | Builds the work.                                                                                                               |
+| `jg-debug`             | `Bug`                       | Finds and fixes a bug.                                                                                                         |
+| `jg-pause`             | `CirclePause`               | Stops at a safe point.                                                                                                         |
+| `jg-command`           | `Terminal`                  | Shell commands.                                                                                                                |
+| `jg-review`            | `SearchCheck`               | Inspects a change and gives a verdict.                                                                                         |
+| `jg-push`              | `Upload`                    | Publishes commits, and differs from its `GitCommitHorizontal` badge.                                                           |
+| `jg-feedback`          | `Scale`                     | Weighs feedback.                                                                                                               |
+| `jg-session`           | `MessagesSquare`            | Reads past sessions.                                                                                                           |
+| `jg-frontend`          | Tailwind CSS mark           | Written for Tailwind CSS.                                                                                                      |
+| `jg-react`             | React mark                  | Written for React.                                                                                                             |
+| `jg-pwa`               | `MonitorSmartphone`         | Web apps installed on desktops and phones, across several browsers.                                                            |
+| `jg-seo`               | `Globe`                     | Public websites as search engines and social networks see them.                                                                |
+| `jg-svg`               | `VectorSquare`              | Vector graphics, drawn as a shape with its anchor points. The SVG mark is CC-BY-SA-4.0.                                        |
+| `jg-graphics`          | `Image`                     | Generated images, made with HTML, SVG, and Playwright, so no single mark fits.                                                 |
+| `jg-nestjs`            | NestJS mark                 | Written for NestJS.                                                                                                            |
+| `jg-postgres`          | `Database`                  | PostgreSQL's elephant blurs at 20 pixels.                                                                                      |
+| `jg-redis`             | Redis mark                  | Written for Redis.                                                                                                             |
+| `jg-node`              | Node.js mark                | Written for Node.js.                                                                                                           |
+| `jg-packages`          | `Puzzle`                    | Reusable capabilities that fit into a project; distinct from package authoring.                                                |
+| `jg-npm-package`       | `Package`                   | Published packages. The npm mark is lettering that blurs at 20 pixels.                                                         |
+| `jg-monorepo`          | `FolderTree`                | Workspace packages under one repository, across Turborepo and pnpm.                                                            |
+| `jg-bash`              | `FileTerminal`              | Shell scripts. The GNU Bash mark blurs at 20 pixels, and `Terminal` is `jg-command`'s.                                         |
+| `jg-docker`            | `Ship`                      | Ships containers. The Docker mark is too detailed for 20 pixels, and `Container` is too close to `jg-npm-package`'s `Package`. |
+| `jg-ci`                | `Workflow`                  | Pipelines. The GitHub Actions mark blurs at 20 pixels.                                                                         |
+| `jg-zod`               | Zod mark                    | Written for Zod.                                                                                                               |
+| `jg-testing`           | `FlaskConical`              | Covers Vitest and Playwright, so no single mark fits.                                                                          |
 
 ## Finding icons
 
