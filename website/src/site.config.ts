@@ -130,7 +130,7 @@ export const SKILL_CATALOG = {
         invocation: 'jg-execute auto',
         label: 'Autonomous',
         outcome:
-          'Builds each remaining milestone, reviews it until clean, and pushes it before starting the next.',
+          'Builds each remaining milestone, reviews it until clean, and pushes it before starting the next, then reviews the whole plan once the last one is pushed.',
       },
       {
         invocation: 'jg-execute',
@@ -232,6 +232,12 @@ export const SKILL_CATALOG = {
           "Reviews the task's changes, and how they follow the plan when you are building one, then answers Ready to commit, Not ready, or Review incomplete.",
       },
       {
+        invocation: 'jg-review',
+        label: 'Finished plan',
+        outcome:
+          "After a plan's last milestone is pushed, reviews everything committed for the plan against the whole plan and answers Plan implemented as agreed, Not ready, or Review incomplete.",
+      },
+      {
         invocation: 'jg-review main',
         label: 'Branch',
         outcome:
@@ -242,11 +248,11 @@ export const SKILL_CATALOG = {
     kind: 'explicit',
     order: 10,
     searchDescription:
-      "An explicit-only agent skill for Claude Code and Codex that reviews a task's changes against its plan, or a branch, and issues a readiness verdict.",
+      "An explicit-only agent skill for Claude Code and Codex that reviews a task's changes, a finished plan, or a branch, and issues a readiness verdict.",
     searchTitle: 'jg-review: Code review for Claude Code and Codex',
     stage: 'ship',
     whenToUse:
-      "Use it before committing a task's changes, or before merging a branch into its target.",
+      "Use it before committing a task's changes, before merging a branch into its target, or after a plan's last milestone is pushed.",
   },
   'jg-push': {
     access: 'commits-and-pushes',
