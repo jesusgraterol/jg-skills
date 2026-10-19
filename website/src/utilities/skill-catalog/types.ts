@@ -19,6 +19,7 @@ export type ISkillAccess =
 export type ISkillLucideIcon =
   | 'bug'
   | 'circle-pause'
+  | 'clipboard-check'
   | 'database'
   | 'file-terminal'
   | 'flask-conical'
@@ -29,6 +30,7 @@ export type ISkillLucideIcon =
   | 'lightbulb'
   | 'list-ordered'
   | 'map'
+  | 'message-circle-question-mark'
   | 'messages-square'
   | 'monitor-smartphone'
   | 'package'

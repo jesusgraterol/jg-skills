@@ -14,6 +14,11 @@ const PLAN_STEPS = [
   { command: 'jg-brainstorm', isOptional: false, text: 'Agree on a direction.' },
   { command: 'jg-plan', isOptional: false, text: 'Save it as a plan you approve.' },
   { command: 'jg-challenge-plan', isOptional: true, text: 'Find gaps before you approve.' },
+  {
+    command: 'jg-challenge-session',
+    isOptional: true,
+    text: 'Challenge it again from a fresh session.',
+  },
   { command: 'jg-breakdown', isOptional: true, text: 'Split a large plan into milestones.' },
 ] as const satisfies readonly IWorkflowStep[];
 
@@ -40,6 +45,11 @@ const OPTIONAL_BUILD_STEPS = [
 const SHIP_STEPS = [
   { command: 'jg-review', isOptional: false, text: 'Check the change before it ships.' },
   { command: 'jg-push', isOptional: false, text: "Commit and push the task's files." },
+  {
+    command: 'jg-review-session',
+    isOptional: true,
+    text: 'Check the delivered work from a fresh session.',
+  },
 ] as const satisfies readonly IWorkflowStep[];
 
 // how jg-execute runs in each mode, and who runs the ship steps

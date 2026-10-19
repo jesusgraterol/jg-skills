@@ -5,10 +5,10 @@ import { SEARCH_TEXT_LIMITS } from '../seo/index.ts';
 import {
   APPLICATION_AREA_PREFIX,
   APPLICATION_VERSION_MARKER,
+  COPIED_SECTION_HEADINGS,
   EXPLICIT_ONLY_OPENAI_POLICY,
   IMPLICIT_OPENAI_POLICY,
   SHARED_SECTION_HEADINGS,
-  TASK_SCOPE_HEADING,
   SKILL_CATALOG_ERROR_MESSAGES,
   SKILL_FILE_BYTE_BUDGET,
 } from './constants.ts';
@@ -217,27 +217,31 @@ export const assertSharedSections = (skills: readonly ISkillDocument[]): void =>
 };
 
 /**
- * Asserts that every skill carrying a `## Task scope` section carries the same one, because
- * jg-push reuses a jg-review verdict only when both computed the scope and its fingerprint alike.
+ * Asserts that every skill carrying one of the copied sections carries the same copy:
+ * `## Task scope`, because jg-push reuses a jg-review verdict only when both computed the scope
+ * and its fingerprint alike, and `## Reading a session`, because the skills that read another
+ * session must find it and weigh its messages alike.
  * @param skills The name, kind, and SKILL.md body of every skill.
  * @throws
- * - Skill Task scope section differs from the other skills that carry one
+ * - Skill section differs from the other skills that carry it
  */
-export const assertTaskScopeSections = (skills: readonly ISkillDocument[]): void => {
-  const sections = skills.flatMap(({ body, name }) => {
-    const section = extractSection(body, TASK_SCOPE_HEADING);
+export const assertCopiedSections = (skills: readonly ISkillDocument[]): void => {
+  COPIED_SECTION_HEADINGS.forEach((heading) => {
+    const sections = skills.flatMap(({ body, name }) => {
+      const section = extractSection(body, heading);
 
-    return section === undefined ? [] : [{ name, section }];
+      return section === undefined ? [] : [{ name, section }];
+    });
+
+    if (new Set(sections.map(({ section }) => section)).size > 1) {
+      throw new Error(
+        `${SKILL_CATALOG_ERROR_MESSAGES.CopiedSectionMismatch}: ${heading} (${sections
+          .map(({ name }) => name)
+          .toSorted()
+          .join(', ')})`,
+      );
+    }
   });
-
-  if (new Set(sections.map(({ section }) => section)).size > 1) {
-    throw new Error(
-      `${SKILL_CATALOG_ERROR_MESSAGES.TaskScopeMismatch}: ${sections
-        .map(({ name }) => name)
-        .toSorted()
-        .join(', ')}`,
-    );
-  }
 };
 
 /**

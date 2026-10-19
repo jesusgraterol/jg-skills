@@ -11,6 +11,7 @@ import type { ISkill } from './types.ts';
 import {
   assertBareSkillReferences,
   assertCatalogCoverage,
+  assertCopiedSections,
   assertFileBudget,
   assertInvocationSettings,
   assertNoOrphanedReferences,
@@ -22,7 +23,6 @@ import {
   assertSearchMetadata,
   assertSharedSections,
   assertSkillName,
-  assertTaskScopeSections,
   assertVersionLine,
   buildSourceUrl,
   groupReferencesBySkill,
@@ -86,7 +86,7 @@ const listReferenceFolder = async (skillDirectory: string): Promise<string[]> =>
  *   disallowed scheme
  * - Skill file is larger than its size budget
  * - Skill shared section differs from the other skills of its kind
- * - Skill Task scope section differs from the other skills that carry one
+ * - Skill section differs from the other skills that carry it
  */
 export const loadSkills = async (): Promise<ISkill[]> => {
   const entries = await getCollection('skills');
@@ -163,7 +163,7 @@ export const loadSkills = async (): Promise<ISkill[]> => {
   const documents = skills.map(({ entry, kind, name }) => ({ body: entry.body ?? '', kind, name }));
 
   assertSharedSections(documents);
-  assertTaskScopeSections(documents);
+  assertCopiedSections(documents);
 
   return skills.toSorted((first, second) => first.order - second.order);
 };
