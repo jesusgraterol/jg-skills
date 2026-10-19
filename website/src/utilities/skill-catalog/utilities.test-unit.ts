@@ -647,12 +647,12 @@ describe('assertReferences with a malformed mention', () => {
 
 describe('assertFileBudget', () => {
   test('accepts a file at exactly the budget', () => {
-    expect(() => assertFileBudget('jg-postgres', 'SKILL.md', 20_480)).not.toThrow();
+    expect(() => assertFileBudget('jg-postgres', 'SKILL.md', 25_600)).not.toThrow();
   });
 
   test('rejects a file one byte over the budget, naming the file and its size', () => {
-    expect(() => assertFileBudget('jg-postgres', 'references/naming.md', 20_481)).toThrow(
-      'Skill file is larger than its size budget: jg-postgres (references/naming.md, 20481 of 20480 bytes)',
+    expect(() => assertFileBudget('jg-postgres', 'references/naming.md', 25_601)).toThrow(
+      'Skill file is larger than its size budget: jg-postgres (references/naming.md, 25601 of 25600 bytes)',
     );
   });
 });

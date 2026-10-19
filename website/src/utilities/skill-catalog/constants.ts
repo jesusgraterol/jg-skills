@@ -30,10 +30,11 @@ export const SKILL_CATALOG_ERROR_MESSAGES = {
 } as const;
 
 /*
- * the largest SKILL.md or reference file, in bytes; after compaction Claude Code re-attaches only
- * the first 5,000 tokens of each invoked skill, and a file this size stays close to that window
+ * the largest SKILL.md or reference file, in bytes; it leaves room for long workflows, but after
+ * compaction Claude Code re-attaches only the first 5,000 tokens of each invoked skill, so
+ * requirements come before defaults and long examples
  */
-export const SKILL_FILE_BYTE_BUDGET = 20_480;
+export const SKILL_FILE_BYTE_BUDGET = 25_600;
 
 // the section each kind of skill copies word for word from the other skills of its kind
 export const SHARED_SECTION_HEADINGS = {
