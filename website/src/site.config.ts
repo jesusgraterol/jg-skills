@@ -547,7 +547,7 @@ export const SKILL_CATALOG = {
     summary:
       'Package selection, local API documentation, and consumer integration for JG Packages.',
     whenToUse:
-      'It loads on its own for reusable helpers, hashing and secure random values, coded errors and user-facing error messages, API envelopes, HTTP wrappers, decimal math, environment variables and secrets, PostgreSQL and Redis helpers, React query persistence, boundaries, hooks, and routing, NestJS error handling, guards, and bootstrap, browser storage or clipboard work, filesystem, private-file, lock, process, readiness, or port helpers, service workers, or consumer use of JG Packages. Call it by name to load it before such a task.',
+      'It loads on its own for reusable helpers, deadlines and background tasks, hashing and secure random values, coded errors and user-facing error messages, API envelopes, HTTP wrappers, decimal math, environment variables, .env files, and secrets, PostgreSQL and Redis helpers, React query persistence, polling, boundaries, hooks, routing, and URL state, NestJS error handling, guards, and bootstrap, browser storage, clipboard, or download work, filesystem, private-file, lock, process, readiness, port, or shutdown-signal helpers, Git commands, local Docker checks, GitHub App tokens and webhooks, service workers, or consumer use of JG Packages. Call it by name to load it before such a task.',
   },
   'jg-npm-package': {
     examples: [
