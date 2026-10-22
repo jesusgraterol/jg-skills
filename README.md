@@ -1,8 +1,8 @@
 # jg-skills
 
-[![jg-skills: battle-tested skills for coding agents](website/public/og/jg-skills.png)](https://jg-skills.jesusgraterol.dev)
+[![jg-skills: explicit workflows and stack standards for coding agents](website/public/og/jg-skills.png)](https://jg-skills.jesusgraterol.dev)
 
-Solid, battle-tested Agent Skills for planning, reviewing, and shipping changes with coding agents, used by professional software developers in their daily work. Explicit skills define what they may change and defer general engineering standards to the coding instructions of the repository you use them in. Implicit skills carry the stack-specific standards, such as PostgreSQL or React, and load on their own when a task touches their stack.
+Explicit workflows for planning, implementing, reviewing and publishing changes with coding agents. Explicit skills define what they may change and defer general engineering standards to the coding instructions of the repository you use them in. Implicit skills carry the stack-specific standards, such as PostgreSQL or React, and load on their own when a task touches their stack.
 
 Browse the skills, their full instructions, and an example session at [jg-skills.jesusgraterol.dev](https://jg-skills.jesusgraterol.dev).
 
@@ -117,7 +117,7 @@ Use `jg-pause` at any point to stop the agent at a safe point and pick up later.
 
 ## Website
 
-The site in `website/` is a static Astro and Tailwind CSS project built on [`jg-personal-astro-ui`](https://www.npmjs.com/package/jg-personal-astro-ui), the UI package Jesus Graterol's sites share: its theme, page head, header, footer, cards, buttons, badges, icon tiles, and segmented control, and the code windows and new-tab markers its Markdown plugins add to every skill. It reads every `skills/*/SKILL.md` and `skills/*/references/*.md` at build time, so the published names, descriptions, instructions, and reference files always match what gets installed.
+The site leads with an illustrative supervised session and a worked search empty-state workflow before the skill catalog. The example shows invocations, artifacts, authorization and relevant implicit guidance; its outputs are illustrations, not live sessions. It explains the separate project-local planning runtime and offers supervised/auto mode exploration. The site in `website/` is a static Astro and Tailwind CSS project built on [`jg-personal-astro-ui`](https://www.npmjs.com/package/jg-personal-astro-ui), the UI package Jesus Graterol's sites share: its theme, page head, header, footer, cards, buttons, badges, icon tiles, and segmented control, and the code windows and new-tab markers its Markdown plugins add to every skill. It reads every `skills/*/SKILL.md` and `skills/*/references/*.md` at build time, so the published names, descriptions, instructions, and reference files always match what gets installed.
 
 Requirements: Node.js `24.15` or newer within Node 24, and npm `11.12` or newer within npm 11. Run these from `website/`:
 

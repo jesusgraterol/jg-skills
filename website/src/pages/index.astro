@@ -9,6 +9,7 @@ import SessionDemo from '../components/session-demo/session-demo.astro';
 import SkillCard from '../components/skill-card/skill-card.astro';
 import StandardsSection from '../components/standards-section/standards-section.astro';
 import WorkflowRun from '../components/workflow-run/workflow-run.astro';
+import WorkedExample from '../components/worked-example/worked-example.astro';
 import BaseLayout from '../layouts/base-layout.astro';
 import { SITE_CONFIG } from '../site.config.ts';
 import {
@@ -38,17 +39,29 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
       class="jg-container grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14"
     >
       <div>
-        <p class="eyebrow">Agent Skills for professional development</p>
+        <p class="eyebrow">Explicit workflows + stack standards</p>
         <h1 class="display-title mt-6 text-4xl sm:text-5xl xl:text-6xl">
-          Battle-tested skills
-          <span class="block text-accent">for coding agents.</span>
+          A clear way to work
+          <span class="block text-accent">with coding agents.</span>
         </h1>
         <p class="lede mt-7">
-          Brainstorm, plan, build, review, and ship changes with the skills professional software
-          developers use on real projects. Workflow skills run only when you call them. Implicit
-          skills load on their own when a task touches their stack.
+          Turn an agreed change into a plan, checked code and an explicit publication step. Choose
+          when each workflow runs. Relevant stack standards guide Claude Code and Codex as they
+          work.
         </p>
-        <div class="mt-8">
+        <div class="mt-7 flex flex-wrap gap-3">
+          <Button href="#workflow"
+            >See the workflow <ArrowDown
+              class="size-4"
+              aria-hidden="true"
+            /></Button
+          ><Button
+            href="#install"
+            variant="outline"
+            >Set up locally</Button
+          >
+        </div>
+        <div class="mt-7">
           <InstallCommand
             command={SITE_CONFIG.commands.install}
             context="install command"
@@ -69,6 +82,25 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
         </Button>
       </div>
       <SessionDemo />
+    </div>
+  </section>
+
+  <section
+    id="workflow"
+    class="jg-section-space scroll-mt-16 border-b border-border"
+    aria-labelledby="workflow-title"
+  >
+    <div class="jg-container">
+      <p class="eyebrow">How it works</p>
+      <h2
+        id="workflow-title"
+        class="section-title mt-4"
+      >
+        From a conversation to a pushed commit.
+      </h2>
+      <div class="mt-10">
+        <WorkedExample />
+      </div>
     </div>
   </section>
 
@@ -117,21 +149,17 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
   </section>
 
   <section
-    id="workflow"
-    class="jg-section-space scroll-mt-16 border-b border-border"
-    aria-labelledby="workflow-title"
+    id="modes"
+    class="jg-section-space border-b border-border"
+    aria-labelledby="modes-title"
   >
     <div class="jg-container">
-      <p class="eyebrow">How it works</p>
-      <h2
-        id="workflow-title"
+      <p class="eyebrow">Choose your pace</p><h2
+        id="modes-title"
         class="section-title mt-4"
       >
-        From a conversation to a pushed commit.
-      </h2>
-      <div class="mt-10">
-        <WorkflowRun />
-      </div>
+        One unit at a time, or the remaining plan.
+      </h2><div class="mt-10"><WorkflowRun /></div>
     </div>
   </section>
 

@@ -696,6 +696,8 @@ const SKILL_NAMES = Object.keys(SKILL_CATALOG);
 
 // canonical metadata, navigation, and commands for every generated page
 export const SITE_CONFIG = {
+  agentHqUrl: 'https://jg-agent-hq.jesusgraterol.dev',
+  plansUrl: 'https://jg-plans.jesusgraterol.dev',
   // Agentic Coding's prompt for refining an existing AGENTS.md
   agenticCodingRefineUrl: 'https://agenticcoding.jesusgraterol.dev/refine/',
   // Agentic Coding's neutral AGENTS.md foundation for repositories that have none
@@ -721,7 +723,7 @@ export const SITE_CONFIG = {
     update: `npx skills update -p ${SKILL_NAMES.join(' ')}`,
   },
   defaultDescription:
-    'Battle-tested agent skills for Claude Code, Codex, and other coding agents. Brainstorm, plan, build, review, and ship changes like professional developers.',
+    'Explicit planning, execution, review and publishing workflows for Claude Code and Codex, with relevant stack standards and project-local planning tools.',
   language: 'en',
   license: 'MIT',
   name: 'jg-skills',
@@ -733,7 +735,7 @@ export const SITE_CONFIG = {
   openGraph: {
     height: 630,
     image: '/og/jg-skills.png',
-    imageAlt: 'jg-skills: battle-tested skills for coding agents',
+    imageAlt: 'jg-skills: explicit workflows and stack standards for coding agents',
     imageType: 'image/png',
     locale: 'en_US',
     width: 1200,
@@ -741,7 +743,7 @@ export const SITE_CONFIG = {
   packagesSkillPath: '/skills/jg-packages/',
   packagesUrl: 'https://jg-packages.jesusgraterol.dev/',
   repositoryUrl: 'https://github.com/jesusgraterol/jg-skills',
-  // the key the visitor's theme preference is stored under, unchanged so saved themes carry over
+  // the key used for the visitor's theme preference
   storageKeys: {
     theme: 'jg-skills-theme',
   },

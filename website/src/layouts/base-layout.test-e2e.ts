@@ -150,10 +150,9 @@ test.describe('production website', () => {
     }
 
     for (const name of Object.keys(SKILL_CATALOG)) {
-      await expect(page.getByRole('link', { name, exact: true })).toHaveAttribute(
-        'href',
-        `/skills/${name}/`,
-      );
+      await expect(
+        page.locator('#skills').getByRole('link', { name, exact: true }),
+      ).toHaveAttribute('href', `/skills/${name}/`);
     }
 
     // implicit skills show how they load where explicit skills show what they may change, and a
