@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { expectNoHorizontalOverflow, waitForPageAssets, inspectMotion } from 'jg-playwright';
 
 import { SITE_CONFIG, SKILL_CATALOG } from '../site.config.ts';
 
@@ -149,10 +150,9 @@ test.describe('production website', () => {
     }
 
     for (const name of Object.keys(SKILL_CATALOG)) {
-      await expect(page.getByRole('link', { name, exact: true })).toHaveAttribute(
-        'href',
-        `/skills/${name}/`,
-      );
+      await expect(
+        page.locator('#skills').getByRole('link', { name, exact: true }),
+      ).toHaveAttribute('href', `/skills/${name}/`);
     }
 
     // implicit skills show how they load where explicit skills show what they may change, and a
@@ -202,9 +202,8 @@ test.describe('production website', () => {
       await page.setViewportSize({ width: 320, height: 720 });
       await page.goto(route);
 
-      expect(
-        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
-      ).toBe(true);
+      await waitForPageAssets(page);
+      await expectNoHorizontalOverflow(page);
     });
   }
 
@@ -290,6 +289,9 @@ test.describe('production website', () => {
       };
     });
 
+    const motion = await inspectMotion(page);
+    expect(motion.prefersReducedMotion).toBe(true);
+    expect(motion.movingAnimations).toEqual([]);
     expect(behavior.scrollBehavior).toBe('auto');
     expect(Number.parseFloat(behavior.transitionDuration)).toBeLessThanOrEqual(0.001);
   });

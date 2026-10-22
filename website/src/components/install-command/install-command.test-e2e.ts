@@ -9,6 +9,7 @@ test.describe('install command', () => {
     for (const [id, command] of [
       ['hero-install-command', SITE_CONFIG.commands.install],
       ['install-command', SITE_CONFIG.commands.install],
+      ['runtime-install-command', SITE_CONFIG.commands.runtimeInstall],
       ['update-command', SITE_CONFIG.commands.update],
       ['remove-command', SITE_CONFIG.commands.remove],
     ] as const) {
@@ -22,6 +23,7 @@ test.describe('install command', () => {
     for (const [sourceId, name] of [
       ['hero-install-command', 'Copy install command'],
       ['install-command', 'Copy install command'],
+      ['runtime-install-command', 'Copy runtime install command'],
       ['update-command', 'Copy update command'],
       ['remove-command', 'Copy remove command'],
     ] as const) {

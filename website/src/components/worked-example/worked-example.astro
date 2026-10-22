@@ -1,0 +1,238 @@
+---
+import Tabs from 'jg-personal-astro-ui/tabs';
+import CodeBlock from 'jg-personal-astro-ui/code-block';
+import TextLink from 'jg-personal-astro-ui/text-link';
+import Card from 'jg-personal-astro-ui/card';
+import { ArrowRight, Check, FileText, ShieldCheck } from '@lucide/astro';
+import { SITE_CONFIG } from '../../site.config.ts';
+
+const steps = [
+  {
+    id: 'plan',
+    label: 'Plan',
+    skill: 'jg-plan',
+    command: '/jg-plan Add an empty state for searches with no results.',
+    title: 'Agree on a reviewable change.',
+    outcome:
+      'A plan records the goal, scope and checks. Review it before authorizing implementation.',
+    artifact: 'plan.md',
+    artifactType: 'markdown',
+    source:
+      '---\nid: example-empty-search\ncreated_at: 2026-10-22T12:00:00Z\nupdated_at: 2026-10-22T12:00:00Z\nrevision: 1\nstatus: pending\n---\n\n# Search empty state\n\nShow helpful feedback when a search returns no results.\n\n## Verification\n\nCheck no-results, keyboard navigation and returning results.\n',
+    authority: 'Writes the planning documents. Your execution request authorizes the next unit.',
+  },
+  {
+    id: 'build',
+    label: 'Build',
+    skill: 'jg-execute',
+    command: '/jg-execute',
+    title: 'Build one approved unit.',
+    outcome:
+      'The agent implements the empty state, runs the relevant checks and stops for your review.',
+    artifact: 'Implementation + check results',
+    artifactType: 'text',
+    source:
+      'SearchResults.tsx\nSearchResults.test-e2e.ts\n\nExpected evidence\n• Empty results show useful feedback\n• Keyboard navigation remains usable\n• Returning results restore the normal view',
+    authority:
+      'Supervised execution stops after the next unit. Publication remains an explicit step.',
+  },
+  {
+    id: 'review',
+    label: 'Review',
+    skill: 'jg-review',
+    command: '/jg-review',
+    title: 'Review the actual task scope.',
+    outcome:
+      'The review checks the proposed change, its evidence and its agreement with the plan. Resolve blocking findings before publishing.',
+    artifact: 'Review excerpt · expected successful result',
+    artifactType: 'text',
+    source:
+      'Task scope\nSearchResults.tsx\nSearchResults.test-e2e.ts\n\nNo blocking findings.\nVerdict: Ready to commit',
+    authority: 'Review reads the actual changes. It does not commit or push them.',
+  },
+  {
+    id: 'publish',
+    label: 'Publish',
+    skill: 'jg-push',
+    command: '/jg-push',
+    title: 'Publish the reviewed change.',
+    outcome:
+      'The skill commits the selected task files with a signature and pushes the agreed branch. The full result reports the actual commit identity.',
+    artifact: 'Publication outcome · illustration',
+    artifactType: 'text',
+    source:
+      'development\n  └─ signed task commit\n      └─ explicit push to the agreed remote branch',
+    authority:
+      'Only the authorized task scope is staged and published; preflight decisions stay explicit.',
+  },
+] as const;
+---
+
+<section
+  aria-label="Worked search empty-state example"
+  class="min-w-0 [&_pre]:wrap-anywhere [&_pre]:whitespace-pre-wrap"
+  data-worked-example
+>
+  <noscript
+    ><style is:inline>
+      [data-worked-example] [role='tablist'] {
+        display: none;
+      }
+      @layer base {
+        [data-worked-example] [data-tab-panel][hidden] {
+          display: block !important;
+        }
+      }
+      [data-worked-example] [data-copy-button] {
+        display: none;
+      }
+    </style></noscript
+  >
+  <div class="mb-7 flex flex-wrap items-center justify-between gap-3">
+    <p class="flex items-center gap-2 text-sm font-semibold">
+      <FileText
+        class="size-4 text-accent"
+        aria-hidden="true"
+      /> Example task: a search empty state
+    </p>
+    <span class="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted"
+      >Illustrative workflow · supervised</span
+    >
+  </div>
+  <Tabs
+    class="[&_[role=tab]]:px-2 sm:[&_[role=tab]]:px-3"
+    id="worked-example"
+    label="Example workflow steps"
+    tabs={steps}
+  >
+    {
+      steps.map((step) => (
+        <div
+          slot={step.id}
+          class="pt-7"
+        >
+          <div class="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-12">
+            <div class="min-w-0">
+              <>
+                <h3 class="text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
+                  {step.title}
+                </h3>
+                <p class="mt-4 text-sm leading-7 text-muted">{step.outcome}</p>
+                <div class="my-6 min-w-0">
+                  <CodeBlock
+                    code={step.command}
+                    lang="text"
+                    title="Claude Code invocation"
+                  />
+                </div>
+                <p class="flex items-start gap-3 border-t border-border pt-5 text-sm leading-7 text-muted">
+                  <ShieldCheck
+                    class="mt-1 size-4 shrink-0 text-accent"
+                    aria-hidden="true"
+                  />
+                  {step.authority}
+                </p>
+                <p class="mt-5 text-sm">
+                  <TextLink href={`/skills/${step.skill}/`}>
+                    Read {step.skill}{' '}
+                    <ArrowRight
+                      class="ml-1 inline size-3.5"
+                      aria-hidden="true"
+                    />
+                  </TextLink>
+                </p>
+              </>
+            </div>
+            <div class="min-w-0">
+              <>
+                <p class="mb-3 font-mono text-xs text-muted">Illustrative artifact</p>
+                <CodeBlock
+                  code={step.source}
+                  lang={step.artifactType}
+                  title={step.artifact}
+                />
+              </>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </Tabs>
+  <div class="mt-8 grid gap-6 border-t border-border pt-6 md:grid-cols-2">
+    <div>
+      <p class="text-sm font-semibold">One small plan, one unit.</p><p
+        class="mt-2 text-sm leading-7 text-muted"
+      >
+        Add <code class="font-mono text-foreground">jg-breakdown</code> when separate milestones help.
+        In Codex, invoke skills with <code class="font-mono text-foreground">$</code>; this example
+        shows Claude Code’s <code class="font-mono text-foreground">/</code> syntax.
+      </p>
+    </div>
+    <div>
+      <p class="text-sm font-semibold">Relevant standards join the work.</p><ul
+        class="mt-3 flex flex-wrap gap-3 text-sm"
+      >
+        {
+          [
+            { name: 'jg-frontend', text: 'UI and accessibility' },
+            { name: 'jg-react', text: 'React implementation' },
+            { name: 'jg-testing', text: 'Browser checks' },
+          ].map((skill) => (
+            <li class="flex items-center gap-2 rounded-md bg-secondary px-3 py-2">
+              <>
+                <Check
+                  class="size-3 text-accent"
+                  aria-hidden="true"
+                />
+                <TextLink href={`/skills/${skill.name}/`}>{skill.name}</TextLink>
+                <span class="sr-only">: {skill.text}</span>
+              </>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="mt-8 grid gap-4 border-t border-border pt-7 md:grid-cols-3">
+    {
+      [
+        {
+          name: 'jg-skills',
+          role: 'The agent workflow',
+          text: 'Explicit planning, execution, review and publication steps, with relevant coding standards.',
+          href: '/skills/jg-plan/',
+          external: false,
+        },
+        {
+          name: 'jg-plans',
+          role: 'The document tools',
+          text: 'Selected reads, structural fingerprints and guarded document edits in each project.',
+          href: SITE_CONFIG.plansUrl,
+          external: true,
+        },
+        {
+          name: 'jg-agent-hq',
+          role: 'For your own application',
+          text: 'A local SDK and controller for native sessions, review handoffs and plan coordination.',
+          href: SITE_CONFIG.agentHqUrl,
+          external: true,
+        },
+      ].map((project) => (
+        <Card>
+          <>
+            <p class="font-mono text-xs text-accent">{project.role}</p>
+            <h3 class="mt-3 font-semibold">
+              <TextLink
+                href={project.href}
+                external={project.external}
+              >
+                {project.name}
+              </TextLink>
+            </h3>
+            <p class="mt-3 text-sm leading-7 text-muted">{project.text}</p>
+          </>
+        </Card>
+      ))
+    }
+  </div>
+</section>

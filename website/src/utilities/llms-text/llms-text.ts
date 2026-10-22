@@ -1,4 +1,4 @@
-import { buildLlmsText as buildLlmsTextFile } from 'jg-personal-astro-ui/llms-text';
+import { buildLlmsText as buildLlmsTextFile } from 'jg-site';
 
 import { SITE_CONFIG } from '../../site.config.ts';
 
@@ -18,6 +18,16 @@ export const buildLlmsText = (skills: readonly ILlmsSkill[]): string =>
     ],
     sections: [
       { heading: 'Install', body: ['```bash', SITE_CONFIG.commands.install, '```'].join('\n') },
+      {
+        heading: 'Planning runtime',
+        body: [
+          'Install the exact runtime dependency in each project (Node.js 24.15+). Skills never install it automatically; no-plan tasks and code-only reviews need no CLI.',
+          '',
+          '```bash',
+          SITE_CONFIG.commands.runtimeInstall,
+          '```',
+        ].join('\n'),
+      },
       {
         heading: 'Skills',
         links: skills.map(({ description, name }) => ({

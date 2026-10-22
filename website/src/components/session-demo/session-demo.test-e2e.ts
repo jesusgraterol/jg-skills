@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('session demo', () => {
-  test('shows a conversation that brainstorms, plans, and executes a change', async ({ page }) => {
+  test('shows a supervised conversation that plans, builds and reviews a change', async ({
+    page,
+  }) => {
     await page.goto('/');
 
     const demo = page.locator('[data-session-demo]');
@@ -9,9 +11,9 @@ test.describe('session demo', () => {
     await expect(demo.locator('[data-terminal]')).toHaveCount(0);
     await expect(demo.locator('[data-conversation-message]')).toHaveCount(6);
     await expect(demo.locator('[data-conversation-message="you"] code')).toHaveText([
-      '/jg-brainstorm',
       '/jg-plan',
-      '/jg-execute auto',
+      '/jg-execute',
+      '/jg-review',
     ]);
     await expect(demo.locator('[data-conversation-message="agent"]')).toHaveCount(3);
   });
@@ -41,17 +43,17 @@ test.describe('session demo', () => {
       - list "Example conversation with Claude Code":
         - listitem:
           - text: "You:"
-          - code: /jg-brainstorm
-          - text: Should we rate-limit the public API per account?
-        - listitem: "Claude Code: Yes. A sliding window per account in Redis fits your middleware."
-        - listitem:
-          - text: "You:"
           - code: /jg-plan
-        - listitem: "Claude Code: Plan saved. Approve it to start."
+          - text: Add an empty state to the search page.
+        - listitem: "Claude Code: plan.md saved. Review the scope before building."
         - listitem:
           - text: "You:"
-          - code: /jg-execute auto
-        - listitem: "Claude Code: Built, reviewed, and pushed to main."
+          - code: /jg-execute
+        - listitem: "Claude Code: Implementation and checks complete. Ready for review."
+        - listitem:
+          - text: "You:"
+          - code: /jg-review
+        - listitem: "Claude Code: No blocking findings. Ready for jg-push."
     `);
   });
 

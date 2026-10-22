@@ -1,7 +1,8 @@
 import type { ISkillCatalogEntry } from './utilities/skill-catalog/index.ts';
+import { PLANNING_RUNTIME_VERSION } from './utilities/skill-catalog/constants.ts';
 
 // a plan path in the layout jg-plan writes, shared by the examples that name a plan
-const EXAMPLE_PLAN_PATH = 'coding-agent-planning/1787592334_sign-in-flow/plan.md';
+const EXAMPLE_PLAN_PATH = 'jg-plans/1787592334_sign-in-flow/plan.md';
 
 /*
  * Site-owned presentation data for every skill under ../skills. Names, descriptions,
@@ -34,7 +35,7 @@ export const SKILL_CATALOG = {
       {
         invocation: 'jg-plan',
         outcome:
-          'Asks about any decision that is yours to make, turns the change you discussed into an implementation-ready plan under coding-agent-planning/, and stops for your approval.',
+          'Asks about any decision that is yours to make, turns the change you discussed into an implementation-ready plan under jg-plans/, and stops for your approval.',
       },
     ],
     icon: 'map',
@@ -695,6 +696,8 @@ const SKILL_NAMES = Object.keys(SKILL_CATALOG);
 
 // canonical metadata, navigation, and commands for every generated page
 export const SITE_CONFIG = {
+  agentHqUrl: 'https://jg-agent-hq.jesusgraterol.dev',
+  plansUrl: 'https://jg-plans.jesusgraterol.dev',
   // Agentic Coding's prompt for refining an existing AGENTS.md
   agenticCodingRefineUrl: 'https://agenticcoding.jesusgraterol.dev/refine/',
   // Agentic Coding's neutral AGENTS.md foundation for repositories that have none
@@ -715,11 +718,12 @@ export const SITE_CONFIG = {
   // project-scoped commands, run from the repository root
   commands: {
     install: 'npx skills add jesusgraterol/jg-skills --skill "*" -y',
+    runtimeInstall: `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_VERSION}`,
     remove: `npx skills remove ${SKILL_NAMES.join(' ')}`,
     update: `npx skills update -p ${SKILL_NAMES.join(' ')}`,
   },
   defaultDescription:
-    'Battle-tested agent skills for Claude Code, Codex, and other coding agents. Brainstorm, plan, build, review, and ship changes like professional developers.',
+    'Explicit planning, execution, review and publishing workflows for Claude Code and Codex, with relevant stack standards and project-local planning tools.',
   language: 'en',
   license: 'MIT',
   name: 'jg-skills',
@@ -731,7 +735,7 @@ export const SITE_CONFIG = {
   openGraph: {
     height: 630,
     image: '/og/jg-skills.png',
-    imageAlt: 'jg-skills: battle-tested skills for coding agents',
+    imageAlt: 'jg-skills: explicit workflows and stack standards for coding agents',
     imageType: 'image/png',
     locale: 'en_US',
     width: 1200,
@@ -739,7 +743,7 @@ export const SITE_CONFIG = {
   packagesSkillPath: '/skills/jg-packages/',
   packagesUrl: 'https://jg-packages.jesusgraterol.dev/',
   repositoryUrl: 'https://github.com/jesusgraterol/jg-skills',
-  // the key the visitor's theme preference is stored under, unchanged so saved themes carry over
+  // the key used for the visitor's theme preference
   storageKeys: {
     theme: 'jg-skills-theme',
   },

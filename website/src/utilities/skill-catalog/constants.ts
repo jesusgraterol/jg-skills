@@ -16,6 +16,9 @@ export const SKILL_CATALOG_ERROR_MESSAGES = {
   InvocationMismatch: 'Skill invocation settings do not match its catalog kind',
   MissingVersionLine: 'Implicit skill has no version line',
   NameMismatch: 'Skill name does not match its directory',
+  PlanningProtocolMismatch:
+    'Planning skills have missing, duplicate, extra, or differing protocol sections',
+  PlanningRuntimeMismatch: 'Planning runtime pins and setup do not agree',
   NestedReference: 'Skill reference file mentions another reference file',
   PrefixedSkillReference: 'Skill refers to another skill with a / or $ prefix',
   ReferenceFileInvalid: 'Skill references folder holds a nested or non-Markdown file',
@@ -48,6 +51,18 @@ export const SHARED_SECTION_HEADINGS = {
  * find it and weigh its messages alike
  */
 export const COPIED_SECTION_HEADINGS = ['Task scope', 'Reading a session'] as const;
+
+export const PLANNING_PROTOCOL_HEADING = 'jg-plans protocol 0.1';
+export const PLANNING_RUNTIME_VERSION = '0.2.0';
+export const PLANNING_PROTOCOL_SKILLS = [
+  'jg-plan',
+  'jg-breakdown',
+  'jg-execute',
+  'jg-challenge-plan',
+  'jg-challenge-session',
+  'jg-review',
+  'jg-review-session',
+] as const;
 
 /*
  * the two lines an implicit skill may change in its shared Application section: the area sentence,

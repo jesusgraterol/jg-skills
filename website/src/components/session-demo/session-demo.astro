@@ -6,25 +6,28 @@ import InlineCode from 'jg-personal-astro-ui/inline-code';
 type ISessionSpeaker = 'agent' | 'you';
 
 /*
- * A short, static conversation: the developer brainstorms a change with Claude Code, saves a
- * plan, and runs it autonomously. Commands and their slashes are rendered from expressions so
+ * A static supervised example: the developer plans, builds and reviews with Claude Code. Commands and their slashes are rendered from expressions so
  * formatters cannot drop them.
  */
 const CONVERSATION = [
   {
-    command: 'jg-brainstorm',
+    command: 'jg-plan',
     speaker: 'you',
-    text: 'Should we rate-limit the public API per account?',
+    text: 'Add an empty state to the search page.',
   },
   {
     command: undefined,
     speaker: 'agent',
-    text: 'Yes. A sliding window per account in Redis fits your middleware.',
+    text: 'plan.md saved. Review the scope before building.',
   },
-  { command: 'jg-plan', speaker: 'you', text: undefined },
-  { command: undefined, speaker: 'agent', text: 'Plan saved. Approve it to start.' },
-  { command: 'jg-execute auto', speaker: 'you', text: undefined },
-  { command: undefined, speaker: 'agent', text: 'Built, reviewed, and pushed to main.' },
+  { command: 'jg-execute', speaker: 'you', text: undefined },
+  {
+    command: undefined,
+    speaker: 'agent',
+    text: 'Implementation and checks complete. Ready for review.',
+  },
+  { command: 'jg-review', speaker: 'you', text: undefined },
+  { command: undefined, speaker: 'agent', text: 'No blocking findings. Ready for jg-push.' },
 ] as const satisfies readonly {
   command: string | undefined;
   speaker: ISessionSpeaker;
@@ -38,7 +41,11 @@ const SPEAKER_LABELS = {
 } as const satisfies Record<ISessionSpeaker, string>;
 ---
 
-<div data-session-demo>
+<div
+  data-session-demo
+  class="rounded-2xl border border-border bg-surface p-5 shadow-surface sm:p-7"
+>
+  <p class="mb-6 font-mono text-xs text-muted">Illustrative session · supervised workflow</p>
   <ol
     class="grid min-w-0 gap-4"
     aria-label="Example conversation with Claude Code"

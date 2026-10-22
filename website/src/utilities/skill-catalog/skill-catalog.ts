@@ -3,8 +3,9 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { root } from 'astro:config/server';
 import { getCollection } from 'astro:content';
+import manifest from '../../../package.json' with { type: 'json' };
 
-import { SKILL_CATALOG } from '../../site.config.ts';
+import { SKILL_CATALOG, SITE_CONFIG } from '../../site.config.ts';
 
 import { SKILL_CATALOG_ERROR_MESSAGES } from './constants.ts';
 import type { ISkill } from './types.ts';
@@ -16,6 +17,7 @@ import {
   assertInvocationSettings,
   assertNoOrphanedReferences,
   assertNoSectionLinks,
+  assertPlanningProtocol,
   assertReferenceFiles,
   assertReferenceIsLeaf,
   assertReferences,
@@ -164,6 +166,11 @@ export const loadSkills = async (): Promise<ISkill[]> => {
 
   assertSharedSections(documents);
   assertCopiedSections(documents);
+  assertPlanningProtocol(
+    documents,
+    SITE_CONFIG.commands.runtimeInstall,
+    manifest.devDependencies['jg-plans'],
+  );
 
   return skills.toSorted((first, second) => first.order - second.order);
 };
