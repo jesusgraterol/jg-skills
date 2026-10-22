@@ -166,9 +166,12 @@ const footerColumns = [
         />
       </Fragment>
     </SiteHeader>
+    {/* Package pins and code examples must remain literal through Cloudflare email protection. */}
+    <Fragment set:html="<!--email_off-->" />
     <main id="main-content">
       <slot />
     </main>
+    <Fragment set:html="<!--/email_off-->" />
     <SiteFooter
       columns={footerColumns}
       notes={[SITE_CONFIG.url.replace('https://', ''), `${SITE_CONFIG.license} License, © 2026`]}

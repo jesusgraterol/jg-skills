@@ -96,6 +96,21 @@ describe('static build artifact', () => {
     await expect(verifyBuild()).resolves.toBeUndefined();
   });
 
+  test('protects installation commands and rendered skill examples from CDN email rewriting', async () => {
+    for (const page of ['index.html', SKILL_PAGE, REFERENCE_PAGE]) {
+      const html = await readFile(resolve(BUILD_DIRECTORY, page), 'utf8');
+      const opening = html.indexOf('<!--email_off-->');
+      const closing = html.indexOf('<!--/email_off-->');
+
+      expect(opening, page).toBeGreaterThanOrEqual(0);
+      expect(opening, page).toBeLessThan(html.indexOf('<main id="main-content">'));
+      expect(closing, page).toBeGreaterThan(html.lastIndexOf('</main>'));
+      expect(html.indexOf('<!--email_off-->', opening + 1), page).toBe(-1);
+      expect(html.indexOf('<!--/email_off-->', closing + 1), page).toBe(-1);
+      expect(html.slice(opening, closing), page).toContain('@');
+    }
+  });
+
   test.each<IBuildFailureCase>([
     [
       'missing structured data',
