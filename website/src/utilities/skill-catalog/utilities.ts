@@ -8,6 +8,9 @@ import {
   COPIED_SECTION_HEADINGS,
   EXPLICIT_ONLY_OPENAI_POLICY,
   IMPLICIT_OPENAI_POLICY,
+  PLANNING_PROTOCOL_HEADING,
+  PLANNING_PROTOCOL_SKILLS,
+  PLANNING_RUNTIME_VERSION,
   SHARED_SECTION_HEADINGS,
   SKILL_CATALOG_ERROR_MESSAGES,
   SKILL_FILE_BYTE_BUDGET,
@@ -242,6 +245,52 @@ export const assertCopiedSections = (skills: readonly ISkillDocument[]): void =>
       );
     }
   });
+};
+
+/**
+ * Keep the seven self-contained planning contracts identical and their supported runtime
+ * aligned with the public setup command and development dependency.
+ * @param skills Every catalog document, including skills that must not carry this section.
+ * @param runtimeInstallCommand The exact setup command rendered and copied by the site.
+ * @param runtimeDependency The website manifest's exact development dependency.
+ * @throws
+ * - Planning skills have missing, duplicate, extra, or differing protocol sections
+ * - Planning runtime pins and setup do not agree
+ */
+export const assertPlanningProtocol = (
+  skills: readonly ISkillDocument[],
+  runtimeInstallCommand: string,
+  runtimeDependency: string,
+): void => {
+  const expected = new Set<string>(PLANNING_PROTOCOL_SKILLS);
+  const sections: string[] = [];
+  const found = new Set<string>();
+  for (const skill of skills) {
+    const count = skill.body
+      .replaceAll('\r\n', '\n')
+      .split('\n')
+      .filter((line) => line === `## ${PLANNING_PROTOCOL_HEADING}`).length;
+    if (
+      count !== (expected.has(skill.name) ? 1 : 0) ||
+      (expected.has(skill.name) && found.has(skill.name))
+    )
+      throw new Error(`${SKILL_CATALOG_ERROR_MESSAGES.PlanningProtocolMismatch}: ${skill.name}`);
+    if (expected.has(skill.name)) {
+      found.add(skill.name);
+      sections.push(extractSection(skill.body, PLANNING_PROTOCOL_HEADING)!);
+    }
+  }
+  if (found.size !== expected.size || new Set(sections).size !== 1)
+    throw new Error(SKILL_CATALOG_ERROR_MESSAGES.PlanningProtocolMismatch);
+  const pins = [...sections[0]!.matchAll(/\bjg-plans@(\d+\.\d+\.\d+)\b/g)].map((match) => match[1]);
+  if (
+    !pins.length ||
+    pins.some((pin) => pin !== PLANNING_RUNTIME_VERSION) ||
+    runtimeDependency !== PLANNING_RUNTIME_VERSION ||
+    runtimeInstallCommand !==
+      `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_VERSION}`
+  )
+    throw new Error(SKILL_CATALOG_ERROR_MESSAGES.PlanningRuntimeMismatch);
 };
 
 /**

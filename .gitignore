@@ -157,3 +157,6 @@ AGENTS.md
 CANDIDATE.md
 CLAUDE.md
 coding-agent-planning/
+
+# new skill planning root; retain protection for existing local records
+/jg-plans/

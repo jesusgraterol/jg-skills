@@ -20,6 +20,9 @@ describe('buildLlmsText', () => {
     expect(text).toContain(
       '## Install\n\n```bash\nnpx skills add jesusgraterol/jg-skills --skill "*" -y\n```\n',
     );
+    expect(text).toContain('## Planning runtime');
+    expect(text).toContain('npm install --save-dev --save-exact jg-plans@0.2.0');
+    expect(text).toContain('Skills never install it automatically');
     expect(text).toContain(
       '- [jg-plan](https://jg-skills.jesusgraterol.dev/skills/jg-plan/): Create or revise a plan. Save it for approval.',
     );

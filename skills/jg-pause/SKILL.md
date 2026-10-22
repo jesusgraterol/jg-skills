@@ -31,4 +31,4 @@ Pause the work in progress at the nearest safe point, report where it stands, an
 4. **Wait.** Answer questions, but do no work until the developer says to continue or gives a new direction.
 5. **On continue,** first check whether the files you were working on changed during the pause, mention any changes, then carry on.
 
-This skill undoes nothing and never touches `jg-execute` status lines or the `## Overview` table in `milestones.md`, so a paused run continues where it stopped. This output replaces any general completion summary.
+This skill needs no planning CLI and never edits plan or milestone progress, so a paused run continues from the observed state. This output replaces any general completion summary.

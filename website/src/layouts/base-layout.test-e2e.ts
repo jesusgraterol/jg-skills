@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { expectNoHorizontalOverflow, waitForPageAssets, inspectMotion } from 'jg-playwright';
 
 import { SITE_CONFIG, SKILL_CATALOG } from '../site.config.ts';
 
@@ -202,9 +203,8 @@ test.describe('production website', () => {
       await page.setViewportSize({ width: 320, height: 720 });
       await page.goto(route);
 
-      expect(
-        await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
-      ).toBe(true);
+      await waitForPageAssets(page);
+      await expectNoHorizontalOverflow(page);
     });
   }
 
@@ -290,6 +290,9 @@ test.describe('production website', () => {
       };
     });
 
+    const motion = await inspectMotion(page);
+    expect(motion.prefersReducedMotion).toBe(true);
+    expect(motion.movingAnimations).toEqual([]);
     expect(behavior.scrollBehavior).toBe('auto');
     expect(Number.parseFloat(behavior.transitionDuration)).toBeLessThanOrEqual(0.001);
   });

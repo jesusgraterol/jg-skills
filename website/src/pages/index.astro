@@ -11,7 +11,12 @@ import StandardsSection from '../components/standards-section/standards-section.
 import WorkflowRun from '../components/workflow-run/workflow-run.astro';
 import BaseLayout from '../layouts/base-layout.astro';
 import { SITE_CONFIG } from '../site.config.ts';
-import { loadSkills, SKILL_STAGES, type ISkillStage } from '../utilities/skill-catalog/index.ts';
+import {
+  loadSkills,
+  SKILL_STAGES,
+  PLANNING_RUNTIME_VERSION,
+  type ISkillStage,
+} from '../utilities/skill-catalog/index.ts';
 
 const skills = await loadSkills();
 const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
@@ -145,11 +150,13 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
           Add them to your project.
         </h2>
         <p class="lede mt-5">
-          Run the commands from your repository's root. The skills live in the project, so you can
-          commit them and share the same workflow with your team.
+          Install the planning runtime in each project. Add the skills from your repository's root,
+          then commit them to share the workflow with your team.
         </p>
         <p class="mt-5 text-sm leading-6 text-muted">
-          Needs Node.js. Explicit-only and implicit loading are verified with Claude Code and Codex.
+          Planning workflows require Node.js 24.15 or newer and jg-plans {PLANNING_RUNTIME_VERSION},
+          installed in your project. The skills use it to inspect and safely edit plans; they never
+          install it automatically. No-plan tasks and code-only reviews need no runtime.
         </p>
         <p class="mt-3 text-sm leading-6 text-muted">
           Update refreshes only the skills you already have. To add skills released since you
@@ -157,6 +164,12 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
         </p>
       </div>
       <div class="grid gap-5">
+        <InstallCommand
+          command={SITE_CONFIG.commands.runtimeInstall}
+          context="runtime install command"
+          id="runtime-install-command"
+          title="Project planning CLI"
+        />
         <InstallCommand
           command={SITE_CONFIG.commands.install}
           context="install command"

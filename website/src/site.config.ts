@@ -1,7 +1,8 @@
 import type { ISkillCatalogEntry } from './utilities/skill-catalog/index.ts';
+import { PLANNING_RUNTIME_VERSION } from './utilities/skill-catalog/constants.ts';
 
 // a plan path in the layout jg-plan writes, shared by the examples that name a plan
-const EXAMPLE_PLAN_PATH = 'coding-agent-planning/1787592334_sign-in-flow/plan.md';
+const EXAMPLE_PLAN_PATH = 'jg-plans/1787592334_sign-in-flow/plan.md';
 
 /*
  * Site-owned presentation data for every skill under ../skills. Names, descriptions,
@@ -34,7 +35,7 @@ export const SKILL_CATALOG = {
       {
         invocation: 'jg-plan',
         outcome:
-          'Asks about any decision that is yours to make, turns the change you discussed into an implementation-ready plan under coding-agent-planning/, and stops for your approval.',
+          'Asks about any decision that is yours to make, turns the change you discussed into an implementation-ready plan under jg-plans/, and stops for your approval.',
       },
     ],
     icon: 'map',
@@ -715,6 +716,7 @@ export const SITE_CONFIG = {
   // project-scoped commands, run from the repository root
   commands: {
     install: 'npx skills add jesusgraterol/jg-skills --skill "*" -y',
+    runtimeInstall: `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_VERSION}`,
     remove: `npx skills remove ${SKILL_NAMES.join(' ')}`,
     update: `npx skills update -p ${SKILL_NAMES.join(' ')}`,
   },
