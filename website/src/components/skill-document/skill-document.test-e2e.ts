@@ -57,7 +57,7 @@ test.describe('skill pages', () => {
           instructions.getByRole('heading', { level: 2, name: 'Workflow' }),
         ).toBeVisible();
         await expect(instructions).toContainText(
-          'This skill runs only when the developer invokes it.',
+          'Run only on direct developer invocation or explicit delegation verified by a trusted host against a current developer grant.',
         );
 
         await expect(page.locator('[data-skill-usage]')).toHaveText(

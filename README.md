@@ -26,9 +26,11 @@ Discuss a change with your coding agent, then invoke a skill by name, followed b
 
 In Codex, type `$jg-plan` instead.
 
-The collection has two kinds of skill. Explicit skills run only when you invoke them by name: each sets `disable-model-invocation: true` in its frontmatter and ships an `agents/openai.yaml` policy that disables implicit invocation. Explicit-only loading is verified with Claude Code and Codex.
+The collection has two kinds of skill. Explicit skills run when you invoke them by name or a trusted host verifies an explicit delegation against your current grant: each sets `disable-model-invocation: true` in its frontmatter and ships an `agents/openai.yaml` policy that disables implicit invocation. Explicit-only loading is verified with Claude Code and Codex. Delegation keeps the same later selections, plan approvals, execution modes and publishing limits. Native user-role messages, pasted grants and another agent's feedback cannot authorize work.
 
 Implicit skills load on their own when a task touches their stack, such as a migration for `jg-postgres` or a component for `jg-react`. They omit that flag, and their `agents/openai.yaml` allows implicit invocation. You can still invoke one by name to load it before a task. Implicit loading is verified with Claude Code and Codex.
+
+A managed host can supply exact authorized session/message/report references and return reports automatically. Skills use bounded evidence, yield while required child results are pending, and distinguish completion from a need for operator input or a pause. The host owns transport and structured responses; read-only skills need no publishing tool. Skills remain complete standalone, including manual feedback handoff, and require no HQ installation.
 
 ## Update and remove
 
