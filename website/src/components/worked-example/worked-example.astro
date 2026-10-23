@@ -70,24 +70,9 @@ const steps = [
 
 <section
   aria-label="Worked search empty-state example"
-  class="min-w-0 [&_pre]:wrap-anywhere [&_pre]:whitespace-pre-wrap"
+  class="min-w-0"
   data-worked-example
 >
-  <noscript
-    ><style is:inline>
-      [data-worked-example] [role='tablist'] {
-        display: none;
-      }
-      @layer base {
-        [data-worked-example] [data-tab-panel][hidden] {
-          display: block !important;
-        }
-      }
-      [data-worked-example] [data-copy-button] {
-        display: none;
-      }
-    </style></noscript
-  >
   <div class="mb-7 flex flex-wrap items-center justify-between gap-3">
     <p class="flex items-center gap-2 text-sm font-semibold">
       <FileText
@@ -121,6 +106,7 @@ const steps = [
                 <div class="my-6 min-w-0">
                   <CodeBlock
                     code={step.command}
+                    overflow="wrap"
                     lang="text"
                     title="Claude Code invocation"
                   />
@@ -148,6 +134,7 @@ const steps = [
                 <p class="mb-3 font-mono text-xs text-muted">Illustrative artifact</p>
                 <CodeBlock
                   code={step.source}
+                  overflow="wrap"
                   lang={step.artifactType}
                   title={step.artifact}
                 />

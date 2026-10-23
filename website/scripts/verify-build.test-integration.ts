@@ -15,10 +15,10 @@ const STRUCTURED_DATA_PATTERN = /<script type="application\/ld\+json">[^<]+<\/sc
 const SKILL_PAGE = 'skills/jg-plan/index.html';
 // a skill page whose last rendered Markdown box holds a reference file
 const REFERENCE_PAGE = 'skills/jg-frontend/index.html';
-// the wrapper's opening tag, whose last attribute is data-skill-markdown, with or without a value
-const SKILL_MARKDOWN_OPENER = /<div\b[^>]*\sdata-skill-markdown(?:="[^"]*")?>/u;
+// the marked wrapper's opening tag, independent of Astro's serialized attribute order
+const SKILL_MARKDOWN_OPENER = /<div\b[^>]*\sdata-skill-markdown(?=[\s=>])[^>]*>/u;
 const LAST_SKILL_MARKDOWN_OPENER =
-  /<div\b[^>]*\sdata-skill-markdown(?:="[^"]*")?>(?![\s\S]*data-skill-markdown)/u;
+  /<div\b[^>]*\sdata-skill-markdown(?=[\s=>])[^>]*>(?![\s\S]*data-skill-markdown)/u;
 const UNSAFE_SKILL_CONTENT =
   'Skill page content holds markup that Markdown does not produce, an event handler, or a URL with a disallowed scheme';
 

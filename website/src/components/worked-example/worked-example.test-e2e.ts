@@ -90,7 +90,8 @@ test.describe('without JavaScript', () => {
     await page.goto('/');
     const example = page.getByRole('region', { name: 'Worked search empty-state example' });
     for (const label of ['Plan', 'Build', 'Review', 'Publish'])
-      await expect(example.getByRole('tabpanel', { name: label, exact: true })).toBeVisible();
+      await expect(example.getByRole('region', { name: label, exact: true })).toBeVisible();
+    await expect(example.getByRole('tablist')).toHaveCount(0);
     await expect(example.getByRole('button', { name: 'Copy code', exact: true })).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
   });
