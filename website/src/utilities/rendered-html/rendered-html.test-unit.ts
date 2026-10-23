@@ -160,6 +160,31 @@ describe('findUnsafeMarkup', () => {
         'style attribute in a code window',
       ],
       [
+        'copy controls without enhancement protection',
+        (html: string) => html.replace(' inert ', ' '),
+        '<button> attributes in a code window',
+      ],
+      [
+        'a nonempty inert attribute',
+        (html: string) => html.replace(' inert ', ' inert="false" '),
+        'inert attribute in a code window',
+      ],
+      [
+        'a different live-status role',
+        (html: string) => html.replace('role="status"', 'role="button"'),
+        'role attribute in a code window',
+      ],
+      [
+        'different live-status atomicity',
+        (html: string) => html.replace('aria-atomic="true"', 'aria-atomic="false"'),
+        'aria-atomic attribute in a code window',
+      ],
+      [
+        'a different live-status announcement',
+        (html: string) => html.replace('aria-live="polite"', 'aria-live="assertive"'),
+        'aria-live attribute in a code window',
+      ],
+      [
         'a copy button outside its wrapper',
         (html: string) =>
           html.replace(

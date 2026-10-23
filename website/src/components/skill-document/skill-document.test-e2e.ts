@@ -57,7 +57,7 @@ test.describe('skill pages', () => {
           instructions.getByRole('heading', { level: 2, name: 'Workflow' }),
         ).toBeVisible();
         await expect(instructions).toContainText(
-          'This skill runs only when the developer invokes it.',
+          'Run only on direct developer invocation or explicit delegation verified by a trusted host against a current developer grant.',
         );
 
         await expect(page.locator('[data-skill-usage]')).toHaveText(
@@ -252,6 +252,54 @@ test.describe('skill pages', () => {
       await page.keyboard.press('Tab');
       await expect(link).toBeFocused();
       await expect(link).not.toHaveCSS('outline-style', 'none');
+    });
+  }
+});
+
+test.describe('skill document outline without JavaScript', () => {
+  test.use({ javaScriptEnabled: false, contextOptions: { reducedMotion: 'reduce' } });
+
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`offers keyboard navigation and preserved source actions at 320 pixels in ${colorScheme}`, async ({
+      page,
+    }) => {
+      await page.emulateMedia({ colorScheme });
+      await page.setViewportSize({ width: 320, height: 720 });
+      await page.goto('/skills/jg-ci/');
+      const outline = page.getByRole('navigation', { name: 'On this page', exact: true });
+      const disclosure = outline.locator('summary');
+      await disclosure.focus();
+      await page.keyboard.press('Enter');
+      const firstLink = outline.getByRole('link', { name: 'When to use it', exact: true });
+      await page.keyboard.press('Tab');
+      await expect(firstLink).toBeFocused();
+      await expect(firstLink).not.toHaveCSS('outline-style', 'none');
+      for (const link of await outline.getByRole('link').all()) {
+        const href = await link.getAttribute('href');
+        expect(href).toMatch(/^#[a-z\d-]+$/u);
+        await expect(page.locator(href!)).toHaveCount(1);
+      }
+      await firstLink.press('Enter');
+      await expect(page).toHaveURL(/#when-to-use-heading$/u);
+      await expect(
+        page.getByRole('heading', { level: 2, name: 'When to use it', exact: true }),
+      ).toBeInViewport();
+      await expect(
+        page.getByRole('navigation', { name: 'Previous and next skills' }),
+      ).toBeVisible();
+      await expect(page.getByRole('link', { name: 'All skills', exact: true })).toHaveAttribute(
+        'href',
+        '/#skills',
+      );
+      await expect(page.getByRole('link', { name: 'View SKILL.md on GitHub' })).toHaveAttribute(
+        'href',
+        'https://github.com/jesusgraterol/jg-skills/blob/main/skills/jg-ci/SKILL.md',
+      );
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        ),
+      ).toBeLessThanOrEqual(0);
     });
   }
 });

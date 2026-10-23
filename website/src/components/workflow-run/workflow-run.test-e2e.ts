@@ -9,6 +9,15 @@ test.describe('workflow section', () => {
     const autonomous = workflow.getByRole('radio', { name: 'Autonomous' });
     const cycle = workflow.getByRole('list', { name: 'For each milestone' });
 
+    await expect(
+      workflow.getByRole('list', { name: 'Workflow phases', exact: true }),
+    ).toBeVisible();
+    for (const phase of ['Plan', 'Build', 'Ship']) {
+      await expect(
+        workflow.getByRole('heading', { level: 3, name: phase, exact: true }),
+      ).toBeVisible();
+    }
+
     await expect(supervised).toBeChecked();
     await expect(workflow.getByText('/jg-execute', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-execute auto', { exact: true })).toBeHidden();
@@ -78,4 +87,34 @@ test.describe('workflow section', () => {
 
     expect(await overflow()).toBeLessThanOrEqual(0);
   });
+});
+
+test.describe('workflow without JavaScript', () => {
+  test.use({ javaScriptEnabled: false, contextOptions: { reducedMotion: 'reduce' } });
+
+  for (const colorScheme of ['light', 'dark'] as const) {
+    test(`keeps both native modes readable at 320 pixels in ${colorScheme}`, async ({ page }) => {
+      await page.emulateMedia({ colorScheme });
+      await page.setViewportSize({ width: 320, height: 720 });
+      await page.goto('/');
+      const workflow = page.locator('[data-workflow-run]');
+      const supervised = workflow.getByRole('radio', { name: 'Supervised' });
+      const autonomous = workflow.getByRole('radio', { name: 'Autonomous' });
+      await supervised.focus();
+      await page.keyboard.press('ArrowRight');
+      await expect(autonomous).toBeChecked();
+      await expect(workflow.getByText('/jg-execute auto', { exact: true })).toBeVisible();
+      await expect(
+        workflow.getByRole('list', { name: 'For each milestone' }).getByRole('listitem'),
+      ).toHaveCount(6);
+      await page.keyboard.press('ArrowLeft');
+      await expect(supervised).toBeChecked();
+      await expect(workflow.getByText('/jg-execute', { exact: true })).toBeVisible();
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        ),
+      ).toBeLessThanOrEqual(0);
+    });
+  }
 });

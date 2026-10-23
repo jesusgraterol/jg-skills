@@ -233,6 +233,19 @@ test.describe('production website', () => {
 
     await expect(mobileNavigation).toBeHidden();
     await expect(menu.locator('.lucide-menu')).toBeVisible();
+
+    const outline = page.getByRole('navigation', { name: 'On this page', exact: true });
+    await outline.locator('summary').focus();
+    await page.keyboard.press('Enter');
+    await page.keyboard.press('Tab');
+    const firstSection = outline.getByRole('link', { name: 'When to use it', exact: true });
+    await expect(firstSection).toBeFocused();
+    await expect(firstSection).not.toHaveCSS('outline-style', 'none');
+    await firstSection.press('Enter');
+    await expect(page).toHaveURL(/#when-to-use-heading$/u);
+    await expect(
+      page.getByRole('heading', { level: 2, name: 'When to use it', exact: true }),
+    ).toBeInViewport();
   });
 
   test('mobile navigation closes after a same-page link and on Escape', async ({ page }) => {

@@ -164,6 +164,7 @@ type IPackageElement = {
   attributes: readonly (readonly string[])[];
   parents: readonly string[];
   style?: RegExp;
+  values?: Readonly<Record<string, string>>;
 };
 
 // the attributes of a code window's figure, and of a new-tab marker's svg, exactly as the package
@@ -196,17 +197,19 @@ const CODE_WINDOW_ELEMENTS: Readonly<Record<string, IPackageElement>> = {
       ['aria-hidden', 'class'],
       ['class', 'data-pagefind-ignore'],
       ['class', 'data-copy-label'],
-      ['aria-live', 'class', 'data-copy-status'],
+      ['aria-atomic', 'aria-live', 'class', 'data-copy-status', 'role'],
       ['class', 'data-copy-hint', 'hidden'],
       ['style'],
     ],
     parents: ['button', 'code', 'figcaption', 'span'],
+    values: { 'aria-atomic': 'true', 'aria-live': 'polite', role: 'status' },
     style:
       /^color:var\(--jg-syntax-[a-z\d-]+\)(?:;(?:font-style:italic|font-weight:bold|text-decoration:(?:underline|line-through)))*$/u,
   },
   button: {
-    attributes: [['class', 'data-copy-button', 'data-copy-context', 'type']],
+    attributes: [['class', 'data-copy-button', 'data-copy-context', 'inert', 'type']],
     parents: ['span'],
+    values: { 'data-copy-context': 'code', inert: '', type: 'button' },
   },
   svg: {
     attributes: [
@@ -297,6 +300,13 @@ const findUnexpectedPackageMarkup = (
 
   if (!allowed.attributes.some((set) => set.join(' ') === names.join(' '))) {
     return `<${element}> attributes in a ${context}: ${names.join(', ')}`;
+  }
+
+  // fixed accessibility and enhancement metadata belongs to the renderer, not Markdown authors
+  for (const [name, value] of Object.entries(allowed.values ?? {})) {
+    if (attributes.has(name) && attributes.get(name) !== value) {
+      return name + ' attribute in a ' + context;
+    }
   }
 
   const style = attributes.get('style');

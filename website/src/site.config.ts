@@ -310,7 +310,7 @@ export const SKILL_CATALOG = {
     searchTitle: 'jg-feedback: Assess review feedback with evidence',
     stage: 'context',
     whenToUse:
-      'Use it when a reviewer, another agent, or a teammate sends claims you want checked before acting on them.',
+      'Use it when a reviewer, another agent, or a teammate sends claims you want checked before acting. A verified host may supply an exact authorized message or report reference.',
   },
   'jg-session': {
     access: 'read-only',

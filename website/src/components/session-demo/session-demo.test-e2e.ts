@@ -9,19 +9,17 @@ test.describe('session demo', () => {
     const demo = page.locator('[data-session-demo]');
 
     await expect(demo.locator('[data-terminal]')).toHaveCount(0);
-    await expect(demo.locator('[data-conversation-message]')).toHaveCount(6);
-    await expect(demo.locator('[data-conversation-message="you"] code')).toHaveText([
-      '/jg-plan',
-      '/jg-execute',
-      '/jg-review',
-    ]);
-    await expect(demo.locator('[data-conversation-message="agent"]')).toHaveCount(3);
+    await expect(demo.getByRole('article')).toHaveCount(6);
+    await expect(
+      demo.getByRole('article', { name: 'You', exact: true }).getByRole('code'),
+    ).toHaveText(['/jg-plan', '/jg-execute', '/jg-review']);
+    await expect(demo.getByRole('article', { name: 'Claude Code', exact: true })).toHaveCount(3);
   });
 
   test('shows the Claude Code mark as a decorative avatar that loads', async ({ page }) => {
     await page.goto('/');
 
-    const avatars = page.locator('[data-conversation-message="agent"] img');
+    const avatars = page.getByRole('article', { name: 'Claude Code', exact: true }).locator('img');
 
     await expect(avatars).toHaveCount(3);
 
@@ -35,26 +33,33 @@ test.describe('session demo', () => {
     }
   });
 
-  test('reads in order to assistive technology, naming each speaker once', async ({ page }) => {
+  test('reads the complete conversation in order with named speakers', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('list', { name: 'Example conversation with Claude Code' }))
-      .toMatchAriaSnapshot(`
-      - list "Example conversation with Claude Code":
-        - listitem:
-          - text: "You:"
-          - code: /jg-plan
-          - text: Add an empty state to the search page.
-        - listitem: "Claude Code: plan.md saved. Review the scope before building."
-        - listitem:
-          - text: "You:"
-          - code: /jg-execute
-        - listitem: "Claude Code: Implementation and checks complete. Ready for review."
-        - listitem:
-          - text: "You:"
-          - code: /jg-review
-        - listitem: "Claude Code: No blocking findings. Ready for jg-push."
-    `);
+    const messages = page
+      .getByRole('list', { name: 'Example conversation with Claude Code' })
+      .getByRole('article');
+    await expect(messages).toHaveText(
+      [
+        'You /jg-plan Add an empty state to the search page.',
+        'Claude Code plan.md saved. Review the scope before building.',
+        'You /jg-execute',
+        'Claude Code Implementation and checks complete. Ready for review.',
+        'You /jg-review',
+        'Claude Code No blocking findings. Ready for jg-push.',
+      ],
+      { useInnerText: true },
+    );
+    for (const [index, speaker] of [
+      'You',
+      'Claude Code',
+      'You',
+      'Claude Code',
+      'You',
+      'Claude Code',
+    ].entries()) {
+      await expect(messages.nth(index)).toHaveAccessibleName(speaker);
+    }
   });
 
   test('keeps the conversation readable without horizontal overflow at 320 pixels', async ({
