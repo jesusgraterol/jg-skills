@@ -1,6 +1,7 @@
 ---
 import { ArrowDown } from '@lucide/astro';
 import Button from 'jg-personal-astro-ui/button';
+import HeroBackdrop from 'jg-personal-astro-ui/hero-backdrop';
 import InstallCommand from 'jg-personal-astro-ui/install-command';
 
 import Credits from '../components/credits/credits.astro';
@@ -34,13 +35,14 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
   title={`${SITE_CONFIG.name} | Agent skills for Claude Code and Codex`}
   structuredDataType="website"
 >
-  <section class="border-b border-border pt-14 pb-16 sm:pt-20 sm:pb-20">
+  <section class="relative isolate overflow-hidden border-b border-border">
+    <HeroBackdrop />
     <div
-      class="jg-container grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14"
+      class="jg-container grid items-center gap-12 pt-14 pb-16 sm:pt-20 sm:pb-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14"
     >
       <div>
         <p class="eyebrow">Explicit workflows + stack standards</p>
-        <h1 class="display-title mt-6 text-4xl sm:text-5xl xl:text-6xl">
+        <h1 class="display-title mt-6">
           A clear way to work
           <span class="block text-accent">with coding agents.</span>
         </h1>
@@ -49,7 +51,7 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
           when each workflow runs. Relevant stack standards guide Claude Code and Codex as they
           work.
         </p>
-        <div class="mt-7 flex flex-wrap gap-3">
+        <div class="mt-8 flex flex-wrap gap-3">
           <Button href="#workflow"
             >See the workflow <ArrowDown
               class="size-4"
