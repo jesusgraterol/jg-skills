@@ -52,8 +52,8 @@ export const SHARED_SECTION_HEADINGS = {
  */
 export const COPIED_SECTION_HEADINGS = ['Task scope', 'Reading a session'] as const;
 
-export const PLANNING_PROTOCOL_HEADING = 'jg-plans protocol 0.1';
-export const PLANNING_RUNTIME_VERSION = '0.2.0';
+export const PLANNING_PROTOCOL_HEADING = 'jg-plans protocol 0.2';
+export const PLANNING_RUNTIME_VERSION = '0.3.0';
 export const PLANNING_PROTOCOL_SKILLS = [
   'jg-plan',
   'jg-breakdown',
