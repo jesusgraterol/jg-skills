@@ -97,7 +97,7 @@ Each implicit skill states the versions it was written for and, for anything wit
 Install the skills in each project as shown above. Persisted planning workflows also require Node.js 24.15+ and the exact runtime dependency installed in each project:
 
 ```sh
-npm install --save-dev --save-exact jg-plans@0.2.0
+npm install --save-dev --save-exact jg-plans@0.3.0
 ./node_modules/.bin/jg-plans --version --json
 ```
 
