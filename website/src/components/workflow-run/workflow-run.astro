@@ -1,5 +1,5 @@
 ---
-import { ChevronRight, CornerDownLeft } from '@lucide/astro';
+import { ChevronRight, CornerDownLeft, ListChecks } from '@lucide/astro';
 import SegmentedControl from 'jg-personal-astro-ui/segmented-control';
 import Step from 'jg-personal-astro-ui/step';
 import Steps from 'jg-personal-astro-ui/steps';
@@ -72,6 +72,9 @@ const MODES = {
 
 // what autonomous mode repeats for every milestone
 const AUTONOMOUS_CYCLE = ['Implement', 'Checks', 'Review', 'Fix', 'Push'] as const;
+
+// what autonomous mode runs once, after the last milestone: jg-review over the whole plan
+const FINAL_REVIEW = 'Whole-plan review';
 ---
 
 <div
@@ -197,6 +200,16 @@ const AUTONOMOUS_CYCLE = ['Implement', 'Checks', 'Review', 'Fix', 'Push'] as con
                 Next milestone
               </li>
             </ol>
+            <p class="mt-4 text-xs font-semibold text-muted">After the last milestone</p>
+            <p
+              class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-0.5 text-xs font-semibold"
+            >
+              <ListChecks
+                class="size-3.5 text-accent"
+                aria-hidden="true"
+              />
+              {FINAL_REVIEW}
+            </p>
           </div>
         </Step>
         {

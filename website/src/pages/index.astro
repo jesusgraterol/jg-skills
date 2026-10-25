@@ -1,10 +1,13 @@
 ---
-import { ArrowDown } from '@lucide/astro';
+import { ArrowDown, ArrowRight } from '@lucide/astro';
 import Button from 'jg-personal-astro-ui/button';
 import HeroBackdrop from 'jg-personal-astro-ui/hero-backdrop';
 import InstallCommand from 'jg-personal-astro-ui/install-command';
+import TextLink from 'jg-personal-astro-ui/text-link';
 
 import Credits from '../components/credits/credits.astro';
+import CriteriaFlow from '../components/criteria-flow/criteria-flow.astro';
+import DelegationDemo from '../components/delegation-demo/delegation-demo.astro';
 import PackagesBridge from '../components/packages-bridge/packages-bridge.astro';
 import SessionDemo from '../components/session-demo/session-demo.astro';
 import SkillCard from '../components/skill-card/skill-card.astro';
@@ -47,9 +50,7 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
           <span class="block text-accent">with coding agents.</span>
         </h1>
         <p class="lede mt-7">
-          Turn an agreed change into a plan, checked code and an explicit publication step. Choose
-          when each workflow runs. Relevant stack standards guide Claude Code and Codex as they
-          work.
+          Plan, build, review and publish with Claude Code and Codex, one explicit step at a time.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
           <Button href="#workflow"
@@ -107,6 +108,29 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
   </section>
 
   <section
+    id="criteria"
+    class="jg-section-space scroll-mt-16 border-b border-border"
+    aria-labelledby="criteria-title"
+  >
+    <div class="jg-container">
+      <p class="eyebrow">Acceptance criteria</p>
+      <h2
+        id="criteria-title"
+        class="section-title mt-4"
+      >
+        Every requirement has an ID and an owner.
+      </h2>
+      <p class="lede mt-5">
+        Plans number their criteria, milestones claim them, and execution checks both before
+        building.
+      </p>
+      <div class="mt-10">
+        <CriteriaFlow />
+      </div>
+    </div>
+  </section>
+
+  <section
     id="skills"
     class="jg-section-space scroll-mt-16 border-b border-border"
     aria-labelledby="skills-title"
@@ -120,8 +144,8 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
         One skill for each step you control.
       </h2>
       <p class="lede mt-5">
-        Explicit skills state exactly what they may change. Implicit skills add the stack-specific
-        standards your agent needs on top of your repository's coding instructions.
+        Explicit skills state what they may change; implicit ones add the standards your stack
+        needs.
       </p>
       <div class="mt-12 grid gap-12">
         {
@@ -166,6 +190,37 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
   </section>
 
   <section
+    id="delegation"
+    class="jg-section-space scroll-mt-16 border-b border-border"
+    aria-labelledby="delegation-title"
+  >
+    <div class="jg-container grid min-w-0 gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
+      <div class="min-w-0">
+        <p class="eyebrow">Hand off a review</p>
+        <h2
+          id="delegation-title"
+          class="section-title mt-4"
+        >
+          Let another agent check the work.
+        </h2>
+        <p class="lede mt-5">
+          Through jg-agent-hq, Codex can ask Claude Code to run jg-review-session and read the
+          report.
+        </p>
+        <p class="mt-6 text-sm">
+          <TextLink href="/skills/jg-review-session/">
+            Read jg-review-session <ArrowRight
+              class="ml-1 inline size-3.5"
+              aria-hidden="true"
+            />
+          </TextLink>
+        </p>
+      </div>
+      <DelegationDemo />
+    </div>
+  </section>
+
+  <section
     id="install"
     class="jg-section-space scroll-mt-16 border-b border-border"
     aria-labelledby="install-title"
@@ -180,8 +235,8 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
           Add them to your project.
         </h2>
         <p class="lede mt-5">
-          Install the planning runtime in each project. Add the skills from your repository's root,
-          then commit them to share the workflow with your team.
+          Add the skills and the planning runtime from your repository's root, then commit them for
+          your team.
         </p>
         <p class="mt-5 text-sm leading-6 text-muted">
           Planning workflows require Node.js 24.15 or newer and jg-plans {PLANNING_RUNTIME_VERSION},

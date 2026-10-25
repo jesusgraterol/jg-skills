@@ -19,7 +19,10 @@ test.describe('session demo', () => {
   test('shows the Claude Code mark as a decorative avatar that loads', async ({ page }) => {
     await page.goto('/');
 
-    const avatars = page.getByRole('article', { name: 'Claude Code', exact: true }).locator('img');
+    const avatars = page
+      .locator('[data-session-demo]')
+      .getByRole('article', { name: 'Claude Code', exact: true })
+      .locator('img');
 
     await expect(avatars).toHaveCount(3);
 
