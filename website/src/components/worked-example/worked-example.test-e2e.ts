@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { expectNoHorizontalOverflow, waitForPageAssets } from 'jg-playwright';
 
 for (const colorScheme of ['light', 'dark'] as const)
-  for (const width of [320, 1440]) {
+  for (const width of [320, 768, 1440]) {
     test(`${colorScheme} ${width}px: follow the worked example before the catalog with visible, copyable workflow steps`, async ({
       page,
       context,
@@ -73,10 +73,21 @@ for (const colorScheme of ['light', 'dark'] as const)
       }
       await tabs.getByRole('tab', { name: 'Plan', exact: true }).click();
       await expect(example).toContainText('Illustrative workflow');
-      await expect(example.getByRole('link', { name: 'jg-frontend', exact: true })).toHaveAttribute(
-        'href',
-        '/skills/jg-frontend/',
-      );
+      const plan = example
+        .getByRole('tabpanel', { name: 'Plan', exact: true })
+        .getByRole('figure')
+        .filter({ hasText: 'plan.md' });
+      await expect(plan).toContainText('protocol: "0.2"');
+      await expect(plan).toContainText('- AC-01: A search with no results explains why.');
+      await expect(
+        example.getByRole('list', { name: 'Files the task touches' }).getByRole('listitem'),
+      ).toHaveText(['SearchResults.tsx', 'SearchResults.test-e2e.ts']);
+      const standards = example.getByRole('list', { name: 'Standards that load for those files' });
+      for (const name of ['jg-frontend', 'jg-react', 'jg-testing'])
+        await expect(standards.getByRole('link', { name, exact: true })).toHaveAttribute(
+          'href',
+          `/skills/${name}/`,
+        );
       await example.screenshot({
         path: testInfo.outputPath(`worked-example-${colorScheme}-${width}.png`),
       });

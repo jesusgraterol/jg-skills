@@ -1,0 +1,106 @@
+---
+import CodeBlock from 'jg-personal-astro-ui/code-block';
+import TerminalWindow from 'jg-personal-astro-ui/terminal-window';
+import TextLink from 'jg-personal-astro-ui/text-link';
+import { CircleX } from '@lucide/astro';
+
+/*
+ * A static protocol 0.2 example: jg-plan numbers the criteria, jg-breakdown names the criteria each
+ * milestone delivers, and jg-execute runs the jg-plans check before building. The failing run's
+ * diagnostic line matches the CLI's real output for an unknown coverage ID.
+ */
+const STEPS = [
+  {
+    skill: 'jg-plan',
+    caption: 'Numbers every acceptance criterion.',
+    title: 'plan.md',
+    source:
+      '## Acceptance criteria\n\n- AC-01: A search with no results explains why.\n- AC-02: The empty state offers to clear the filters.\n- AC-03: Both work with a keyboard and a screen reader.\n',
+  },
+  {
+    skill: 'jg-breakdown',
+    caption: 'Names the criteria each milestone delivers.',
+    title: 'milestones.md',
+    source:
+      '## Milestone 1: Explain empty results\n**Status:** done\n**Milestone ID:** 3c7a2f1e-9b4d-4e8a-a6f2-1d5c7e9b0a34\n**Acceptance criteria:** AC-01\n\n## Milestone 2: Offer a next action\n**Status:** in progress\n**Milestone ID:** 8e1d6b2a-4f7c-4a3e-b9d1-6c2e8f4a7b15\n**Acceptance criteria:** AC-02, AC-03\n',
+  },
+] as const;
+// the two check runs jg-execute's preflight can meet
+const RUNS = [
+  { label: 'Covered', result: '"conforms": true', note: 'Execution starts.', isPassing: true },
+  {
+    label: 'Unknown ID',
+    result:
+      'milestones:11:1 error UNKNOWN_CRITERION: The coverage line names a criterion the plan does not define.',
+    note: 'Stopped before building; run jg-breakdown.',
+    isPassing: false,
+  },
+] as const;
+---
+
+<ol
+  class="grid min-w-0 gap-8 lg:grid-cols-3 lg:gap-6"
+  aria-label="How acceptance criteria flow through the skills"
+  data-criteria-flow
+>
+  {
+    STEPS.map((step, index) => (
+      <li class="flex min-w-0 flex-col gap-3">
+        <div class="text-sm">
+          <p class="flex items-center gap-2">
+            <span class="font-mono text-xs text-muted">0{index + 1}</span>
+            <TextLink href={`/skills/${step.skill}/`}>
+              <code class="font-mono font-semibold">{'/' + step.skill}</code>
+            </TextLink>
+          </p>
+          <p class="mt-1 text-muted">{step.caption}</p>
+        </div>
+        <CodeBlock
+          code={step.source}
+          overflow="wrap"
+          lang="markdown"
+          title={step.title}
+        />
+      </li>
+    ))
+  }
+  <li class="flex min-w-0 flex-col gap-3">
+    <div class="text-sm">
+      <p class="flex items-center gap-2">
+        <span class="font-mono text-xs text-muted">03</span>
+        <TextLink href="/skills/jg-execute/">
+          <code class="font-mono font-semibold">/jg-execute</code>
+        </TextLink>
+      </p>
+      <p class="mt-1 text-muted">Checks both files before building.</p>
+    </div>
+    <TerminalWindow title="jg-plans check">
+      <ul
+        class="grid gap-4"
+        aria-label="Check results"
+      >
+        {
+          RUNS.map((run) => (
+            <li class="min-w-0">
+              <p class="text-xs text-terminal-foreground/70">{run.label}</p>
+              <p class="mt-1 flex gap-3">
+                <span
+                  class="flex h-6 w-3 shrink-0 items-center justify-center"
+                  aria-hidden="true"
+                >
+                  {run.isPassing ? (
+                    <span class="size-1.5 rounded-full bg-terminal-accent" />
+                  ) : (
+                    <CircleX class="size-3.5 text-terminal-foreground/70" />
+                  )}
+                </span>
+                <code class="min-w-0 wrap-anywhere whitespace-pre-wrap">{run.result}</code>
+              </p>
+              <p class="mt-1 pl-6 text-xs text-terminal-foreground/70">{run.note}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </TerminalWindow>
+  </li>
+</ol>

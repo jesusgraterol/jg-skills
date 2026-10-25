@@ -3,7 +3,7 @@ import Tabs from 'jg-personal-astro-ui/tabs';
 import CodeBlock from 'jg-personal-astro-ui/code-block';
 import TextLink from 'jg-personal-astro-ui/text-link';
 import Card from 'jg-personal-astro-ui/card';
-import { ArrowRight, Check, FileText, ShieldCheck } from '@lucide/astro';
+import { ArrowDown, ArrowRight, Check, FileText, ShieldCheck } from '@lucide/astro';
 import { SITE_CONFIG } from '../../site.config.ts';
 
 const steps = [
@@ -14,12 +14,12 @@ const steps = [
     command: '/jg-plan Add an empty state for searches with no results.',
     title: 'Agree on a reviewable change.',
     outcome:
-      'A plan records the goal, scope and checks. Review it before authorizing implementation.',
+      'A plan records the goal, the scope and numbered acceptance criteria for you to approve.',
     artifact: 'plan.md',
     artifactType: 'markdown',
     source:
-      '---\nid: example-empty-search\ncreated_at: 2026-10-22T12:00:00Z\nupdated_at: 2026-10-22T12:00:00Z\nrevision: 1\nstatus: pending\n---\n\n# Search empty state\n\nShow helpful feedback when a search returns no results.\n\n## Verification\n\nCheck no-results, keyboard navigation and returning results.\n',
-    authority: 'Writes the planning documents. Your execution request authorizes the next unit.',
+      '---\nid: example-empty-search\ncreated_at: 2026-10-22T12:00:00Z\nupdated_at: 2026-10-22T12:00:00Z\nrevision: 1\nstatus: pending\nprotocol: "0.2"\n---\n\n# Search empty state\n\nShow helpful feedback when a search returns no results.\n\n## Acceptance criteria\n\n- AC-01: A search with no results explains why.\n- AC-02: The empty state offers to clear the filters.\n- AC-03: Both work with a keyboard and a screen reader.\n',
+    authority: 'It writes only planning documents; your next request authorizes building.',
   },
   {
     id: 'build',
@@ -27,14 +27,12 @@ const steps = [
     skill: 'jg-execute',
     command: '/jg-execute',
     title: 'Build one approved unit.',
-    outcome:
-      'The agent implements the empty state, runs the relevant checks and stops for your review.',
+    outcome: 'The agent builds the empty state, runs its checks and stops for your review.',
     artifact: 'Implementation + check results',
     artifactType: 'text',
     source:
       'SearchResults.tsx\nSearchResults.test-e2e.ts\n\nExpected evidence\n• Empty results show useful feedback\n• Keyboard navigation remains usable\n• Returning results restore the normal view',
-    authority:
-      'Supervised execution stops after the next unit. Publication remains an explicit step.',
+    authority: 'Supervised runs stop after one unit; publishing stays a separate step.',
   },
   {
     id: 'review',
@@ -42,13 +40,12 @@ const steps = [
     skill: 'jg-review',
     command: '/jg-review',
     title: 'Review the actual task scope.',
-    outcome:
-      'The review checks the proposed change, its evidence and its agreement with the plan. Resolve blocking findings before publishing.',
+    outcome: 'The review checks the change and its evidence against each acceptance criterion.',
     artifact: 'Review excerpt · expected successful result',
     artifactType: 'text',
     source:
-      'Task scope\nSearchResults.tsx\nSearchResults.test-e2e.ts\n\nNo blocking findings.\nVerdict: Ready to commit',
-    authority: 'Review reads the actual changes. It does not commit or push them.',
+      'Task scope\nSearchResults.tsx\nSearchResults.test-e2e.ts\n\nAC-01, AC-02, AC-03: met on evidence\nNo blocking findings.\nVerdict: Ready to commit',
+    authority: 'It reads the actual changes and never commits or pushes them.',
   },
   {
     id: 'publish',
@@ -56,14 +53,12 @@ const steps = [
     skill: 'jg-push',
     command: '/jg-push',
     title: 'Publish the reviewed change.',
-    outcome:
-      'The skill commits the selected task files with a signature and pushes the agreed branch. The full result reports the actual commit identity.',
+    outcome: 'The skill commits the task’s files with a signature and pushes the agreed branch.',
     artifact: 'Publication outcome · illustration',
     artifactType: 'text',
     source:
       'development\n  └─ signed task commit\n      └─ explicit push to the agreed remote branch',
-    authority:
-      'Only the authorized task scope is staged and published; preflight decisions stay explicit.',
+    authority: 'Only the authorized task scope is staged and published.',
   },
 ] as const;
 ---
@@ -150,34 +145,59 @@ const steps = [
       <p class="text-sm font-semibold">One small plan, one unit.</p><p
         class="mt-2 text-sm leading-7 text-muted"
       >
-        Add <code class="font-mono text-foreground">jg-breakdown</code> when separate milestones help.
-        In Codex, invoke skills with <code class="font-mono text-foreground">$</code>; this example
-        shows Claude Code’s <code class="font-mono text-foreground">/</code> syntax.
+        Add <code class="font-mono text-foreground">jg-breakdown</code> when milestones help; in Codex,
+        invoke skills with <code class="font-mono text-foreground">$</code> instead of <code
+          class="font-mono text-foreground">/</code
+        >.
       </p>
     </div>
     <div>
-      <p class="text-sm font-semibold">Relevant standards join the work.</p><ul
-        class="mt-3 flex flex-wrap gap-3 text-sm"
+      <p class="text-sm font-semibold">Standards load on their own.</p>
+      <div
+        class="mt-3 flex min-w-0 flex-col items-start gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center"
       >
-        {
-          [
-            { name: 'jg-frontend', text: 'UI and accessibility' },
-            { name: 'jg-react', text: 'React implementation' },
-            { name: 'jg-testing', text: 'Browser checks' },
-          ].map((skill) => (
-            <li class="flex items-center gap-2 rounded-md bg-secondary px-3 py-2">
-              <>
-                <Check
-                  class="size-3 text-accent"
-                  aria-hidden="true"
-                />
-                <TextLink href={`/skills/${skill.name}/`}>{skill.name}</TextLink>
-                <span class="sr-only">: {skill.text}</span>
-              </>
-            </li>
-          ))
-        }
-      </ul>
+        <ul
+          class="flex min-w-0 flex-wrap gap-2"
+          aria-label="Files the task touches"
+        >
+          {
+            ['SearchResults.tsx', 'SearchResults.test-e2e.ts'].map((file) => (
+              <li class="rounded-md bg-code px-2 py-1 font-mono text-xs wrap-anywhere">{file}</li>
+            ))
+          }
+        </ul>
+        <ArrowDown
+          class="size-4 shrink-0 text-muted sm:hidden"
+          aria-hidden="true"
+        />
+        <ArrowRight
+          class="hidden size-4 shrink-0 text-muted sm:block"
+          aria-hidden="true"
+        />
+        <ul
+          class="flex min-w-0 flex-wrap gap-2"
+          aria-label="Standards that load for those files"
+        >
+          {
+            [
+              { name: 'jg-frontend', text: 'UI and accessibility' },
+              { name: 'jg-react', text: 'React implementation' },
+              { name: 'jg-testing', text: 'Browser checks' },
+            ].map((skill) => (
+              <li class="flex items-center gap-2 rounded-md bg-secondary px-3 py-2">
+                <>
+                  <Check
+                    class="size-3 text-accent"
+                    aria-hidden="true"
+                  />
+                  <TextLink href={`/skills/${skill.name}/`}>{skill.name}</TextLink>
+                  <span class="sr-only">: {skill.text}</span>
+                </>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </div>
   <div class="mt-8 grid gap-4 border-t border-border pt-7 md:grid-cols-3">
@@ -193,14 +213,14 @@ const steps = [
         {
           name: 'jg-plans',
           role: 'The document tools',
-          text: 'Selected reads, structural fingerprints and guarded document edits in each project.',
+          text: 'Acceptance criteria, progress and guarded edits for plan files.',
           href: SITE_CONFIG.plansUrl,
           external: true,
         },
         {
           name: 'jg-agent-hq',
           role: 'For your own application',
-          text: 'A local SDK and controller for native sessions, review handoffs and plan coordination.',
+          text: 'Native sessions, review handoffs and checked plan approvals.',
           href: SITE_CONFIG.agentHqUrl,
           external: true,
         },
