@@ -34,6 +34,9 @@ test.describe('production website', () => {
         'https://jg-skills.jesusgraterol.dev/og/jg-skills.png',
       );
       await expect(page.locator('script[type="application/ld+json"]')).toHaveCount(1);
+      await expect(page.locator('[data-copy-button]:not([data-copy-display="icon"])')).toHaveCount(
+        0,
+      );
 
       const description =
         (await page.locator('meta[name="description"]').getAttribute('content')) ?? '';

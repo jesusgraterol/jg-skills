@@ -207,9 +207,11 @@ const CODE_WINDOW_ELEMENTS: Readonly<Record<string, IPackageElement>> = {
       /^color:var\(--jg-syntax-[a-z\d-]+\)(?:;(?:font-style:italic|font-weight:bold|text-decoration:(?:underline|line-through)))*$/u,
   },
   button: {
-    attributes: [['class', 'data-copy-button', 'data-copy-context', 'inert', 'type']],
+    attributes: [
+      ['class', 'data-copy-button', 'data-copy-context', 'data-copy-display', 'inert', 'type'],
+    ],
     parents: ['span'],
-    values: { 'data-copy-context': 'code', inert: '', type: 'button' },
+    values: { 'data-copy-context': 'code', 'data-copy-display': 'icon', inert: '', type: 'button' },
   },
   svg: {
     attributes: [

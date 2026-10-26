@@ -101,6 +101,7 @@ const steps = [
                 <div class="my-6 min-w-0">
                   <CodeBlock
                     code={step.command}
+                    copyDisplay="icon"
                     overflow="wrap"
                     lang="text"
                     title="Claude Code invocation"
@@ -129,6 +130,7 @@ const steps = [
                 <p class="mb-3 font-mono text-xs text-muted">Illustrative artifact</p>
                 <CodeBlock
                   code={step.source}
+                  copyDisplay="icon"
                   overflow="wrap"
                   lang={step.artifactType}
                   title={step.artifact}
