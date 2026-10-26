@@ -66,6 +66,7 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
         </div>
         <div class="mt-7">
           <InstallCommand
+            copyDisplay="icon"
             command={SITE_CONFIG.commands.install}
             context="install command"
             id="hero-install-command"
@@ -250,24 +251,28 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
       </div>
       <div class="grid gap-5">
         <InstallCommand
+          copyDisplay="icon"
           command={SITE_CONFIG.commands.runtimeInstall}
           context="runtime install command"
           id="runtime-install-command"
           title="Project planning CLI"
         />
         <InstallCommand
+          copyDisplay="icon"
           command={SITE_CONFIG.commands.install}
           context="install command"
           id="install-command"
           title="Install"
         />
         <InstallCommand
+          copyDisplay="icon"
           command={SITE_CONFIG.commands.update}
           context="update command"
           id="update-command"
           title="Update"
         />
         <InstallCommand
+          copyDisplay="icon"
           command={SITE_CONFIG.commands.remove}
           context="remove command"
           id="remove-command"

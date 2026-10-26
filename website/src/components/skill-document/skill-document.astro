@@ -179,6 +179,7 @@ const outline = [
           examples.map((example) => (
             <TerminalWindow
               copy={{ context: example.copyContext, sourceId: example.id }}
+              copyDisplay="icon"
               title={example.title}
             >
               <p class="flex gap-3">

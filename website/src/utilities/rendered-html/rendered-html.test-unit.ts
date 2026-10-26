@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { createSatteriMarkdownProcessor } from '@astrojs/markdown-satteri';
 import { renderCodeWindowHeader } from 'jg-personal-astro-ui/code-window';
-import { codeWindowPlugin } from 'jg-personal-astro-ui/code-window-plugin';
+import { createCodeWindowPlugin } from 'jg-personal-astro-ui/code-window-plugin';
 import { externalLinkPlugin } from 'jg-personal-astro-ui/external-link-plugin';
 import { renderNewTabMarker } from 'jg-personal-astro-ui/new-tab-marker-markup';
 import { SYNTAX_THEME } from 'jg-personal-astro-ui/syntax-theme';
@@ -87,7 +87,10 @@ describe('findUnsafeMarkup', () => {
 
     beforeAll(async () => {
       const processor = await createSatteriMarkdownProcessor({
-        hastPlugins: [codeWindowPlugin, externalLinkPlugin({ siteUrl: 'https://jg-skills.dev' })],
+        hastPlugins: [
+          createCodeWindowPlugin({ copyDisplay: 'icon' }),
+          externalLinkPlugin({ siteUrl: 'https://jg-skills.dev' }),
+        ],
         shikiConfig: { theme: SYNTAX_THEME, wrap: true },
       });
       const { code } = await processor.render(
@@ -105,7 +108,7 @@ describe('findUnsafeMarkup', () => {
       );
       rendered = code;
       const pre = /<pre[\s\S]*?<\/pre>/u.exec(code)?.[0] ?? '';
-      codeWindow = `<figure class="jg-code-window" data-code-window="">${renderCodeWindowHeader({ caption: 'ts' })}${pre}</figure>`;
+      codeWindow = `<figure class="jg-code-window" data-code-window="">${renderCodeWindowHeader({ caption: 'ts', copyDisplay: 'icon' })}${pre}</figure>`;
     });
 
     test('accepts code windows and new-tab markers as the site renders them', () => {

@@ -17,7 +17,7 @@ test.describe('install command', () => {
     }
   });
 
-  test('names each copy button after the command it copies', async ({ page }) => {
+  test('names each icon-only copy button after the command it copies', async ({ page }) => {
     await page.goto('/');
 
     for (const [sourceId, name] of [
@@ -27,9 +27,10 @@ test.describe('install command', () => {
       ['update-command', 'Copy update command'],
       ['remove-command', 'Copy remove command'],
     ] as const) {
-      await expect(page.locator(`button[data-copy-source="${sourceId}"]`)).toHaveAccessibleName(
-        name,
-      );
+      const copyControl = page.locator(`button[data-copy-source="${sourceId}"]`);
+
+      await expect(copyControl).toHaveAccessibleName(name);
+      await expect(copyControl).toHaveAttribute('data-copy-display', 'icon');
     }
 
     await page.goto('/skills/jg-plan/');
@@ -57,11 +58,16 @@ test.describe('install command', () => {
     await page.goto('/');
 
     const copyControl = page.locator('button[data-copy-source="hero-install-command"]');
+    const bounds = await copyControl.boundingBox();
+
+    expect(bounds).not.toBeNull();
+    expect(bounds?.width).toBe(bounds?.height);
 
     await copyControl.click();
 
     await expect(copyControl).toHaveAttribute('data-copy-state', 'success');
-    await expect(copyControl).toContainText('Copied');
+    await expect(copyControl).toHaveAccessibleName('Copied install command');
+    expect((await copyControl.boundingBox())?.width).toBe(bounds?.width);
     await expect(copyControl.locator('xpath=..').locator('[data-copy-status]')).toHaveText(
       'Copied to the clipboard.',
     );
@@ -89,7 +95,7 @@ test.describe('install command', () => {
     await copyControl.click();
 
     await expect(copyControl).toHaveAttribute('data-copy-state', 'error');
-    await expect(copyControl).toContainText('Copy failed');
+    await expect(copyControl).toHaveAccessibleName('Copy failed remove command');
     await expect(wrapper.locator('[data-copy-status]')).toHaveText(guidance);
     await expect(hint).toBeVisible();
     await expect(hint).toHaveText(guidance);
