@@ -29,8 +29,9 @@ import { PLANNING_PROTOCOL_SKILLS } from './constants.ts';
 
 describe('planning protocol contract', () => {
   const command = 'npm install --save-dev --save-exact jg-plans@0.4.0';
-  const body =
-    '## jg-plans protocol 0.2\n\nA version at or above 0.4.0; install jg-plans@0.4.0.\n\n## Workflow\n\nUse it.';
+  const profiles =
+    '| Package version | CLI schemaVersion |\n| --- | --- |\n| 0.4.x | 1 |\n| >=0.5.0 | 2 |';
+  const body = `## jg-plans protocol 0.2\n\nA version at or above 0.4.0; install jg-plans@0.4.0.\n\n${profiles}\n\n## Workflow\n\nUse it.`;
   const documents = () =>
     PLANNING_PROTOCOL_SKILLS.map((name) => ({ name, kind: 'explicit' as const, body }));
   test.each(['0.4.0', '0.4.1', '0.10.0', '1.0.0'])(
@@ -78,6 +79,10 @@ describe('planning protocol contract', () => {
   test.each([
     ['another pin', (text: string) => text.replaceAll('@0.4.0', '@0.1.2')],
     ['no stated minimum', (text: string) => text.replaceAll('at or above 0.4.0', 'exactly 0.4.0')],
+    ['no profiles', (text: string) => text.replace(profiles, '')],
+    ['schema 2 for 0.4.x', (text: string) => text.replace('| 0.4.x | 1 |', '| 0.4.x | 2 |')],
+    ['schema 1 for 0.5.0', (text: string) => text.replace('| >=0.5.0 | 2 |', '| >=0.5.0 | 1 |')],
+    ['an extra profile', (text: string) => text.replace(profiles, `${profiles}\n| 0.3.x | 1 |`)],
   ])('rejects identical sections with %s', (_defect, change) => {
     expect(() =>
       assertPlanningProtocol(

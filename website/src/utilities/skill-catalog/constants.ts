@@ -53,7 +53,7 @@ export const SHARED_SECTION_HEADINGS = {
 export const COPIED_SECTION_HEADINGS = ['Task scope', 'Reading a session'] as const;
 
 export const PLANNING_PROTOCOL_HEADING = 'jg-plans protocol 0.2';
-// the oldest jg-plans the planning skills accept; any newer one with envelope schemaVersion 1 also works
+// the oldest supported jg-plans; 0.4.x uses schema 1 and 0.5.0 or newer uses schema 2
 export const PLANNING_RUNTIME_MINIMUM_VERSION = '0.4.0';
 export const PLANNING_PROTOCOL_SKILLS = [
   'jg-plan',

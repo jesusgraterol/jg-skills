@@ -21,7 +21,7 @@ export const buildLlmsText = (skills: readonly ILlmsSkill[]): string =>
       {
         heading: 'Planning runtime',
         body: [
-          'Install jg-plans in each project at the minimum version or newer (Node.js 24.15+). Skills never install it automatically; no-plan tasks and code-only reviews need no CLI.',
+          'Use project-local jg-plans 0.4.x with CLI schema 1 or 0.5.0 and newer with CLI schema 2 (Node.js 24.15+). Other version/schema pairs are unsupported. Skills never install it automatically; no-plan tasks and code-only reviews need no CLI.',
           '',
           '```bash',
           SITE_CONFIG.commands.runtimeInstall,
