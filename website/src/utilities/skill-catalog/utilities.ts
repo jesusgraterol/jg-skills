@@ -10,7 +10,7 @@ import {
   IMPLICIT_OPENAI_POLICY,
   PLANNING_PROTOCOL_HEADING,
   PLANNING_PROTOCOL_SKILLS,
-  PLANNING_RUNTIME_VERSION,
+  PLANNING_RUNTIME_MINIMUM_VERSION,
   SHARED_SECTION_HEADINGS,
   SKILL_CATALOG_ERROR_MESSAGES,
   SKILL_FILE_BYTE_BUDGET,
@@ -248,8 +248,24 @@ export const assertCopiedSections = (skills: readonly ISkillDocument[]): void =>
 };
 
 /**
- * Keep the seven self-contained planning contracts identical and their supported runtime
- * aligned with the public setup command and development dependency.
+ * Compares two exact versions, such as 0.4.0 and 0.10.1, by their numeric parts.
+ * @param first One version.
+ * @param second The other.
+ * @returns A negative number when the first is older, 0 when equal, and a positive one otherwise.
+ */
+const compareVersions = (first: string, second: string): number => {
+  const [a, b] = [first, second].map((version) => version.split('.').map(Number));
+  for (let index = 0; index < 3; index += 1) {
+    const difference = (a![index] ?? 0) - (b![index] ?? 0);
+    if (difference !== 0) return difference;
+  }
+  return 0;
+};
+
+/**
+ * Keep the seven self-contained planning contracts identical, stating the minimum jg-plans
+ * version, with the public setup command pinning that minimum and the website's development
+ * dependency at or above it.
  * @param skills Every catalog document, including skills that must not carry this section.
  * @param runtimeInstallCommand The exact setup command rendered and copied by the site.
  * @param runtimeDependency The website manifest's exact development dependency.
@@ -282,13 +298,16 @@ export const assertPlanningProtocol = (
   }
   if (found.size !== expected.size || new Set(sections).size !== 1)
     throw new Error(SKILL_CATALOG_ERROR_MESSAGES.PlanningProtocolMismatch);
-  const pins = [...sections[0]!.matchAll(/\bjg-plans@(\d+\.\d+\.\d+)\b/g)].map((match) => match[1]);
+  const section = sections[0]!;
+  const pins = [...section.matchAll(/\bjg-plans@(\d+\.\d+\.\d+)\b/g)].map((match) => match[1]);
   if (
     !pins.length ||
-    pins.some((pin) => pin !== PLANNING_RUNTIME_VERSION) ||
-    runtimeDependency !== PLANNING_RUNTIME_VERSION ||
+    pins.some((pin) => pin !== PLANNING_RUNTIME_MINIMUM_VERSION) ||
+    !section.includes(`at or above ${PLANNING_RUNTIME_MINIMUM_VERSION}`) ||
+    !/^\d+\.\d+\.\d+$/.test(runtimeDependency) ||
+    compareVersions(runtimeDependency, PLANNING_RUNTIME_MINIMUM_VERSION) < 0 ||
     runtimeInstallCommand !==
-      `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_VERSION}`
+      `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_MINIMUM_VERSION}`
   )
     throw new Error(SKILL_CATALOG_ERROR_MESSAGES.PlanningRuntimeMismatch);
 };
