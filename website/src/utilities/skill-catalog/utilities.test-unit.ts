@@ -28,19 +28,23 @@ import {
 import { PLANNING_PROTOCOL_SKILLS } from './constants.ts';
 
 describe('planning protocol contract', () => {
-  const command = 'npm install --save-dev --save-exact jg-plans@0.3.0';
-  const body = '## jg-plans protocol 0.2\n\nSupported jg-plans@0.3.0.\n\n## Workflow\n\nUse it.';
+  const command = 'npm install --save-dev --save-exact jg-plans@0.4.0';
+  const body =
+    '## jg-plans protocol 0.2\n\nA version at or above 0.4.0; install jg-plans@0.4.0.\n\n## Workflow\n\nUse it.';
   const documents = () =>
     PLANNING_PROTOCOL_SKILLS.map((name) => ({ name, kind: 'explicit' as const, body }));
-  test('accepts exactly the seven identical sections and one exact runtime pin', () => {
-    expect(() =>
-      assertPlanningProtocol(
-        [...documents(), { name: 'jg-push', kind: 'explicit', body: '## Workflow\nPush.' }],
-        command,
-        '0.3.0',
-      ),
-    ).not.toThrow();
-  });
+  test.each(['0.4.0', '0.4.1', '0.10.0', '1.0.0'])(
+    'accepts exactly the seven identical sections stating the minimum, with dependency %s',
+    (dependency) => {
+      expect(() =>
+        assertPlanningProtocol(
+          [...documents(), { name: 'jg-push', kind: 'explicit', body: '## Workflow\nPush.' }],
+          command,
+          dependency,
+        ),
+      ).not.toThrow();
+    },
+  );
   test.each([
     'missing-skill',
     'missing-section',
@@ -55,27 +59,31 @@ describe('planning protocol contract', () => {
     if (defect === 'duplicate-section') skills[0]!.body += '\n## jg-plans protocol 0.2\nAgain.';
     if (defect === 'extra-skill') skills.push({ name: 'jg-push', kind: 'explicit', body });
     if (defect === 'duplicate-skill') skills.push({ ...skills[0]! });
-    if (defect === 'drift') skills[0]!.body = body.replace('Supported', 'Different');
-    expect(() => assertPlanningProtocol(skills, command, '0.3.0')).toThrow(
+    if (defect === 'drift') skills[0]!.body = body.replace('A version', 'Another version');
+    expect(() => assertPlanningProtocol(skills, command, '0.4.0')).toThrow(
       'Planning skills have missing, duplicate, extra, or differing protocol sections',
     );
   });
   test.each([
-    ['npm install --save-dev --save-exact jg-plans@0.1.2', '0.3.0'],
-    ['npx jg-plans@0.3.0', '0.3.0'],
-    [command, '^0.3.0'],
+    ['npm install --save-dev --save-exact jg-plans@0.4.1', '0.4.1'],
+    ['npx jg-plans@0.4.0', '0.4.0'],
+    [command, '0.3.9'],
+    [command, '^0.4.0'],
     [command, ''],
   ])('rejects inconsistent setup/dependency %s / %s', (setup, dependency) => {
     expect(() => assertPlanningProtocol(documents(), setup, dependency)).toThrow(
       'Planning runtime pins and setup do not agree',
     );
   });
-  test('rejects a matching but unsupported pin in every copied section', () => {
+  test.each([
+    ['another pin', (text: string) => text.replaceAll('@0.4.0', '@0.1.2')],
+    ['no stated minimum', (text: string) => text.replaceAll('at or above 0.4.0', 'exactly 0.4.0')],
+  ])('rejects identical sections with %s', (_defect, change) => {
     expect(() =>
       assertPlanningProtocol(
-        documents().map((skill) => ({ ...skill, body: skill.body.replaceAll('@0.3.0', '@0.1.2') })),
+        documents().map((skill) => ({ ...skill, body: change(skill.body) })),
         command,
-        '0.3.0',
+        '0.4.0',
       ),
     ).toThrow('Planning runtime pins and setup do not agree');
   });

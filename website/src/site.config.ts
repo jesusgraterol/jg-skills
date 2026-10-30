@@ -1,5 +1,5 @@
 import type { ISkillCatalogEntry } from './utilities/skill-catalog/index.ts';
-import { PLANNING_RUNTIME_VERSION } from './utilities/skill-catalog/constants.ts';
+import { PLANNING_RUNTIME_MINIMUM_VERSION } from './utilities/skill-catalog/constants.ts';
 
 // a plan path in the layout jg-plan writes, shared by the examples that name a plan
 const EXAMPLE_PLAN_PATH = 'jg-plans/1787592334_sign-in-flow/plan.md';
@@ -717,7 +717,7 @@ export const SITE_CONFIG = {
   // project-scoped commands, run from the repository root
   commands: {
     install: 'npx skills add jesusgraterol/jg-skills --skill "*" -y',
-    runtimeInstall: `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_VERSION}`,
+    runtimeInstall: `npm install --save-dev --save-exact jg-plans@${PLANNING_RUNTIME_MINIMUM_VERSION}`,
     remove: `npx skills remove ${SKILL_NAMES.join(' ')}`,
     update: `npx skills update -p ${SKILL_NAMES.join(' ')}`,
   },

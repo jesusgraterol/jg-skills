@@ -17,7 +17,7 @@ import { SITE_CONFIG } from '../site.config.ts';
 import {
   loadSkills,
   SKILL_STAGES,
-  PLANNING_RUNTIME_VERSION,
+  PLANNING_RUNTIME_MINIMUM_VERSION,
   type ISkillStage,
 } from '../utilities/skill-catalog/index.ts';
 
@@ -207,9 +207,10 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
           your team.
         </p>
         <p class="mt-5 text-sm leading-6 text-muted">
-          Planning workflows require Node.js 24.15 or newer and jg-plans {PLANNING_RUNTIME_VERSION},
-          installed in your project. The skills use it to inspect and safely edit plans; they never
-          install it automatically. No-plan tasks and code-only reviews need no runtime.
+          Planning workflows require Node.js 24.15 or newer and jg-plans
+          {PLANNING_RUNTIME_MINIMUM_VERSION} or newer, installed in your project. The skills use it to
+          inspect and safely edit plans; they never install it automatically. No-plan tasks and code-only
+          reviews need no runtime.
         </p>
         <p class="mt-3 text-sm leading-6 text-muted">
           Update refreshes only the skills you already have. To add skills released since you

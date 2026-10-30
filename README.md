@@ -92,16 +92,16 @@ Each implicit skill states the versions it was written for and, for anything wit
 
 ## Planning runtime
 
-Install the skills in each project as shown above. Persisted planning workflows also require Node.js 24.15+ and the exact runtime dependency installed in each project:
+Install the skills in each project as shown above. Persisted planning workflows also require Node.js 24.15+ and jg-plans 0.4.0 or newer installed in each project:
 
 ```sh
-npm install --save-dev --save-exact jg-plans@0.3.0
+npm install --save-dev --save-exact jg-plans@0.4.0
 ./node_modules/.bin/jg-plans --version --json
 ```
 
-The seven planning reader/writer skills preflight that exact package version and envelope before using selected documents. Use the project’s existing package manager and its installed local CLI, or the documented built entry when developing jg-plans itself. No global executable is used. This repository keeps its Node tooling in `website/`: run `npm ci` there and use `website/node_modules/.bin/jg-plans` from the repository root. Existing runtime consumers retain their production dependency. They never install tooling automatically. No-plan tasks, code-only reviews, brainstorming, and pause need no CLI. jg-execute auto additionally reads the neighboring jg-review and jg-push skill files.
+The seven planning reader/writer skills preflight the package version, at or above 0.4.0, and envelope `schemaVersion` 1 before using selected documents. A newer jg-plans is accepted while its envelope stays on `schemaVersion` 1; an older one gets the install command above. Use the project’s existing package manager and its installed local CLI, or the documented built entry when developing jg-plans itself. No global executable is used. This repository keeps its Node tooling in `website/`: run `npm ci` there and use `website/node_modules/.bin/jg-plans` from the repository root. Existing runtime consumers retain their production dependency. They never install tooling automatically. No-plan tasks, code-only reviews, brainstorming, and pause need no CLI. jg-execute auto additionally reads the neighboring jg-review and jg-push skill files.
 
-New plans use `jg-plans/<timestamp>_<slug>/`. Explicit existing/custom paths remain usable. Guarded edits preserve source and progress. Breakdown binds a sequence to the plan id/revision and a structural content fingerprint, excluding only created_at, updated_at, revision, and status. Changed body or contractual metadata requires coverage to be refreshed; an unexpected missing sequence never means completion. An approved plan deliberately without milestones executes as one unit. Generic format checks and fingerprints grant no authority.
+New plans use `jg-plans/<timestamp>_<slug>/` and record their priority, the repositories they change, and any error codes they add; jg-plan checks those codes with `jg-plans overlaps` over the planning folders of the repositories involved. Explicit existing/custom paths remain usable. Guarded edits preserve source and progress. Breakdown binds a sequence to the plan id/revision and a structural content fingerprint, excluding only created_at, updated_at, revision, status, and priority, so reprioritizing a plan keeps its sequence current. Changed body or contractual metadata, such as the repositories or error codes a plan records, requires coverage to be refreshed; an unexpected missing sequence never means completion. An approved plan deliberately without milestones executes as one unit. Generic format checks and fingerprints grant no authority.
 
 ## A typical run
 
