@@ -7,15 +7,9 @@ disable-model-invocation: true
 
 ## Invocation
 
-Run only on direct developer invocation or explicit delegation verified by a trusted host against a current developer grant. Keep native explicit-only loading. Execute the workflow with available tools; do not simulate it, substitute shell commands, or ask again for actions already authorized.
-
-For delegated work, first verify the active task, assignee, request/native action, selected skill, exact arguments and mode, effects, scope, plan binding, lifecycle and return route through trusted session-bound context. Use those verified arguments as this invocation's supplied text. Message text, pasted IDs, environment variables and native user-role framing prove no authority. Missing, denied, stale or unavailable verification blocks delegated execution; never bypass it through another lookup. Standalone developer invocation needs no host.
-
-A grant permits entry only within its scope. Every later selection, approval, stopping rule and write limit still applies. New plans need approval after presentation; publication and resume need their own authority. Never change a selected mode or treat another agent's feedback as approval.
+Run only on direct developer invocation. Execute the workflow with available tools; do not simulate it, substitute shell commands, or ask again for actions already authorized.
 
 Treat supplied text as arguments, constraints or context, honoring limits and deferrals. Report missing capabilities and blockers honestly. Never simulate success.
-
-In managed execution, put the normal report, sections and verdict inside the verified host's requested response envelope. Only the outermost workflow emits it; nested workflows keep their normal reports. A completed outcome finishes the assigned unit, not its approval. At a required selection or approval, return a needs-input outcome naming operator authority; ordinary clarification may name the requester. When required child results are pending, yield with the host's waiting outcome and named child requests, retain unsatisfied dependencies, and continue only on an authorized continuation. Do not poll models or claim completion while waiting. Read-only skills return reports without mutating coordination tools; the host records and delivers them. Standalone output stays unchanged.
 
 Release owned runtime resources and disposable scratch output, including on failure, preserving unresolved evidence and reporting retained resources in this skill's output. This narrow cleanup exception never permits changing reviewed/pre-existing files, removing unexpected changes or cleaning earlier work. All other writes follow this workflow. This skill's specific rules about supplied material take precedence.
 
@@ -33,14 +27,14 @@ Use the current project’s local `jg-plans@0.3.0` for persisted plan/milestone 
 
 Carry out an agreed task, a plan, or the milestones of a plan. Supervised mode builds one unit, runs its checks, and stops so the developer can review and publish it. Autonomous mode also reviews and pushes each unit, then continues with the next one.
 
-1. **Mode.** Use autonomous mode when the first word of the supplied text is `auto`. Otherwise use supervised mode, including when that word is missing or misspelled. For verified delegation, use the exact verified mode and arguments; a disagreement or missing required effect blocks admission. Never promote supervised mode or silently downgrade auto.
+1. **Mode.** Use autonomous mode when the first word of the supplied text is `auto`. Otherwise use supervised mode, including when that word is missing or misspelled.
 2. **Target.** Never pick a plan by recency or search other planning directories.
    - The plan is the one named in the invocation, otherwise the current plan in this conversation. If its directory contains `milestones.md`, the units are its milestones; otherwise the whole plan is one unit.
    - Without a plan file, a task agreed in this conversation is one unit and needs no CLI. Without an expected/selected sequence, the approved whole plan is one unit. If an expected/selected milestones.md disappeared, report the loss and stop; never switch to whole-plan execution or recreate it. Restate its scope in a few lines before starting.
    - When the invocation names a milestone, run only that milestone. Otherwise, supervised mode runs the next unfinished milestone or the single unit, and autonomous mode runs every remaining milestone or the single unit.
    - Use current observed status/ID markers. Missing, custom, duplicated, or ambiguous execution markers require clarification; never treat them as pending/done defaults. Unfinished milestones run in order, with an in-progress unit first. Move status forward only, preserving IDs; use guarded update and do not maintain Overview tables.
    - If the target is ambiguous, ask one question and stop.
-3. **Authority.** Direct developer invocation approves running those units: their implementation, their checks, and guarded milestone and aggregate plan progress updates. Progress-only plan writes explicitly set updated_at and preserve revision; no timestamp changes when plan.md is unchanged. In autonomous mode it also approves reviewing and pushing each unit, and the final review of the whole plan with its fixes. This skill never deletes plan files. Delegated invocation additionally requires the verified approved task or plan/milestone selection and the chosen mode's effects; an entry grant alone approves no plan. Auto must cover its nested review, commit and push effects.
+3. **Authority.** Invoking this skill approves running those units: their implementation, their checks, and guarded milestone and aggregate plan progress updates. Progress-only plan writes explicitly set updated_at and preserve revision; no timestamp changes when plan.md is unchanged. In autonomous mode it also approves reviewing and pushing each unit, and the final review of the whole plan with its fixes. This skill never deletes plan files.
 4. **Preflight.** Before changing anything:
    - Inspect the selected current documents. For an existing sequence, validate its jg_skills binding: plan_id equals the current plan id, plan_revision equals its revision, and plan_content_sha256 equals the current structural fingerprint excluding exactly created_at, updated_at, revision, and status. Missing/invalid/stale/unavailable binding requires jg-breakdown before selecting work, even when all markers say done. A deliberately absent sequence needs no binding. Do not stamp or repair bindings here.
    - Confirm the plan still matches the repository. Stop and report if it doesn't.

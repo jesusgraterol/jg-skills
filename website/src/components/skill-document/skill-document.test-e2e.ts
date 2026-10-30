@@ -56,9 +56,7 @@ test.describe('skill pages', () => {
         await expect(
           instructions.getByRole('heading', { level: 2, name: 'Workflow' }),
         ).toBeVisible();
-        await expect(instructions).toContainText(
-          'Run only on direct developer invocation or explicit delegation verified by a trusted host against a current developer grant.',
-        );
+        await expect(instructions).toContainText('Run only on direct developer invocation.');
 
         await expect(page.locator('[data-skill-usage]')).toHaveText(
           new RegExp(`^/${name}( (\\[|<).+)?$`, 'u'),
