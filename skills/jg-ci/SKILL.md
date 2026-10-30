@@ -57,8 +57,8 @@ The agent loads this skill on its own when a task touches its area. This skill's
 ## Foundation
 
 - Prefer one workflow per repository. Its check job runs the project's check command on `pull_request` and on pushes to the default branch, even when the task mentions only pull requests, so the merged tree is checked too. When the project deploys, a deploy job `needs` the check job and runs only for pushes to the default branch.
-- Prefer one check command that runs every check the project has, such as `npm run check`, so CI and developers run the same thing. When there is none, run the project's existing test, lint, and build commands as steps of the one job.
-- A new check reaches CI by joining the check command. Never add a job, a matrix, a workflow, a scheduled run, or a bot unless the developer asks for it or another loaded skill requires it for its own area, such as jg-npm-package's runtime and release jobs.
+- Prefer the project's designated required verification command, such as `npm run check`, so CI and developers use the same authoritative checks. When there is none, run the applicable existing required test, lint, typecheck, and build commands as steps of the one job. Respect the repository's essential/full policy: select essential when defined, and do not append full merely because it exists. Additional full runs require an explicit request or the repository's documented policy.
+- A new required check reaches CI by joining that command; additional full-only coverage does not automatically join routine required CI. Never add a job, a matrix, a workflow, a scheduled run, or a bot unless the developer asks for it or another loaded skill requires it for its own area, such as jg-npm-package's runtime and release jobs.
 - When creating a repository's first workflow, offer once, in the summary, to turn on Dependabot alerts and security updates in the repository's settings. They need no configuration file, and they open pull requests only for alerts that have a fix available. Turn them on only with the developer's agreement.
 
 ## Defaults
