@@ -264,8 +264,8 @@ const compareVersions = (first: string, second: string): number => {
 
 /**
  * Keep the seven self-contained planning contracts identical, stating the minimum jg-plans
- * version, with the public setup command pinning that minimum and the website's development
- * dependency at or above it.
+ * version and supported package/schema pairs, with setup pinning the minimum and the website's
+ * development dependency at or above it.
  * @param skills Every catalog document, including skills that must not carry this section.
  * @param runtimeInstallCommand The exact setup command rendered and copied by the site.
  * @param runtimeDependency The website manifest's exact development dependency.
@@ -300,10 +300,21 @@ export const assertPlanningProtocol = (
     throw new Error(SKILL_CATALOG_ERROR_MESSAGES.PlanningProtocolMismatch);
   const section = sections[0]!;
   const pins = [...section.matchAll(/\bjg-plans@(\d+\.\d+\.\d+)\b/g)].map((match) => match[1]);
+  const profiles = [...section.matchAll(/^\|\s*([^|]+?)\s*\|\s*(\d+)\s*\|$/gm)].map(
+    ([, packageVersion, schemaVersion]) => ({
+      packageVersion: packageVersion!.trim(),
+      schemaVersion: Number(schemaVersion),
+    }),
+  );
   if (
     !pins.length ||
     pins.some((pin) => pin !== PLANNING_RUNTIME_MINIMUM_VERSION) ||
     !section.includes(`at or above ${PLANNING_RUNTIME_MINIMUM_VERSION}`) ||
+    profiles.length !== 2 ||
+    profiles[0]?.packageVersion !== '0.4.x' ||
+    profiles[0]?.schemaVersion !== 1 ||
+    profiles[1]?.packageVersion !== '>=0.5.0' ||
+    profiles[1]?.schemaVersion !== 2 ||
     !/^\d+\.\d+\.\d+$/.test(runtimeDependency) ||
     compareVersions(runtimeDependency, PLANNING_RUNTIME_MINIMUM_VERSION) < 0 ||
     runtimeInstallCommand !==
