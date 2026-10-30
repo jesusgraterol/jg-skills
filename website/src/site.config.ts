@@ -310,7 +310,7 @@ export const SKILL_CATALOG = {
     searchTitle: 'jg-feedback: Assess review feedback with evidence',
     stage: 'context',
     whenToUse:
-      'Use it when a reviewer, another agent, or a teammate sends claims you want checked before acting. A verified host may supply an exact authorized message or report reference.',
+      'Use it when a reviewer, another agent, or a teammate sends claims you want checked before acting on them.',
   },
   'jg-session': {
     access: 'read-only',
@@ -696,7 +696,6 @@ const SKILL_NAMES = Object.keys(SKILL_CATALOG);
 
 // canonical metadata, navigation, and commands for every generated page
 export const SITE_CONFIG = {
-  agentHqUrl: 'https://jg-agent-hq.jesusgraterol.dev',
   plansUrl: 'https://jg-plans.jesusgraterol.dev',
   // Agentic Coding's prompt for refining an existing AGENTS.md
   agenticCodingRefineUrl: 'https://agenticcoding.jesusgraterol.dev/refine/',

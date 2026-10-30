@@ -1,13 +1,11 @@
 ---
-import { ArrowDown, ArrowRight } from '@lucide/astro';
+import { ArrowDown } from '@lucide/astro';
 import Button from 'jg-personal-astro-ui/button';
 import HeroBackdrop from 'jg-personal-astro-ui/hero-backdrop';
 import InstallCommand from 'jg-personal-astro-ui/install-command';
-import TextLink from 'jg-personal-astro-ui/text-link';
 
 import Credits from '../components/credits/credits.astro';
 import CriteriaFlow from '../components/criteria-flow/criteria-flow.astro';
-import DelegationDemo from '../components/delegation-demo/delegation-demo.astro';
 import PackagesBridge from '../components/packages-bridge/packages-bridge.astro';
 import SessionDemo from '../components/session-demo/session-demo.astro';
 import SkillCard from '../components/skill-card/skill-card.astro';
@@ -187,37 +185,6 @@ const stages = (Object.keys(SKILL_STAGES) as ISkillStage[]).map((stage) => ({
       >
         One unit at a time, or the remaining plan.
       </h2><div class="mt-10"><WorkflowRun /></div>
-    </div>
-  </section>
-
-  <section
-    id="delegation"
-    class="jg-section-space scroll-mt-16 border-b border-border"
-    aria-labelledby="delegation-title"
-  >
-    <div class="jg-container grid min-w-0 gap-10 lg:grid-cols-2 lg:items-center lg:gap-14">
-      <div class="min-w-0">
-        <p class="eyebrow">Hand off a review</p>
-        <h2
-          id="delegation-title"
-          class="section-title mt-4"
-        >
-          Let another agent check the work.
-        </h2>
-        <p class="lede mt-5">
-          Through jg-agent-hq, Codex can ask Claude Code to run jg-review-session and read the
-          report.
-        </p>
-        <p class="mt-6 text-sm">
-          <TextLink href="/skills/jg-review-session/">
-            Read jg-review-session <ArrowRight
-              class="ml-1 inline size-3.5"
-              aria-hidden="true"
-            />
-          </TextLink>
-        </p>
-      </div>
-      <DelegationDemo />
     </div>
   </section>
 
