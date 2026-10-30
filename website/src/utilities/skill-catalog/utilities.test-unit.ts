@@ -183,7 +183,7 @@ describe('assertInvocationSettings', () => {
   });
 });
 
-describe('assertSearchMetadata', () => {
+describe('assertSearchMetadata', { tags: ['full'] }, () => {
   const description = 'A search description that is long enough to describe the skill properly.';
 
   test('accepts a title that leads with the skill name and fits both limits', () => {
@@ -251,7 +251,7 @@ describe('assertCatalogCoverage', () => {
   });
 });
 
-describe('buildSourceUrl', () => {
+describe('buildSourceUrl', { tags: ['full'] }, () => {
   test('points at the skill instructions on the main branch', () => {
     expect(buildSourceUrl('jg-push')).toBe(
       'https://github.com/jesusgraterol/jg-skills/blob/main/skills/jg-push/SKILL.md',
@@ -259,7 +259,7 @@ describe('buildSourceUrl', () => {
   });
 });
 
-describe('extractSection', () => {
+describe('extractSection', { tags: ['full'] }, () => {
   test('returns the lines up to the next level-two heading', () => {
     expect(extractSection(buildExplicitBody('Shared rules.', 'Steps.'), 'Invocation')).toBe(
       '\nShared rules.',
@@ -439,7 +439,7 @@ describe('assertCopiedSections', () => {
   });
 });
 
-describe('assertVersionLine', () => {
+describe('assertVersionLine', { tags: ['full'] }, () => {
   test('accepts an implicit skill with a version bullet', () => {
     expect(() =>
       assertVersionLine({ body: buildImplicitBody(), kind: 'implicit', name: 'jg-react' }),
@@ -469,7 +469,7 @@ describe('assertVersionLine', () => {
   });
 });
 
-describe('assertNoSectionLinks', () => {
+describe('assertNoSectionLinks', { tags: ['full'] }, () => {
   test.each([
     [
       'links to other pages and plain text',
@@ -503,7 +503,7 @@ describe('assertNoSectionLinks', () => {
   });
 });
 
-describe('assertBareSkillReferences', () => {
+describe('assertBareSkillReferences', { tags: ['full'] }, () => {
   test.each([
     ['a bare name', 'Run jg-plan first.'],
     ['a bare name in code', 'Invoke `jg-execute auto`.'],
@@ -525,7 +525,7 @@ describe('assertBareSkillReferences', () => {
   });
 });
 
-describe('extractReferencePaths', () => {
+describe('extractReferencePaths', { tags: ['full'] }, () => {
   test('lists each reference a skill names once, in sorted order', () => {
     expect(
       extractReferencePaths(
@@ -547,7 +547,7 @@ describe('extractReferencePaths', () => {
   });
 });
 
-describe('extractReferenceMentions', () => {
+describe('extractReferenceMentions', { tags: ['full'] }, () => {
   test('lists every references/ path a document writes, valid or not', () => {
     expect(
       extractReferenceMentions(
@@ -566,7 +566,7 @@ describe('extractReferenceMentions', () => {
   });
 });
 
-describe('assertReferencePathForm', () => {
+describe('assertReferencePathForm', { tags: ['full'] }, () => {
   test('accepts a kebab-case Markdown file directly inside references/', () => {
     expect(() => assertReferencePathForm('jg-postgres', 'references/naming.md')).not.toThrow();
   });
@@ -584,7 +584,7 @@ describe('assertReferencePathForm', () => {
   });
 });
 
-describe('assertReferenceFiles', () => {
+describe('assertReferenceFiles', { tags: ['full'] }, () => {
   test('accepts kebab-case Markdown files at the top of references/', () => {
     expect(() => assertReferenceFiles('jg-postgres', ['migrations.md', 'naming.md'])).not.toThrow();
     expect(() => assertReferenceFiles('jg-react', [])).not.toThrow();
@@ -605,7 +605,7 @@ describe('assertReferenceFiles', () => {
   });
 });
 
-describe('groupReferencesBySkill', () => {
+describe('groupReferencesBySkill', { tags: ['full'] }, () => {
   test('groups reference entries by skill folder, in code-point path order', () => {
     const groups = groupReferencesBySkill([
       { id: 'jg-postgres/references/naming' },
@@ -766,7 +766,7 @@ describe('assertFileBudget', () => {
   });
 });
 
-describe('content checks on reference files', () => {
+describe('content checks on reference files', { tags: ['full'] }, () => {
   test('name the reference file when it links to a section of a document', () => {
     expect(() =>
       assertNoSectionLinks({

@@ -125,19 +125,22 @@ Requirements: Node.js `24.15` or newer within Node 24, and npm `11.12` or newer 
 
 ```bash
 npm ci
-npx playwright install chromium
 npm run dev
 ```
 
-| Command                   | Purpose                                                                                             |
-| ------------------------- | --------------------------------------------------------------------------------------------------- |
-| `npm run dev`             | Start the Astro development server. If an edit under `skills/` does not appear, restart it.         |
-| `npm run build`           | Generate the site in `dist/` and verify every skill page, metadata, link, and `llms.txt`.           |
-| `npm run preview`         | Serve the current production build locally.                                                         |
-| `npm run check`           | Run unit tests, typechecking, linting, formatting, the build, integration tests, and browser tests. |
-| `npm test`                | Run the unit, integration, and end-to-end test categories.                                          |
-| `npm run format`          | Format the website files.                                                                           |
-| `npm run assets:generate` | Regenerate the committed open-graph image from its HTML template.                                   |
+| Command                   | Purpose                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------- |
+| `npm run dev`             | Start the Astro development server. If an edit under `skills/` does not appear, restart it. |
+| `npm run build`           | Generate the site in `dist/` and verify every skill page, metadata, link, and `llms.txt`.   |
+| `npm run preview`         | Serve the current production build locally.                                                 |
+| `npm run check`           | Run essential tests, typechecking, linting, formatting, and one validated build.            |
+| `npm test`                | Run essential unit and integration coverage with one validated build.                       |
+| `npm run test:full`       | Run all unit, integration, and browser tests with one build.                                |
+| `npm run check:full`      | Run complete coverage plus typechecking, linting, formatting, and one build.                |
+| `npm run format`          | Format the website files.                                                                   |
+| `npm run assets:generate` | Regenerate the committed open-graph image from its HTML template.                           |
+
+Essential needs no browser. Install Chromium with `npx playwright install chromium` before complete focused browser checks or an explicitly requested full run. [`docs/testing.md`](docs/testing.md) defines suite membership, complete category commands, and verification.
 
 The build fails when the site catalog in `website/src/site.config.ts` and the skill folders disagree, when a skill name differs from its directory, when a skill's frontmatter flag or Codex policy doesn't match its kind in the catalog, when a skill's search title or description would be cut off in search results, when a skill's shared `## Invocation` or `## Application` section drifts from the other skills of its kind, when a `## Task scope` or `## Reading a session` copy differs from the other skills that carry it, when the seven planning protocol copies are missing, duplicated, extra, or different, when their supported runtime/setup/development pins disagree, when an implicit skill has no version line, when a skill or reference file links to a section of a document or names another skill with a `/` or `$` prefix, when a skill names a reference file that doesn't exist or has one it never names, when a reference path isn't a kebab-case Markdown file directly in `references/` or that folder holds a nested or non-Markdown file, when a skill or reference file renders an element Markdown doesn't produce, a comment, an event handler, or a URL whose scheme isn't `http`, `https`, or `mailto`, when an explicit skill has reference files, when a reference names another reference, when a `SKILL.md` or reference file is larger than 25,600 bytes, when a built page links to a missing fragment, repeats an element ID, or holds an event handler or a URL with any other scheme, when `robots.txt` doesn't name the sitemap index, or when the 404 page names a canonical URL. The type check fails when a skill's icon is missing or doesn't match its kind. When you add, change, rename, or remove a skill, follow [`docs/skill-guidelines.md`](docs/skill-guidelines.md).
 
@@ -156,7 +159,7 @@ Until then, the deploy job fails, or the site is served under a path where its r
 ```text
 .
 ├── .github/workflows/       # site verification and GitHub Pages deployment
-├── docs/                    # concise, durable project concepts and processes
+├── docs/                    # concise, durable project concepts and processes, including testing.md
 ├── skills/
 │   └── jg-<name>/
 │       ├── SKILL.md         # frontmatter and the skill's instructions
@@ -183,6 +186,7 @@ Until then, the deploy job fails, or the site is served under a path where its r
 - An implicit skill may keep topics that only some tasks need in `references/<topic>.md`, one level deep. Its `SKILL.md` names each file as a code-formatted path, with when to read it, and the website renders the files below the skill's instructions. Explicit skills keep their whole workflow in `SKILL.md`. Every `SKILL.md` and reference file stays within 25,600 bytes. After compaction, Claude Code re-attaches only the first 5,000 tokens of each invoked skill, so requirements come before defaults and long examples.
 - Explicit skills are explicit-only in both agents: their frontmatter sets `disable-model-invocation: true`, and their `agents/openai.yaml` sets `policy.allow_implicit_invocation: false`. Implicit skills omit the flag and set `policy.allow_implicit_invocation: true`. The site catalog's `kind` must match, or the build fails.
 - Every skill is self-contained and never links to sections of a specific `AGENTS.md`. Explicit skills share the rules in their `## Invocation` section. Implicit skills share their `## Application` section, which sets how their rules rank against the repository's coding instructions and conventions. Skills refer to each other by bare name, such as `jg-breakdown`, never with a `/` or `$` prefix. Every skill works on its own: a mention of another skill is only a pointer, and the auto workflow dependency is `jg-execute auto`, which reads the `jg-review` and `jg-push` `SKILL.md` files from the neighboring folders.
+- [`docs/testing.md`](docs/testing.md) owns essential/full membership, focused verification, and the separate skill installation gate.
 - Creating, writing, checking, maintaining, renaming, and removing a skill follow [`docs/skill-guidelines.md`](docs/skill-guidelines.md), which lists every place to update.
 - Website links show where they lead: `ArrowDown` for a section on the same page, `ArrowRight` (or `ArrowLeft` going back) for another page on the site, and the package's new-tab marker, a screen-reader note plus an up-right arrow, for other sites, which open in a new tab without a referrer. A link card that covers a whole card shows the arrow in its corner. The package's external-link plugin gives skill Markdown's links to other sites the same marker.
 - The website shares its design tokens, Ubuntu Sans typography, and components with Agentic Coding, jesusgraterol.dev, and jg-packages, through `jg-personal-astro-ui`. [`docs/asset-attribution.md`](docs/asset-attribution.md) records where its brand marks come from.

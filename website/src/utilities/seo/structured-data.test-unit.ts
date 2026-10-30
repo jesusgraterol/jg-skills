@@ -24,7 +24,7 @@ const AUTHOR = {
   url: 'https://jesusgraterol.dev/',
 };
 
-describe('buildStructuredData', () => {
+describe('buildStructuredData', { tags: ['full'] }, () => {
   test('describes the canonical website without fabricated page fields', () => {
     expect(
       buildStructuredData({

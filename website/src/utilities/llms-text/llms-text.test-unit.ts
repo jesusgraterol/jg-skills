@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 
 import { buildLlmsText } from './llms-text.ts';
 
-describe('buildLlmsText', () => {
+describe('buildLlmsText', { tags: ['full'] }, () => {
   test('builds the required llms.txt structure with the install command and ordered skills', () => {
     const text = buildLlmsText([
       {

@@ -33,20 +33,26 @@ describe('SkillFrontmatterSchema', () => {
     expect(SkillFrontmatterSchema.parse(implicitFrontmatter)).toStrictEqual(implicitFrontmatter);
   });
 
+  test('rejects enabling model invocation through the explicit-only flag', () => {
+    expect(
+      SkillFrontmatterSchema.safeParse({ ...VALID_FRONTMATTER, 'disable-model-invocation': false })
+        .success,
+    ).toBe(false);
+  });
+
   test.each([
-    ['model invocation enabled', { ...VALID_FRONTMATTER, 'disable-model-invocation': false }],
     ['an unknown key', { ...VALID_FRONTMATTER, 'user-invocable': true }],
     ['a name without the jg- prefix', { ...VALID_FRONTMATTER, name: 'plan' }],
     ['an uppercase name', { ...VALID_FRONTMATTER, name: 'jg-Plan' }],
     ['an empty description', { ...VALID_FRONTMATTER, description: '' }],
     ['a description over 1024 characters', { ...VALID_FRONTMATTER, description: 'a'.repeat(1025) }],
     ['an empty argument hint', { ...VALID_FRONTMATTER, 'argument-hint': '' }],
-  ])('rejects frontmatter with %s', (_caseName, frontmatter) => {
+  ])('rejects frontmatter with %s', { tags: ['full'] }, (_caseName, frontmatter) => {
     expect(SkillFrontmatterSchema.safeParse(frontmatter).success).toBe(false);
   });
 });
 
-describe('SkillReferenceFrontmatterSchema', () => {
+describe('SkillReferenceFrontmatterSchema', { tags: ['full'] }, () => {
   test('accepts a reference file without frontmatter', () => {
     expect(SkillReferenceFrontmatterSchema.parse({})).toStrictEqual({});
   });

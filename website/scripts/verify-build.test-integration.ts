@@ -79,6 +79,18 @@ const createBuildFixture = async (): Promise<string> => {
   return fixtureDirectory;
 };
 
+/** Verifies one rejection against a separately corrupted production artifact. */
+const expectBuildFailure = async (
+  _caseName: string,
+  expectedMessage: string,
+  mutation: IBuildMutation,
+): Promise<void> => {
+  const buildDirectory = await createBuildFixture();
+
+  await mutation(buildDirectory);
+  await expect(verifyBuild(buildDirectory)).rejects.toThrow(expectedMessage);
+};
+
 describe('static build artifact', () => {
   beforeAll(async () => {
     temporaryRoot = await mkdtemp(join(tmpdir(), TEMPORARY_ROOT_PREFIX));
@@ -92,24 +104,117 @@ describe('static build artifact', () => {
     await rm(temporaryRoot, { force: true, recursive: true });
   });
 
-  test('contains every skill page, required metadata, valid links, and no test files', async () => {
-    await expect(verifyBuild()).resolves.toBeUndefined();
-  });
+  test(
+    'contains every skill page, required metadata, valid links, and no test files',
+    { tags: ['full'] },
+    async () => {
+      await expect(verifyBuild()).resolves.toBeUndefined();
+    },
+  );
 
-  test('protects installation commands and rendered skill examples from CDN email rewriting', async () => {
-    for (const page of ['index.html', SKILL_PAGE, REFERENCE_PAGE]) {
-      const html = await readFile(resolve(BUILD_DIRECTORY, page), 'utf8');
-      const opening = html.indexOf('<!--email_off-->');
-      const closing = html.indexOf('<!--/email_off-->');
+  test(
+    'protects installation commands and rendered skill examples from CDN email rewriting',
+    { tags: ['full'] },
+    async () => {
+      for (const page of ['index.html', SKILL_PAGE, REFERENCE_PAGE]) {
+        const html = await readFile(resolve(BUILD_DIRECTORY, page), 'utf8');
+        const opening = html.indexOf('<!--email_off-->');
+        const closing = html.indexOf('<!--/email_off-->');
 
-      expect(opening, page).toBeGreaterThanOrEqual(0);
-      expect(opening, page).toBeLessThan(html.indexOf('<main id="main-content">'));
-      expect(closing, page).toBeGreaterThan(html.lastIndexOf('</main>'));
-      expect(html.indexOf('<!--email_off-->', opening + 1), page).toBe(-1);
-      expect(html.indexOf('<!--/email_off-->', closing + 1), page).toBe(-1);
-      expect(html.slice(opening, closing), page).toContain('@');
-    }
-  });
+        expect(opening, page).toBeGreaterThanOrEqual(0);
+        expect(opening, page).toBeLessThan(html.indexOf('<main id="main-content">'));
+        expect(closing, page).toBeGreaterThan(html.lastIndexOf('</main>'));
+        expect(html.indexOf('<!--email_off-->', opening + 1), page).toBe(-1);
+        expect(html.indexOf('<!--/email_off-->', closing + 1), page).toBe(-1);
+        expect(html.slice(opening, closing), page).toContain('@');
+      }
+    },
+  );
+
+  test.each<IBuildFailureCase>([
+    [
+      'emitted test file',
+      'Production build contains a test file: emitted.test-unit.ts',
+      async (buildDirectory) =>
+        writeFile(
+          resolveBuildFile(buildDirectory, 'emitted.test-unit.ts'),
+          '// disposable emitted test fixture\n',
+          'utf8',
+        ),
+    ],
+    [
+      'missing skill page',
+      'Missing skill page: skills/jg-push/index.html',
+      async (buildDirectory) => rm(resolveBuildFile(buildDirectory, 'skills/jg-push/index.html')),
+    ],
+    [
+      'a skill page missing one of its reference files',
+      'Skill page is missing a reference file: skills/jg-postgres/index.html (references/migrations.md)',
+      async (buildDirectory) =>
+        replaceBuildFileText(
+          buildDirectory,
+          'skills/jg-postgres/index.html',
+          'data-skill-reference="references/migrations.md"',
+          'data-skill-reference="references/removed.md"',
+        ),
+    ],
+    [
+      'a skill page without its Markdown markers',
+      `Skill page does not mark each Markdown file it renders: ${SKILL_PAGE}`,
+      async (buildDirectory) =>
+        replaceBuildFileText(buildDirectory, SKILL_PAGE, /\sdata-skill-markdown/gu, ''),
+    ],
+    [
+      'a script element in skill instructions',
+      `${UNSAFE_SKILL_CONTENT} in ${SKILL_PAGE}: <script> element`,
+      async (buildDirectory) =>
+        replaceBuildFileText(
+          buildDirectory,
+          SKILL_PAGE,
+          SKILL_MARKDOWN_OPENER,
+          '$&<p>Use `this</p>\n<script>window.__probe=1</script>\n<p>and` that.</p>',
+        ),
+    ],
+    [
+      'an event handler in skill instructions',
+      `${UNSAFE_SKILL_CONTENT} in ${SKILL_PAGE}: onerror attribute`,
+      async (buildDirectory) =>
+        replaceBuildFileText(
+          buildDirectory,
+          SKILL_PAGE,
+          SKILL_MARKDOWN_OPENER,
+          '$&<p><img src=x onerror=alert(1)></p>',
+        ),
+    ],
+    [
+      'an entity-encoded script link in skill instructions',
+      `${UNSAFE_SKILL_CONTENT} in ${SKILL_PAGE}: href="&#106;avascript:alert(1)"`,
+      async (buildDirectory) =>
+        replaceBuildFileText(
+          buildDirectory,
+          SKILL_PAGE,
+          SKILL_MARKDOWN_OPENER,
+          '$&<p><a href="&#106;avascript:alert(1)">encoded</a></p>',
+        ),
+    ],
+    [
+      'a script link in a reference file',
+      `${UNSAFE_SKILL_CONTENT} in ${REFERENCE_PAGE}: href="javascript:alert(3)"`,
+      async (buildDirectory) =>
+        replaceBuildFileText(
+          buildDirectory,
+          REFERENCE_PAGE,
+          LAST_SKILL_MARKDOWN_OPENER,
+          '$&<p><a href="javascript:alert(3)">reference</a></p>',
+        ),
+    ],
+    [
+      'an event handler outside skill content',
+      'Page holds an event handler or a URL with a disallowed scheme in index.html: onload attribute',
+      async (buildDirectory) =>
+        replaceBuildFileText(buildDirectory, 'index.html', '<body', '<body onload="alert(1)"'),
+    ],
+  ])('rejects a build with %s', expectBuildFailure);
 
   test.each<IBuildFailureCase>([
     [
@@ -138,16 +243,6 @@ describe('static build artifact', () => {
           SKILL_PAGE,
           STRUCTURED_DATA_PATTERN,
           '<script type="application/ld+json">{"@graph":[null]}</script>',
-        ),
-    ],
-    [
-      'emitted test file',
-      'Production build contains a test file: emitted.test-unit.ts',
-      async (buildDirectory) =>
-        writeFile(
-          resolveBuildFile(buildDirectory, 'emitted.test-unit.ts'),
-          '// disposable emitted test fixture\n',
-          'utf8',
         ),
     ],
     [
@@ -183,11 +278,6 @@ describe('static build artifact', () => {
           '</body>',
           '<span id="main-content"></span></body>',
         ),
-    ],
-    [
-      'missing skill page',
-      'Missing skill page: skills/jg-push/index.html',
-      async (buildDirectory) => rm(resolveBuildFile(buildDirectory, 'skills/jg-push/index.html')),
     ],
     [
       'missing required metadata',
@@ -327,75 +417,6 @@ describe('static build artifact', () => {
         ),
     ],
     [
-      'a skill page missing one of its reference files',
-      'Skill page is missing a reference file: skills/jg-postgres/index.html (references/migrations.md)',
-      async (buildDirectory) =>
-        replaceBuildFileText(
-          buildDirectory,
-          'skills/jg-postgres/index.html',
-          'data-skill-reference="references/migrations.md"',
-          'data-skill-reference="references/removed.md"',
-        ),
-    ],
-    [
-      'a skill page without its Markdown markers',
-      `Skill page does not mark each Markdown file it renders: ${SKILL_PAGE}`,
-      async (buildDirectory) =>
-        replaceBuildFileText(buildDirectory, SKILL_PAGE, /\sdata-skill-markdown/gu, ''),
-    ],
-    // the rendered forms of Markdown that once passed the source check: a script between stray
-    // backticks, an event handler, and entity-encoded and reference-style script links
-    [
-      'a script element in skill instructions',
-      `${UNSAFE_SKILL_CONTENT} in ${SKILL_PAGE}: <script> element`,
-      async (buildDirectory) =>
-        replaceBuildFileText(
-          buildDirectory,
-          SKILL_PAGE,
-          SKILL_MARKDOWN_OPENER,
-          '$&<p>Use `this</p>\n<script>window.__probe=1</script>\n<p>and` that.</p>',
-        ),
-    ],
-    [
-      'an event handler in skill instructions',
-      `${UNSAFE_SKILL_CONTENT} in ${SKILL_PAGE}: onerror attribute`,
-      async (buildDirectory) =>
-        replaceBuildFileText(
-          buildDirectory,
-          SKILL_PAGE,
-          SKILL_MARKDOWN_OPENER,
-          '$&<p><img src=x onerror=alert(1)></p>',
-        ),
-    ],
-    [
-      'an entity-encoded script link in skill instructions',
-      `${UNSAFE_SKILL_CONTENT} in ${SKILL_PAGE}: href="&#106;avascript:alert(1)"`,
-      async (buildDirectory) =>
-        replaceBuildFileText(
-          buildDirectory,
-          SKILL_PAGE,
-          SKILL_MARKDOWN_OPENER,
-          '$&<p><a href="&#106;avascript:alert(1)">encoded</a></p>',
-        ),
-    ],
-    [
-      'a script link in a reference file',
-      `${UNSAFE_SKILL_CONTENT} in ${REFERENCE_PAGE}: href="javascript:alert(3)"`,
-      async (buildDirectory) =>
-        replaceBuildFileText(
-          buildDirectory,
-          REFERENCE_PAGE,
-          LAST_SKILL_MARKDOWN_OPENER,
-          '$&<p><a href="javascript:alert(3)">reference</a></p>',
-        ),
-    ],
-    [
-      'an event handler outside skill content',
-      'Page holds an event handler or a URL with a disallowed scheme in index.html: onload attribute',
-      async (buildDirectory) =>
-        replaceBuildFileText(buildDirectory, 'index.html', '<body', '<body onload="alert(1)"'),
-    ],
-    [
       'missing skill source code entity',
       `Skill page is missing its source code entity in ${SKILL_PAGE}`,
       async (buildDirectory) =>
@@ -406,12 +427,7 @@ describe('static build artifact', () => {
           '"@type":"CreativeWork"',
         ),
     ],
-  ])('rejects a build with %s', async (_caseName, expectedMessage, mutation) => {
-    const buildDirectory = await createBuildFixture();
-
-    await mutation(buildDirectory);
-    await expect(verifyBuild(buildDirectory)).rejects.toThrow(expectedMessage);
-  });
+  ])('rejects a build with %s', { tags: ['full'] }, expectBuildFailure);
 
   test('rejects a build missing the page of a newly added skill folder', async () => {
     assert.ok(temporaryRoot);

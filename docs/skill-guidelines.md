@@ -45,7 +45,7 @@
 
 ## Checking a change
 
-- **Always.** Run `npm run check` in `website/`. The build fails when:
+- **Always.** Run `npm run check` in `website/` for essential regression, plus complete focused coverage for affected behavior, including full-only cases. [`testing.md`](testing.md) defines membership, category commands, repeats, and the separate installation gate. Full runs locally only when explicitly requested. The build fails when:
   - the catalog and the skill folders disagree, or a skill name differs from its directory
   - a skill's frontmatter flag or Codex policy doesn't match its kind in the catalog
   - a search title or description falls outside its limits
