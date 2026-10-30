@@ -92,7 +92,10 @@ Use the narrowest scope that covers the slow operation:
 
 - In Playwright, tag tests with (1.42+) `{ tag: '@name' }` and select them with `--grep` and `--grep-invert`.
 - In Vitest, (4.1+) declare tags under `test.tags` in the config, attach them with `{ tags: [...] }`, and select tests with `--tags-filter`.
-- Keep runs that find no tests failing: never pass `--passWithNoTests` to Vitest or `--pass-with-no-tests` to Playwright in a required run, so a wrong filter can't pass silently.
+- When a repository adopts essential/full, follow its classification and suite policy. Prefer a full-only tag, such as `@full` in Playwright or a declared `full` tag in Vitest. Essential can use `--grep-invert '@full'` or `--tags-filter='!full'` respectively; full and complete granular/focused commands omit that exclusion. Preserve existing category, file, and title filters, and retain unclassified tests in essential. Tag cases or suites in mixed files rather than moving them into separate tier trees.
+- Per-test filters can still load files for discovery. For entirely full-only files, prefer an essential-only exclusion in the owning runner configuration, merged with existing exclusions, so imports and their side effects are avoided. Keep those files discoverable in full and complete focused runs. Avoid preparation used solely by excluded coverage; do not introduce a custom runner just to choose a suite.
+- Keep selection local to the aggregate invocation rather than exporting it into later granular commands. When configuration reads a suite mode, accept only its supported values and fail on invalid input instead of silently choosing a smaller selection.
+- Keep unexpected empty required selections failing: never enable blanket `--passWithNoTests` or `--pass-with-no-tests` to conceal a wrong filter. An explicitly full-only category can be omitted from essential together with its preparation; any intentional-empty exception must be narrowly defined so broken discovery still fails.
 
 ## Vitest specifics
 
