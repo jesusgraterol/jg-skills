@@ -325,7 +325,7 @@ export const SKILL_CATALOG = {
     kind: 'explicit',
     order: 14,
     searchDescription:
-      'An explicit-only agent skill that finds a named Claude Code or Codex session and answers questions from its latest decisions and state.',
+      'An explicit-only agent skill that finds named Claude Code or Codex sessions and answers questions from their latest decisions and state.',
     searchTitle: 'jg-session: Read past Claude Code and Codex sessions',
     stage: 'context',
     whenToUse: 'Use it when you need what another session decided without rereading it yourself.',
