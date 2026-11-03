@@ -63,7 +63,7 @@ Both commands name the skills, so other skills in the project are left alone. Up
 | `jg-push`              | Commits the current task's files, signed when signing is set up, and pushes the branch.                  | Stages and commits the task's files (or every change without a task) and pushes the current branch.                                                                             |
 | `jg-review-session`    | Reviews what another session built against its plan, milestones, and your decisions.                     | Nothing.                                                                                                                                                                        |
 | `jg-feedback`          | Assesses feedback independently and recommends what to adopt, reject, or adjust.                         | Nothing.                                                                                                                                                                        |
-| `jg-session`           | Finds a named Codex or Claude Code session and answers questions about it.                               | Nothing.                                                                                                                                                                        |
+| `jg-session`           | Finds named Codex or Claude Code sessions and answers questions about them.                              | Nothing.                                                                                                                                                                        |
 
 ### Implicit skills
 

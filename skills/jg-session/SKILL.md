@@ -1,7 +1,7 @@
 ---
 name: jg-session
-description: Find a named Claude Code or Codex session and answer questions from its latest decisions.
-argument-hint: '<session-name> [request]'
+description: Find named Claude Code or Codex sessions and answer questions from their latest decisions.
+argument-hint: '<session-name...> [request]'
 disable-model-invocation: true
 ---
 
@@ -31,8 +31,8 @@ Never reproduce a secret, token, credential, or personal data found in a transcr
 
 ## Workflow
 
-Find and read the named session under `## Reading a session`. Additional text may specify what to review, evaluate, compare, or explain.
+The supplied text names one or more sessions, then an optional request. The sessions are its leading arguments, each a session ID or an exact session name, in quotes when the name contains spaces; the request is the text after them and may specify what to review, evaluate, compare, or explain. When it isn't clear where the sessions end and the request begins, ask. Find and read each named session under `## Reading a session`, resolving every name before reading any session, so that choices between exact matches for different names reach the developer together, in one message.
 
-Read enough context to understand the developer's intent, corrections, decisions, and latest relevant state, not just the final message. Identify the session read and answer any accompanying request; otherwise briefly summarize its latest outcome and independently assess material concerns. Inspect relevant code when evaluating implementation claims, and distinguish verified facts from the other agent's claims.
+Read enough context from each session to understand the developer's intent, corrections, decisions, and latest relevant state, not just the final message. Identify every session read and answer any accompanying request across all of them; otherwise briefly summarize each session's latest outcome and independently assess material concerns, including where the sessions disagree. Inspect relevant code when evaluating implementation claims, and distinguish verified facts from the other agents' claims.
 
 This skill is read-only. Do not edit files, resume another agent, or implement recommendations. This output replaces any general completion summary.
