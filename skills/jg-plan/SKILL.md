@@ -51,7 +51,7 @@ Perform a planning-only workflow for the concrete engineering change currently b
    - the exact files, modules, symbols, exports, schemas, configuration, documentation, and tests to add, modify, or remove
    - the ordered strategic implementation steps, dependencies between them, and the review checkpoints that matter to the overall implementation; keep these steps detailed enough to guide implementation, but do not decompose them into independently executable milestones unless the user invokes `jg-breakdown`
    - validation, error handling, security, authorization, persistence, concurrency, migration, deployment, compatibility, and rollback considerations
-   - focused tests, broader regression checks, and the exact repository verification commands that should be run
+   - focused tests, broader regression checks, and exact repository verification commands, assigning each check to its required stage: affected-unit verification, justified earlier release/deployment gates, or final integration. Follow repository testing policy; keep each unit's correctness evidence with it, avoid copying the final suite into every milestone, and identify scenarios needing stability repetitions and why. State what evidence may be reused and what changes invalidate it
    - every decision the plan rests on and its source: the developer, the repository (with its evidence), or your own default, so the developer can check your defaults before approving; never leave a decision open, ask under step 2 instead
    - risks, edge cases, assumptions, and blockers
 
