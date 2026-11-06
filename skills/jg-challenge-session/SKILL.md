@@ -51,6 +51,8 @@ Locate matches using filenames and session identity/title metadata; never search
 
 Challenge, read-only, where another session's latest task stands: the direction under discussion, or the plan and milestones it wrote. That session usually belongs to another agent, so its answers, plans, and verdicts are claims to test, not conclusions to repeat. The result is an independent second opinion that the developer pastes back into the authoring session with `jg-feedback`. Text supplied after the session name is the focus: what to challenge, or which task or plan to take when the session holds several.
 
+On a follow-up, challenge unresolved findings, changed direction or plan material, and affected interactions. Reuse current evidence for unchanged reviewed areas. Broaden for an explicit fresh full challenge, missing prior coverage, stale evidence, new failures, or changed material risk. Retain unresolved material concerns; do not invent another objection to prolong the cycle.
+
 1. **Find and read the session** under `## Reading a session`.
 2. **Choose the target.** Take the session's latest task unless the focus names another, and say which one you took.
    - When the session wrote or revised a plan for that task, the target is the `plan.md` it last wrote or revised, which the session itself names, and the `milestones.md` beside it when present. Never take a plan from another directory or by timestamp.
