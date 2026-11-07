@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { expectNoHorizontalOverflow } from 'jg-playwright';
 
 import { SKILL_CATALOG } from '../../site.config.ts';
 
@@ -23,34 +24,44 @@ test.describe('skill card', () => {
     }
   });
 
-  // the narrowest cards: one column at 320 pixels, and two columns just past the sm breakpoint
-  for (const width of [320, 640]) {
-    test(`keeps every badge under the skill name on one line at ${width} pixels`, async ({
-      page,
-    }) => {
-      await page.setViewportSize({ width, height: 720 });
-      await page.goto('/');
-      // measure with the self-hosted font, not a fallback
-      await page.evaluate(async () => {
-        await document.fonts.ready;
+  for (const theme of ['light', 'dark'] as const) {
+    // one column on a small phone, two just past sm, and three on desktop
+    for (const width of [320, 640, 1280]) {
+      test(`keeps badges compact below the skill names at ${width} pixels in the ${theme} theme`, async ({
+        page,
+      }) => {
+        await page.emulateMedia({ colorScheme: theme });
+        await page.setViewportSize({ width, height: 720 });
+        await page.goto('/');
+        // measure with the self-hosted font, not a fallback
+        await page.evaluate(async () => {
+          await document.fonts.ready;
+        });
+
+        const badges = page.locator('[data-skill-badge]');
+
+        await expect(badges).toHaveCount(Object.keys(SKILL_CATALOG).length);
+
+        const misplaced = await badges.evaluateAll((elements) =>
+          elements.flatMap((element) => {
+            const title = element.closest('[data-skill-card]')?.querySelector('h4');
+            const badgeBounds = element.getBoundingClientRect();
+            const titleBounds = title?.getBoundingClientRect();
+
+            return !titleBounds ||
+              badgeBounds.top < titleBounds.bottom ||
+              badgeBounds.top - titleBounds.bottom > 4 ||
+              Math.abs(badgeBounds.left - titleBounds.left) > 1 ||
+              badgeBounds.height > 20
+              ? [title?.textContent?.trim() ?? 'Missing title']
+              : [];
+          }),
+        );
+
+        expect(misplaced).toStrictEqual([]);
+        await expectNoHorizontalOverflow(page);
       });
-
-      const badges = page.locator('[data-skill-badge]');
-
-      await expect(badges).toHaveCount(Object.keys(SKILL_CATALOG).length);
-
-      const wrapped = await badges.evaluateAll((elements) =>
-        elements
-          .filter(
-            (element) =>
-              element.getBoundingClientRect().height >=
-              2 * Number.parseFloat(getComputedStyle(element).lineHeight),
-          )
-          .map((element) => element.textContent?.trim()),
-      );
-
-      expect(wrapped).toStrictEqual([]);
-    });
+    }
   }
 
   for (const theme of ['light', 'dark'] as const) {
