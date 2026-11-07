@@ -29,6 +29,51 @@ type IBuildFailureCase = [caseName: string, expectedMessage: string, mutation: I
 let temporaryRoot: string | undefined;
 let fixtureIndex = 0;
 
+test('README and package-selection skill retain complete matching reviewed versions', async () => {
+  const [readmeSource, skillSource] = await Promise.all([
+    readFile(resolve(websiteRoot, '..', 'README.md'), 'utf8'),
+    readFile(resolve(websiteRoot, '..', 'skills/jg-packages/SKILL.md'), 'utf8'),
+  ]);
+  const readmeRow = readmeSource.split('\n').find((line) => /^\|\s*`jg-packages`\s*\|/u.test(line));
+  const readmeVersionText = readmeRow?.split('|')[3]?.trim();
+  const skillVersionText = skillSource.match(
+    /This skill was written for (.+?)\. An item marked/u,
+  )?.[1];
+  assert.ok(readmeVersionText);
+  assert.ok(skillVersionText);
+
+  const parseVersions = (versionText: string): Map<string, string> => {
+    const versions = new Map<string, string>();
+    for (const group of versionText.split(';')) {
+      const matches = [...group.matchAll(/\b\d+\.\d+\.\d+\b/gu)];
+      expect(matches, group).toHaveLength(1);
+      const version = matches[0]?.[0];
+      assert.ok(version);
+      const packageNames = group.match(/\bjg-[a-z0-9-]+\b/gu) ?? [];
+      expect(packageNames.length, group).toBeGreaterThan(0);
+      for (const packageName of packageNames) {
+        expect(versions.has(packageName), packageName).toBe(false);
+        versions.set(packageName, version);
+      }
+    }
+    return versions;
+  };
+
+  const requiredPackages = [...skillSource.matchAll(/^\|\s*`(jg-[a-z0-9-]+)`\s*\|/gmu)].map(
+    (match) => {
+      assert.ok(match[1]);
+      return match[1];
+    },
+  );
+  expect(requiredPackages.length).toBeGreaterThan(0);
+  const readmeVersions = parseVersions(readmeVersionText);
+  const skillVersions = parseVersions(skillVersionText);
+  for (const versions of [readmeVersions, skillVersions]) {
+    expect([...versions.keys()].sort()).toStrictEqual(requiredPackages.toSorted());
+  }
+  expect(Object.fromEntries(readmeVersions)).toStrictEqual(Object.fromEntries(skillVersions));
+});
+
 /** Resolves one fixture artifact while enforcing the disposable build boundary. */
 const resolveBuildFile = (buildDirectory: string, relativePath: string): string => {
   const filePath = resolve(buildDirectory, relativePath);
