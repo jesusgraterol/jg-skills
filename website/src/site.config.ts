@@ -80,7 +80,7 @@ export const SKILL_CATALOG = {
       {
         invocation: 'jg-challenge-session org-api-keys',
         outcome:
-          'Reads the session that planned organization API keys, challenges its plan and milestones, and returns a complete report in one copyable code block with the verdict No material concerns, Revision required before proceeding, or Developer decision required before proceeding.',
+          'Reads the session that planned organization API keys, challenges its plan and milestones, and returns a copyable assessment with the verdict No material concerns, Revision required before proceeding, or Developer decision required before proceeding. Your next-step instructions stay outside the code block.',
       },
     ],
     icon: 'message-circle-question-mark',
@@ -280,7 +280,7 @@ export const SKILL_CATALOG = {
       {
         invocation: 'jg-review-session org-api-keys',
         outcome:
-          "Checks the commits, pull requests, and claims of the session that built organization API keys against its plan and milestones, and returns a complete report in one copyable code block with the verdict Everything checks out, Issues found, or Couldn't confirm everything.",
+          "Checks the commits, pull requests, and claims of the session that built organization API keys against its plan and milestones, and returns a copyable assessment with the verdict Everything checks out, Issues found, or Couldn't confirm everything. Your next-step instructions stay outside the code block.",
       },
     ],
     icon: 'clipboard-check',
