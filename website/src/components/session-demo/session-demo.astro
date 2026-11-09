@@ -20,16 +20,22 @@ const CONVERSATION = [
   {
     command: undefined,
     speaker: 'agent',
-    text: 'plan.md saved. Review the scope before building.',
+    text: 'plan.md saved with development as the delivery target. Approval covers its delivery steps.',
   },
   { command: 'jg-execute', speaker: 'you', text: undefined },
   {
     command: undefined,
     speaker: 'agent',
-    text: 'Implementation and checks complete. Ready for review.',
+    text: 'Implementation and checks complete. Work is local and uncommitted; delivery remains.',
   },
   { command: 'jg-review', speaker: 'you', text: undefined },
-  { command: undefined, speaker: 'agent', text: 'No blocking findings. Ready for jg-push.' },
+  { command: undefined, speaker: 'agent', text: 'No blocking findings. Ready for jg-deliver.' },
+  { command: 'jg-deliver', speaker: 'you', text: undefined },
+  {
+    command: undefined,
+    speaker: 'agent',
+    text: 'Committed, pushed and merged into development. Task resources removed. Safe to close: yes.',
+  },
 ] as const satisfies readonly {
   command: string | undefined;
   speaker: ISessionSpeaker;

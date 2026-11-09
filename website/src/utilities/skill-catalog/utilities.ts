@@ -248,7 +248,7 @@ export const assertCopiedSections = (skills: readonly ISkillDocument[]): void =>
 };
 
 /**
- * Compares two exact versions, such as 0.4.0 and 0.10.1, by their numeric parts.
+ * Compares two exact versions, such as 0.6.1 and 0.10.1, by their numeric parts.
  * @param first One version.
  * @param second The other.
  * @returns A negative number when the first is older, 0 when equal, and a positive one otherwise.
@@ -263,8 +263,8 @@ const compareVersions = (first: string, second: string): number => {
 };
 
 /**
- * Keep the seven self-contained planning contracts identical, stating the minimum jg-plans
- * version and supported package/schema pairs, with setup pinning the minimum and the website's
+ * Keep the eight self-contained planning contracts identical, stating one native CLI schema
+ * and minimum version, with setup pinning that minimum and the website's
  * development dependency at or above it.
  * @param skills Every catalog document, including skills that must not carry this section.
  * @param runtimeInstallCommand The exact setup command rendered and copied by the site.
@@ -300,21 +300,20 @@ export const assertPlanningProtocol = (
     throw new Error(SKILL_CATALOG_ERROR_MESSAGES.PlanningProtocolMismatch);
   const section = sections[0]!;
   const pins = [...section.matchAll(/\bjg-plans@(\d+\.\d+\.\d+)\b/g)].map((match) => match[1]);
-  const profiles = [...section.matchAll(/^\|\s*([^|]+?)\s*\|\s*(\d+)\s*\|$/gm)].map(
-    ([, packageVersion, schemaVersion]) => ({
-      packageVersion: packageVersion!.trim(),
-      schemaVersion: Number(schemaVersion),
-    }),
+  const schemas = [...section.matchAll(/\bCLI schema (\d+)\b/g)].map((match) => Number(match[1]));
+  const fingerprints = [...section.matchAll(/--fingerprint-exclude '([^']+)'/g)].map(
+    (match) => match[1],
   );
+  const exclusions = ['created_at', 'updated_at', 'revision', 'status', 'priority', 'delivery'];
   if (
     !pins.length ||
     pins.some((pin) => pin !== PLANNING_RUNTIME_MINIMUM_VERSION) ||
-    !section.includes(`at or above ${PLANNING_RUNTIME_MINIMUM_VERSION}`) ||
-    profiles.length !== 2 ||
-    profiles[0]?.packageVersion !== '0.4.x' ||
-    profiles[0]?.schemaVersion !== 1 ||
-    profiles[1]?.packageVersion !== '>=0.5.0' ||
-    profiles[1]?.schemaVersion !== 2 ||
+    !section.includes(`jg-plans >=${PLANNING_RUNTIME_MINIMUM_VERSION}`) ||
+    schemas.length !== 1 ||
+    schemas[0] !== 3 ||
+    !section.includes('schemaVersion 3') ||
+    fingerprints.length !== 1 ||
+    fingerprints[0] !== JSON.stringify(exclusions) ||
     !/^\d+\.\d+\.\d+$/.test(runtimeDependency) ||
     compareVersions(runtimeDependency, PLANNING_RUNTIME_MINIMUM_VERSION) < 0 ||
     runtimeInstallCommand !==

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('session demo', () => {
-  test('shows a supervised conversation that plans, builds and reviews a change', async ({
+  test('shows a supervised conversation that plans, builds, reviews and delivers a change', async ({
     page,
   }) => {
     await page.goto('/');
@@ -9,11 +9,11 @@ test.describe('session demo', () => {
     const demo = page.locator('[data-session-demo]');
 
     await expect(demo.locator('[data-terminal]')).toHaveCount(0);
-    await expect(demo.getByRole('article')).toHaveCount(6);
+    await expect(demo.getByRole('article')).toHaveCount(8);
     await expect(
       demo.getByRole('article', { name: 'You', exact: true }).getByRole('code'),
-    ).toHaveText(['/jg-plan', '/jg-execute', '/jg-review']);
-    await expect(demo.getByRole('article', { name: 'Claude Code', exact: true })).toHaveCount(3);
+    ).toHaveText(['/jg-plan', '/jg-execute', '/jg-review', '/jg-deliver']);
+    await expect(demo.getByRole('article', { name: 'Claude Code', exact: true })).toHaveCount(4);
   });
 
   test('shows the Claude Code mark as a decorative avatar that loads', async ({ page }) => {
@@ -24,7 +24,7 @@ test.describe('session demo', () => {
       .getByRole('article', { name: 'Claude Code', exact: true })
       .locator('img');
 
-    await expect(avatars).toHaveCount(3);
+    await expect(avatars).toHaveCount(4);
 
     for (const avatar of await avatars.all()) {
       await expect(avatar).toHaveAttribute('alt', '');
@@ -45,15 +45,19 @@ test.describe('session demo', () => {
     await expect(messages).toHaveText(
       [
         'You /jg-plan Add an empty state to the search page.',
-        'Claude Code plan.md saved. Review the scope before building.',
+        'Claude Code plan.md saved with development as the delivery target. Approval covers its delivery steps.',
         'You /jg-execute',
-        'Claude Code Implementation and checks complete. Ready for review.',
+        'Claude Code Implementation and checks complete. Work is local and uncommitted; delivery remains.',
         'You /jg-review',
-        'Claude Code No blocking findings. Ready for jg-push.',
+        'Claude Code No blocking findings. Ready for jg-deliver.',
+        'You /jg-deliver',
+        'Claude Code Committed, pushed and merged into development. Task resources removed. Safe to close: yes.',
       ],
       { useInnerText: true },
     );
     for (const [index, speaker] of [
+      'You',
+      'Claude Code',
       'You',
       'Claude Code',
       'You',

@@ -28,14 +28,13 @@ import {
 import { PLANNING_PROTOCOL_SKILLS } from './constants.ts';
 
 describe('planning protocol contract', () => {
-  const command = 'npm install --save-dev --save-exact jg-plans@0.4.0';
-  const profiles =
-    '| Package version | CLI schemaVersion |\n| --- | --- |\n| 0.4.x | 1 |\n| >=0.5.0 | 2 |';
-  const body = `## jg-plans protocol 0.2\n\nA version at or above 0.4.0; install jg-plans@0.4.0.\n\n${profiles}\n\n## Workflow\n\nUse it.`;
+  const command = 'npm install --save-dev --save-exact jg-plans@0.6.1';
+  const exclusions = '["created_at","updated_at","revision","status","priority","delivery"]';
+  const body = `## jg-plans protocol 0.2\n\nPersisted documents require jg-plans >=0.6.1 with CLI schema 3; require schemaVersion 3. Install jg-plans@0.6.1.\n\ninspect --fingerprint-exclude '${exclusions}'\n\n## Workflow\n\nUse it.`;
   const documents = () =>
     PLANNING_PROTOCOL_SKILLS.map((name) => ({ name, kind: 'explicit' as const, body }));
-  test.each(['0.4.0', '0.4.1', '0.10.0', '1.0.0'])(
-    'accepts exactly the seven identical sections stating the minimum, with dependency %s',
+  test.each(['0.6.1', '0.6.2', '0.10.0', '1.0.0'])(
+    'accepts eight identical native contracts with dependency %s',
     (dependency) => {
       expect(() =>
         assertPlanningProtocol(
@@ -60,16 +59,16 @@ describe('planning protocol contract', () => {
     if (defect === 'duplicate-section') skills[0]!.body += '\n## jg-plans protocol 0.2\nAgain.';
     if (defect === 'extra-skill') skills.push({ name: 'jg-push', kind: 'explicit', body });
     if (defect === 'duplicate-skill') skills.push({ ...skills[0]! });
-    if (defect === 'drift') skills[0]!.body = body.replace('A version', 'Another version');
-    expect(() => assertPlanningProtocol(skills, command, '0.4.0')).toThrow(
+    if (defect === 'drift') skills[0]!.body = body.replace('Persisted', 'Saved');
+    expect(() => assertPlanningProtocol(skills, command, '0.6.1')).toThrow(
       'Planning skills have missing, duplicate, extra, or differing protocol sections',
     );
   });
   test.each([
-    ['npm install --save-dev --save-exact jg-plans@0.4.1', '0.4.1'],
-    ['npx jg-plans@0.4.0', '0.4.0'],
-    [command, '0.3.9'],
-    [command, '^0.4.0'],
+    ['npm install --save-dev --save-exact jg-plans@0.6.2', '0.6.2'],
+    ['npx jg-plans@0.6.1', '0.6.1'],
+    [command, '0.1.0'],
+    [command, '^0.6.1'],
     [command, ''],
   ])('rejects inconsistent setup/dependency %s / %s', (setup, dependency) => {
     expect(() => assertPlanningProtocol(documents(), setup, dependency)).toThrow(
@@ -77,18 +76,33 @@ describe('planning protocol contract', () => {
     );
   });
   test.each([
-    ['another pin', (text: string) => text.replaceAll('@0.4.0', '@0.1.2')],
-    ['no stated minimum', (text: string) => text.replaceAll('at or above 0.4.0', 'exactly 0.4.0')],
-    ['no profiles', (text: string) => text.replace(profiles, '')],
-    ['schema 2 for 0.4.x', (text: string) => text.replace('| 0.4.x | 1 |', '| 0.4.x | 2 |')],
-    ['schema 1 for 0.5.0', (text: string) => text.replace('| >=0.5.0 | 2 |', '| >=0.5.0 | 1 |')],
-    ['an extra profile', (text: string) => text.replace(profiles, `${profiles}\n| 0.3.x | 1 |`)],
+    ['another pin', (text: string) => text.replaceAll('@0.6.1', '@0.1.2')],
+    ['no minimum', (text: string) => text.replace('>=0.6.1', 'any version')],
+    ['different CLI schema', (text: string) => text.replace('CLI schema 3', 'CLI schema 99')],
+    [
+      'different envelope schema',
+      (text: string) => text.replace('schemaVersion 3', 'schemaVersion 99'),
+    ],
+    [
+      'extra schema',
+      (text: string) => text.replace('CLI schema 3', 'CLI schema 3 or CLI schema 99'),
+    ],
+    ['missing delivery exclusion', (text: string) => text.replace(',"delivery"', '')],
+    ['missing priority exclusion', (text: string) => text.replace(',"priority"', '')],
+    [
+      'repeated fingerprint profile',
+      (text: string) =>
+        text.replace(
+          'inspect --fingerprint-exclude',
+          `inspect --fingerprint-exclude '${exclusions}' --fingerprint-exclude`,
+        ),
+    ],
   ])('rejects identical sections with %s', (_defect, change) => {
     expect(() =>
       assertPlanningProtocol(
         documents().map((skill) => ({ ...skill, body: change(skill.body) })),
         command,
-        '0.4.0',
+        '0.6.1',
       ),
     ).toThrow('Planning runtime pins and setup do not agree');
   });
