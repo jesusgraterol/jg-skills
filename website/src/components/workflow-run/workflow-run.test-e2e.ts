@@ -25,6 +25,7 @@ test.describe('workflow section', () => {
     await expect(workflow.getByText('/jg-execute auto', { exact: true })).toBeHidden();
     await expect(cycle).toBeHidden();
     await expect(workflow.getByText('Whole-plan review', { exact: true })).toBeHidden();
+    await expect(workflow.getByText('Verified delivery', { exact: true })).toBeHidden();
     await expect(workflow.getByText('You run these when you are ready.')).toBeVisible();
     await expect(workflow.getByText('/jg-debug', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-pause', { exact: true })).toBeVisible();
@@ -54,7 +55,12 @@ test.describe('workflow section', () => {
     await expect(workflow.getByText('After the last milestone', { exact: true })).toBeVisible();
     await expect(workflow.getByText('Whole-plan review', { exact: true })).toBeVisible();
     await expect(
-      workflow.getByText('jg-execute runs jg-review and jg-push after each milestone.'),
+      workflow.getByRole('list', { name: 'After all milestones' }).getByRole('listitem'),
+    ).toHaveText(['Whole-plan review', 'Verified delivery']);
+    await expect(
+      workflow.getByText(
+        'jg-execute reviews/pushes each milestone, then follows jg-deliver after whole-plan review.',
+      ),
     ).toBeVisible();
     await expect(workflow.getByText('/jg-debug', { exact: true })).toBeVisible();
     await expect(workflow.getByText('/jg-pause', { exact: true })).toBeVisible();

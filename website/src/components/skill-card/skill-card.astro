@@ -1,5 +1,13 @@
 ---
-import { BookOpen, Code, Eye, FilePenLine, GitCommitHorizontal, Play } from '@lucide/astro';
+import {
+  BookOpen,
+  Code,
+  Eye,
+  FilePenLine,
+  GitCommitHorizontal,
+  GitMerge,
+  Play,
+} from '@lucide/astro';
 import Badge from 'jg-personal-astro-ui/badge';
 import LinkCard from 'jg-personal-astro-ui/link-card';
 
@@ -13,8 +21,9 @@ interface Props {
 // icon that signals what each kind of skill may change
 const ACCESS_ICONS = {
   'changes-code': Code,
-  'changes-code-and-pushes': Code,
+  'changes-code-and-delivers': Code,
   'commits-and-pushes': GitCommitHorizontal,
+  'delivers-task': GitMerge,
   'planning-files': FilePenLine,
   'read-only': Eye,
   'runs-picked-command': Play,

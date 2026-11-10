@@ -11,8 +11,9 @@ export type ISkillAccess =
   | 'read-only'
   | 'planning-files'
   | 'changes-code'
-  | 'changes-code-and-pushes'
+  | 'changes-code-and-delivers'
   | 'commits-and-pushes'
+  | 'delivers-task'
   | 'runs-picked-command';
 
 // a Lucide icon that stands for what a skill does, named as Lucide names its `lucide-<name>` class
@@ -22,6 +23,7 @@ export type ISkillLucideIcon =
   | 'clipboard-check'
   | 'database'
   | 'file-terminal'
+  | 'flag-triangle-right'
   | 'flask-conical'
   | 'folder-tree'
   | 'globe'

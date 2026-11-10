@@ -31,6 +31,7 @@
 | `jg-command`           | `Terminal`                  | Shell commands.                                                                                                                |
 | `jg-review`            | `SearchCheck`               | Inspects a change and gives a verdict.                                                                                         |
 | `jg-push`              | `Upload`                    | Publishes commits, and differs from its `GitCommitHorizontal` badge.                                                           |
+| `jg-deliver` | `FlagTriangleRight` | The defined finish; distinct from its GitMerge delivery badge and the publication/review icons. |
 | `jg-review-session`    | `ClipboardCheck`            | Checks delivered work against the plan, and differs from `jg-review`'s `SearchCheck`.                                          |
 | `jg-feedback`          | `Scale`                     | Weighs feedback.                                                                                                               |
 | `jg-session`           | `MessagesSquare`            | Reads past sessions.                                                                                                           |

@@ -53,8 +53,8 @@ export const SHARED_SECTION_HEADINGS = {
 export const COPIED_SECTION_HEADINGS = ['Task scope', 'Reading a session'] as const;
 
 export const PLANNING_PROTOCOL_HEADING = 'jg-plans protocol 0.2';
-// the oldest supported jg-plans; 0.4.x uses schema 1 and 0.5.0 or newer uses schema 2
-export const PLANNING_RUNTIME_MINIMUM_VERSION = '0.4.0';
+// one native planning contract, shared by all eight document-reading workflows
+export const PLANNING_RUNTIME_MINIMUM_VERSION = '0.6.1';
 export const PLANNING_PROTOCOL_SKILLS = [
   'jg-plan',
   'jg-breakdown',
@@ -63,6 +63,7 @@ export const PLANNING_PROTOCOL_SKILLS = [
   'jg-challenge-session',
   'jg-review',
   'jg-review-session',
+  'jg-deliver',
 ] as const;
 
 /*
@@ -77,7 +78,7 @@ export const APPLICATION_VERSION_MARKER = 'This skill was written for';
 export const SKILL_STAGES = {
   plan: { label: 'Plan', summary: 'Agree on what to build before any code changes.' },
   build: { label: 'Build', summary: 'Turn the approved plan into verified code.' },
-  ship: { label: 'Ship', summary: 'Check the finished change, then publish it.' },
+  ship: { label: 'Ship', summary: 'Review, publish and verify the defined delivery.' },
   context: { label: 'Context', summary: 'Weigh outside input and earlier sessions.' },
   implicit: { label: 'Implicit', summary: 'Loaded by your agent when a task touches their stack.' },
 } as const satisfies Record<ISkillStage, { label: string; summary: string }>;
@@ -85,8 +86,9 @@ export const SKILL_STAGES = {
 // display labels for what a skill may change, short enough to fit one line of the narrowest card
 export const SKILL_ACCESS_LABELS = {
   'changes-code': 'Changes code',
-  'changes-code-and-pushes': 'Changes code, can push',
+  'changes-code-and-delivers': 'Changes code, delivers',
   'commits-and-pushes': 'Commits and pushes',
+  'delivers-task': 'Delivers task',
   'planning-files': 'Writes planning files',
   'read-only': 'Read-only',
   'runs-picked-command': 'Runs a picked command',
