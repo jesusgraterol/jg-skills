@@ -56,7 +56,7 @@ Both commands name the skills, so other skills in the project are left alone. Up
 | `jg-challenge-session` | Reads another Claude Code or Codex session and challenges its direction, plan, and milestones.           | Nothing.                                                                                                                                                                        |
 | `jg-breakdown`         | Splits a plan into ordered, reviewable milestones when it has real implementation boundaries.            | Writes or removes `milestones.md` next to the plan.                                                                                                                             |
 | `jg-execute`           | Builds an agreed task, a plan, or its milestones; supervised by default, or `auto`.                      | Code and guarded milestone/aggregate plan progress. Auto also reviews/pushes each milestone and follows whole-task delivery after its final review. |
-| `jg-debug`             | Reproduces a bug, finds its cause, and fixes it with a regression test that fails first.                 | Code, a regression test, and temporary logging it removes. Never commits.                                                                                                       |
+| `jg-debug`             | Diagnoses a bug, recommends planning or a direct fix, and waits for your choice unless you chose upfront. | Temporary diagnosis experiments and logging; code and a regression test after a direct fix is authorized. Never commits.                                                       |
 | `jg-pause`             | Stops at the nearest safe point, reports where things stand, and waits until you continue.               | Nothing.                                                                                                                                                                        |
 | `jg-command`           | Turns a task into a few checked shell commands for your machine and explains each one.                   | Nothing until you pick; then runs that command. Irreversible ones ask again; `sudo` ones are printed.                                                                           |
 | `jg-review`            | Reviews the task's changes against its plan, a finished plan as a whole, or the branch against a target. | No files. With a target branch, it may refresh that branch's remote-tracking ref.                                                                                               |
@@ -122,7 +122,7 @@ Both session skills give a short verdict and the scope checked when there is not
 
 A small, settled change, such as a few edits with nothing left to decide, skips steps 2 to 4: invoke `jg-execute` right after the discussion, and it builds the agreed task as one unit.
 
-Use `jg-pause` at any point to stop the agent at a safe point and pick up later. Use `jg-debug` when something breaks and the cause isn't obvious.
+Use `jg-pause` at any point to stop the agent at a safe point and pick up later. Use `jg-debug` when something breaks and the cause isn't obvious. After diagnosis, it recommends a direct fix or planning with `jg-plan` and waits for your choice. Include 'diagnose and fix directly' upfront to skip that choice while keeping diagnosis and verification.
 
 ## Website
 

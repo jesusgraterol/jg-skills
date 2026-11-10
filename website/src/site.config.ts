@@ -173,18 +173,27 @@ export const SKILL_CATALOG = {
     examples: [
       {
         invocation: 'jg-debug Checkout totals are off by one cent for some carts.',
+        label: 'Choose after diagnosis',
         outcome:
-          'Reproduces the bug, narrows it to one cause, and fixes it with a regression test that failed first.',
+          'Reproduces the bug, identifies its cause, recommends a direct fix or planning, and waits for your choice.',
+      },
+      {
+        invocation:
+          'jg-debug Checkout totals are off by one cent for some carts. Diagnose and fix directly.',
+        label: 'Fix directly',
+        outcome:
+          'Diagnoses the cause and fixes it with a regression test that failed first, without pausing for a planning choice.',
       },
     ],
     icon: 'bug',
     kind: 'explicit',
     order: 7,
     searchDescription:
-      'An explicit-only agent skill for Claude Code and Codex that reproduces a bug, finds its cause, and fixes it with a test that fails first.',
+      'An explicit-only skill for Claude Code and Codex that diagnoses a bug, recommends planning or a direct fix, and follows your choice or upfront instruction.',
     searchTitle: "jg-debug: Find a bug's cause before fixing it",
     stage: 'build',
-    whenToUse: "Use it when something is broken and the cause isn't obvious yet.",
+    whenToUse:
+      "Use it when something is broken and the cause isn't obvious yet. Choose planning or a direct fix after diagnosis, or request a direct fix upfront.",
   },
   'jg-pause': {
     access: 'read-only',
