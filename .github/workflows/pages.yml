@@ -1,7 +1,6 @@
-name: Verify and deploy Pages
+name: Deploy website
 
 on:
-  pull_request:
   push:
     branches:
       - main
@@ -9,7 +8,7 @@ on:
 
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -48,42 +47,10 @@ jobs:
         with:
           path: website/dist
 
-  # installs every skill the way the skills CLI does and fails when a file, such as a reference, is
-  # missing from or differs in the installed copy; it runs apart from the job that builds the site,
-  # so the CLI and its unlocked dependencies never touch the artifact that gets deployed
-  verify-skills:
-    name: Verify skill installation
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v7
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.15.0
-
-      - name: Install every skill and compare it with its source
-        env:
-          SKILLS_TEST_HOME: ${{ runner.temp }}/skills-home
-          # runs the pinned CLI without dependency lifecycle scripts
-          npm_config_ignore_scripts: 'true'
-        run: |
-          set -euo pipefail
-          mkdir -p "$SKILLS_TEST_HOME"
-          HOME="$SKILLS_TEST_HOME" XDG_CONFIG_HOME="$SKILLS_TEST_HOME/.config" \
-            npx --yes skills@1.7.2 add ./skills --skill '*' -g -a codex -y --copy
-          for skill_dir in skills/*/; do
-            name="$(basename "$skill_dir")"
-            test -d "$SKILLS_TEST_HOME/.agents/skills/$name"
-            diff --recursive --brief "$skill_dir" "$SKILLS_TEST_HOME/.agents/skills/$name"
-          done
-
   deploy:
     name: Deploy GitHub Pages
     if: github.ref == 'refs/heads/main'
-    needs: [verify, verify-skills]
+    needs: verify
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

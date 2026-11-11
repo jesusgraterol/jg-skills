@@ -45,7 +45,8 @@
 
 ## Checking a change
 
-- **Always.** Run `npm run check` in `website/`. The build fails when:
+- **Skill sources.** Run `npm run skills:check` in `website/`. It verifies the actual skill files, frontmatter, invocation policy, references, size budgets, shared sections and planning-protocol copies through the same source verifier used by the site. CI runs this gate and the independent installation comparison without a website build or browser setup. These checks do not establish native model behavior.
+- **Website changes.** Run `npm run check` in `website/` for affected website work. Website presentation and deployment are independent of skill distribution. The build also runs the shared skill source verifier and fails when:
   - the catalog and the skill folders disagree, or a skill name differs from its directory
   - a skill's frontmatter flag or Codex policy doesn't match its kind in the catalog
   - a search title or description falls outside its limits

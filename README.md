@@ -144,6 +144,7 @@ npm run dev
 | `npm run build`           | Generate the site in `dist/` and verify every skill page, metadata, link, and `llms.txt`.           |
 | `npm run preview`         | Serve the current production build locally.                                                         |
 | `npm run check`           | Run unit tests, typechecking, linting, formatting, the build, integration tests, and browser tests. |
+| `npm run skills:check`    | Validate installable skill metadata, instructions and references without building the website. |
 | `npm test`                | Run the unit, integration, and end-to-end test categories.                                          |
 | `npm run format`          | Format the website files.                                                                           |
 | `npm run assets:generate` | Regenerate the committed open-graph image from its HTML template.                                   |
@@ -152,7 +153,7 @@ The build fails when the site catalog in `website/src/site.config.ts` and the sk
 
 ### Deployment
 
-`.github/workflows/pages.yml` verifies every pull request and deploys `main` to GitHub Pages. The site expects to be served at the root of `https://jg-skills.jesusgraterol.dev`, so before the first deployment:
+`.github/workflows/check-skills.yml` verifies actual skill sources and installation on pull requests and main pushes, without rendering the website or installing a browser. `.github/workflows/pages.yml` independently verifies and deploys the website on main pushes or explicit dispatches. Website failure does not block skill distribution. The site expects to be served at the root of `https://jg-skills.jesusgraterol.dev`, so before the first deployment:
 
 1. Set the repository's GitHub Pages source to GitHub Actions.
 2. Add the custom domain `jg-skills.jesusgraterol.dev`.
@@ -166,7 +167,7 @@ Until then, the deploy job fails, or the site is served under a path where its r
 
 ```text
 .
-├── .github/workflows/       # site verification and GitHub Pages deployment
+├── .github/workflows/       # skill verification and independent GitHub Pages deployment
 ├── docs/                    # concise, durable project concepts and processes
 ├── skills/
 │   └── jg-<name>/
