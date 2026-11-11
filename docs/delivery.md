@@ -11,7 +11,7 @@ Stops run in order. Implementation completion and delivery are distinct.
 
 ## development
 
-Follow [skill guidelines](skill-guidelines.md), including the required website and affected native behavior checks, and regenerate the social image when explicit skills change. Review, commit and push the task into `development`. Verify the remote branch contains its HEAD.
+Follow [skill guidelines](skill-guidelines.md), including skill-source/installation checks, website checks for affected website work, and native behavior checks when skill behavior changes. Regenerate the social image when explicit skills change. Review, commit and push the task into `development`. Verify the remote branch contains its HEAD.
 
 ## main
 
