@@ -27,6 +27,7 @@
 | `jg-breakdown`         | `ListOrdered`               | A plan split into numbered milestones.                                                                                         |
 | `jg-execute`           | `Hammer`                    | Builds the work.                                                                                                               |
 | `jg-debug`             | `Bug`                       | Finds and fixes a bug.                                                                                                         |
+| `jg-debug-session`     | `Bug`                       | Diagnoses a bug using another session's evidence, sharing the debugging mark.                                                     |
 | `jg-pause`             | `CirclePause`               | Stops at a safe point.                                                                                                         |
 | `jg-command`           | `Terminal`                  | Shell commands.                                                                                                                |
 | `jg-review`            | `SearchCheck`               | Inspects a change and gives a verdict.                                                                                         |

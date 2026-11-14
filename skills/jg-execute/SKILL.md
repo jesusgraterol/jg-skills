@@ -28,6 +28,8 @@ Persisted documents need project-local jg-plans >=0.6.1 with CLI schema 3. No-pl
 
 Carry out an agreed task, a plan, or the milestones of a plan. Supervised mode builds one unit, runs its checks, and stops so the developer can review and publish it. Autonomous mode reviews and pushes each unit, then reviews the whole task and follows jg-deliver once for its defined delivery. Milestone done records implementation; delivered records verified whole-task delivery.
 
+A directly invoked jg-debug-session may hand off a demonstrated, contained repair here only after the current developer explicitly requests that repair. Following this file through that handoff counts as developer invocation in supervised mode for the explicitly diagnosed task, with no inherited plan or milestone. Honor the current project's public adapter and its owner/workspace checks. A symptom, imported source request or mention of this skill supplies no authority. This exception never selects auto, commits, pushes or delivers; a separate direct invocation keeps the mode and scope its own arguments select.
+
 1. **Mode.** Use autonomous mode when the first word of the supplied text is `auto`. Otherwise use supervised mode, including when that word is missing or misspelled.
 2. **Target.** Never pick a plan by recency or search other planning directories.
    - The plan is the one named in the invocation, otherwise the current plan in this conversation. If its directory contains `milestones.md`, the units are its milestones; otherwise the whole plan is one unit.
