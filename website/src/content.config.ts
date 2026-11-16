@@ -9,7 +9,7 @@ const skills = defineCollection({
   loader: glob({
     base: '../skills',
     generateId: ({ entry }) => posix.dirname(entry),
-    pattern: '*/SKILL.md',
+    pattern: 'jg-*/SKILL.md',
   }),
   schema: SkillFrontmatterSchema,
 });
@@ -20,7 +20,7 @@ const skillReferences = defineCollection({
     base: '../skills',
     // the skill directory and the file's path inside it, such as jg-postgres/references/migrations
     generateId: ({ entry }) => entry.replace(/\.md$/u, ''),
-    pattern: '*/references/*.md',
+    pattern: 'jg-*/references/*.md',
   }),
   schema: SkillReferenceFrontmatterSchema,
 });

@@ -90,7 +90,7 @@
 ## Maintaining a skill
 
 - **Outdated-item issues.** Implicit skills offer to open an issue when an item looks outdated for a newer version. Verify the report against the official documentation, update the item and its version marker, and close the issue with the change.
-- **Version lines.** Change a skill's "written for" versions only after reviewing the whole skill against them.
+- **Version lines.** Change a skill's "written for" versions only after reviewing the whole skill against them. For jg-packages, maintain the existing review facts in configs/reviewed-versions.json, then run npm run reviewed-versions:generate from website/. The generator replaces only the bounded version fragment and leaves the installed skill self-contained. npm run reviewed-versions:check and skills:check verify freshness without changing it; the package-guidance catalogue must cover the same packages.
 - **Major releases.** Review a skill when its technology ships a new major version.
 - **Review months.** Review a skill whose version bullet gives a review month at least every six months, and change the month only after reviewing the whole skill against current official guidance.
 - **The index.** Keep each `CANDIDATE.md` index line naming the same triggers as its skill's description.
