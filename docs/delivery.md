@@ -15,7 +15,7 @@ Follow [skill guidelines](skill-guidelines.md), including skill-source/installat
 
 ## main
 
-Promote checked development work to `main` through a pull request, then verify the [Pages deployment](../README.md#deployment) and actual live artifact. `main` is the live stop for linked installations: when agent skill folders are symlinks into this checkout, its skill bytes become active immediately. A breaking planning-contract change requires every affected local consumer and selected plan conversion to be qualified before activation; prepare them in isolation and activate together.
+Promote checked development work to `main` through a pull request, then verify the [Pages deployment](development.md#deployment) and actual live artifact. `main` is the live stop for linked installations: when agent skill folders are symlinks into this checkout, its skill bytes become active immediately. A breaking planning-contract change requires every affected local consumer and selected plan conversion to be qualified before activation; prepare them in isolation and activate together.
 
 Verify the pushed merge, successful workflow, served source revision/content and linked installation bytes. Do not infer deployment from a push alone.
 

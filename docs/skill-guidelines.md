@@ -39,7 +39,7 @@
   - Give it a search title of at most 60 characters that starts with the skill name, and a search description of 70 to 160 characters.
   - Give it an `icon` following [`skill-icons.md`](skill-icons.md), and add its row to that page's table.
 - **Card text.** Each card shows one sentence: an explicit skill's `SKILL.md` description, or an implicit skill's `summary`, which also opens its page. Keep it to about 75 to 100 characters, and never repeat the card's badge, such as "Read-only". An explicit description starts with a verb and says what the skill does and produces. An implicit summary lists what the skill covers and ends with its technology. A new access label must fit on one line under the skill name, which the card tests check at 320 and 640 pixels wide.
-- **README.** Add a row to the explicit or implicit skills table, and add the name to the update and remove commands in the catalog's key order.
+- **Catalogue.** Add a row to the explicit or implicit skills table in [skill-catalog.md](skill-catalog.md), and add the name to its update and remove commands in the catalog's key order.
 - **Social image.** After adding or removing an explicit skill, run `npm run assets:generate` in `website/`, which lists every explicit skill in the image, and commit the regenerated `public/og/jg-skills.png`.
 - **Implicit skills only.** Add a line to the `## Implicit skills` index in the local, git-ignored `CANDIDATE.md` under `coding-agent-planning/` when it exists, naming the same triggers as the skill's description. When a protected instructions file, such as `AGENTS.md` or `CLAUDE.md`, carries the same index, don't edit it; report the line it needs instead.
 
