@@ -1,6 +1,6 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { expectNoHorizontalOverflow } from 'jg-playwright';
+import { expectNoAxeViolations } from 'jg-playwright/axe';
 
 test.describe('workflow section', () => {
   test('starts supervised and switches to autonomous from the keyboard', async ({ page }) => {
@@ -93,11 +93,13 @@ test.describe('workflow section', () => {
     const overflow = async (): Promise<number> =>
       workflow.evaluate((element) => element.scrollWidth - element.clientWidth);
 
-    expect(await overflow()).toBeLessThanOrEqual(0);
+    await expectNoHorizontalOverflow(page);
+    await expect.poll(overflow).toBeLessThanOrEqual(0);
 
     await workflow.getByText('Autonomous', { exact: true }).click();
 
-    expect(await overflow()).toBeLessThanOrEqual(0);
+    await expectNoHorizontalOverflow(page);
+    await expect.poll(overflow).toBeLessThanOrEqual(0);
   });
 
   for (const colorScheme of ['light', 'dark'] as const) {
@@ -114,14 +116,10 @@ test.describe('workflow section', () => {
           }),
         ).toBeVisible();
         await expectNoHorizontalOverflow(page);
-        expect(
-          (
-            await new AxeBuilder({ page })
-              .include('[data-workflow-run]')
-              .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-              .analyze()
-          ).violations,
-        ).toStrictEqual([]);
+        await expectNoAxeViolations(page, {
+          include: '[data-workflow-run]',
+          ruleSet: 'wcag22aa',
+        });
       }
       await expect(workflow.getByText('Whole-plan review', { exact: true })).toBeVisible();
     });
