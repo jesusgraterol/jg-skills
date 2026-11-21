@@ -1,6 +1,6 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { expectNoHorizontalOverflow, waitForPageAssets } from 'jg-playwright';
+import { expectNoAxeViolations } from 'jg-playwright/axe';
 
 for (const colorScheme of ['light', 'dark'] as const)
   for (const width of [320, 768, 1440]) {
@@ -62,14 +62,10 @@ for (const colorScheme of ['light', 'dark'] as const)
           `/skills/${step.skill}/`,
         );
         await expectNoHorizontalOverflow(page);
-        expect(
-          (
-            await new AxeBuilder({ page })
-              .include('[data-worked-example]')
-              .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
-              .analyze()
-          ).violations,
-        ).toStrictEqual([]);
+        await expectNoAxeViolations(page, {
+          include: '[data-worked-example]',
+          ruleSet: 'wcag22aa',
+        });
       }
       await tabs.getByRole('tab', { name: 'Plan', exact: true }).click();
       await expect(example).toContainText('Illustrative workflow');

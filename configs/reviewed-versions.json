@@ -2,16 +2,12 @@
   "schemaVersion": 1,
   "groups": [
     {
-      "packages": ["jg-utilities"],
+      "packages": ["jg-utilities", "jg-fs", "jg-process"],
       "version": "1.8.0"
     },
     {
       "packages": ["jg-exception"],
       "version": "1.7.1"
-    },
-    {
-      "packages": ["jg-fs", "jg-process"],
-      "version": "1.7.0"
     },
     {
       "packages": ["jg-sw"],
@@ -74,7 +70,11 @@
       "version": "0.2.0"
     },
     {
-      "packages": ["jg-locks"],
+      "packages": ["jg-publishing-guides"],
+      "version": "1.0.1"
+    },
+    {
+      "packages": ["jg-locks", "jg-render", "jg-site-checks", "jg-package-check"],
       "version": "1.0.0"
     },
     {
