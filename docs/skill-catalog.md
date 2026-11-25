@@ -93,6 +93,8 @@ New plans use `jg-plans/<timestamp>_<slug>/`. They record priority, affected rep
 
 Plan statuses are pending, in progress, done and delivered. Done means implementation is complete; delivered means the defined delivery was verified. Pending, in progress and done plans remain active and reserve error codes until delivered. jg-plan checks overlapping claims in the affected planning roots.
 
+Repositories can document an editorial route in their README blueprint or the guide it points to. Use `jg-plan editorial <topic>` to create a plan with `jg_workflow: editorial`, then use jg-breakdown for its reviewable stages. Supervised jg-execute runs one stage. It keeps the milestone in progress while a required input or review is pending and marks it done after the matching review is recorded. Editorial handoff and publication use the repository's own workflow and authorizations.
+
 Breakdown binds milestones to the plan id/revision and a structural fingerprint excluding created_at, updated_at, revision, status, priority and delivery. Reprioritization or delivery-only retargeting preserves implementation and bindings. Changed body or contractual metadata needs coverage reassessment. An explicit retarget of a delivered plan records the new map and status done together before delivery effects. A missing expected sequence never means completion. Generic checks and bindings grant no authority.
 
 jg-deliver owns the live closing report: branch/HEAD, committed and pushed source, required merges, deployed revision or published version, resource cleanup and Safe to close. It sets delivered only after verified completion. jg-execute reads neighboring jg-review, jg-push and jg-deliver instructions; supervised execution uses the same report without publication effects.
