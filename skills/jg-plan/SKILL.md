@@ -1,7 +1,7 @@
 ---
 name: jg-plan
 description: Ask about the decisions that are yours, then write an implementation-ready plan for approval.
-argument-hint: '[editorial <topic> | task or amendments]'
+argument-hint: '[task or amendments]'
 disable-model-invocation: true
 ---
 
@@ -26,17 +26,7 @@ Persisted documents need project-local jg-plans >=0.6.1 with CLI schema 3. No-pl
 
 ## Workflow
 
-Plan a concrete engineering change or follow the opt-in editorial route below. This skill authorizes proportional repository inspection, non-writing analysis, and only the planning-file writes defined in this skill. It does not authorize changing source, project records, external documents, Git state, or anything outside the plan's planning directory, or starting work. Treat the current discussion, including the user's objective, decisions, constraints, exclusions, and acceptance criteria, as the task contract. If an inspection command unexpectedly changes files, preserve and report those changes without cleaning, reverting, or claiming them as part of the plan.
-
-### Editorial route
-
-For a new topic, the developer must opt in with `editorial` as the first argument. For a revision, use the selected plan's inspected `rawMetadata.jg_workflow` value. A repository must document this route in its README blueprint or the editorial guide it points to. If the route is missing, or an editorial request selects an engineering plan, report the mismatch and stop. Preserve a selected plan's workflow on revision. For new editorial plans, set `jg_workflow: editorial` in the create input's metadata. The marker is part of the structural fingerprint and grants no authority.
-
-Follow the numbered planning steps with these substitutions:
-
-- Use the repository's editorial guide to identify the topic outputs, ordered reviews, approval owners, and handoff. Separate scope decisions needed now from stage inputs, such as a document link or approved voice needed at intake. Record stage inputs and who supplies them as prerequisites. Planning can finish before those inputs arrive. Planning neither drafts content nor changes editorial records.
-- Write evidence-based acceptance criteria for reviewable editorial outcomes. Name the article, story, visuals, or other outputs and their exact approval evidence where applicable. Keep private collaboration links in the editorial record it owns. Use the same repository/delivery metadata for any in-scope versioned source. When there is no repository source scope, omit `repositories` from the create input and provide `delivery: {}`. Name any editorial handoff and its separate authority outside the criteria for completing production.
-- Replace the approval rules in steps 2 and 7 for this route. In `## Approval required`, state that explicit approval of the presented plan settles its scope. Use jg-breakdown for multiple reviewable stages, then name supervised jg-execute for authorization of one selected stage at a time. Team review decisions, Git operations, handoff, and publication require their own evidence or authorization. Use jg-plan again for scope amendments. Preserve the same save, reinspection, check, and exact-presentation requirements.
+Perform a planning-only workflow for the concrete engineering change currently being discussed, including a new module, package, feature, bug fix, refactor, migration, or other implementation. This skill authorizes proportional repository inspection, non-writing analysis, and only the planning-file writes defined in this skill. It does not authorize editing source code, tests, snapshots, configuration, dependencies, migrations, generated artifacts, ordinary project documentation, Git state, or any file outside the plan's planning directory, and it does not authorize committing, pushing, or beginning implementation. Treat the current discussion, including the user's objective, decisions, constraints, exclusions, and acceptance criteria, as the task contract. If an inspection command unexpectedly changes files, preserve and report those changes without cleaning, reverting, or claiming them as part of the plan.
 
 1. Read the root `README.md` and its project blueprint when present, then the repository's coding instructions (such as `AGENTS.md` or `CLAUDE.md`) and the implicit jg skills that apply to the affected files, and follow every applicable domain-specific section of those instructions and skills. When sources conflict, follow the repository's coding instructions. Without them, apply this order: the explicit developer request and acceptance criteria, unless they would create safety, security, privacy, data-integrity, or production-correctness risk; then safety, security, privacy, data integrity, and production correctness; then established codebase behavior, public contracts, and patterns; then repository tooling. Reuse repository evidence already established during the current task only when it remains current; otherwise inspect the smallest complete affected path (entry points, callers, validation, persistence, side effects, tests, configuration, and integration points) needed to ground the plan in the existing architecture, conventions, behavior, contracts, tests, tooling, and documentation.
 2. Settle every decision the plan depends on before writing it. Identify the decisions the plan would make and sort each by who owns it:
